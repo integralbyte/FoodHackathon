@@ -11,6 +11,17 @@ Checked 7 November 2026. The ending presents ingredient benefits, separately fro
 
 The raw-grain figures do not establish Sorami's finished-cup fibre content or retention through processing. Protein is deliberately omitted from this ingredient scene so the presentation focuses on the selected strengths.
 
+## Minerals
+
+The same USDA records provide the mineral values displayed beside each grain:
+
+| Raw grain, per 100g | Magnesium | Phosphorus |
+| --- | ---: | ---: |
+| Sorghum grain, NDB 20067, PDF page 386 | 165mg | 289mg |
+| Proso millet, NDB 20031, PDF page 130 | 114mg | 285mg |
+
+The callout is titled “Minerals” and names magnesium and phosphorus with their amounts, rather than applying a blanket “high in every mineral” claim. Its raw-grain basis is displayed in each row, and clicking the row opens the exact USDA record. These ingredient values are not a tested mineral analysis of the finished cup, and no absorption or health-outcome claim is made.
+
 ## Naturally gluten-free grains
 
 [FAO, About the International Year of Millets 2023](https://www.fao.org/millets-2023/about/) includes sorghum and proso millet in its discussion of millets and states that millets are gluten-free. The callouts describe the grains themselves; they do not certify a finished noodle product or its manufacturing environment.
