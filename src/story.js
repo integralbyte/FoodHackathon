@@ -109,13 +109,15 @@
   current=index;n('assembly-announcement').textContent=chapters[index];
   root.querySelectorAll('[data-story-step]').forEach((e,i)=>{if(i===index)e.setAttribute('aria-current','step');else e.removeAttribute('aria-current')});
  }
- function paint(p,time){
+ function paint(p,time,facts=0){
   const s=p*4.4;root.style.setProperty('--story-progress',String(p));root.dataset.stage=String(chapterAt(s));setChapter(chapterAt(s));
   const cup=smooth(1.75,2.48,s),close=smooth(3.82,4.38,s),idle=staticMode||flow?0:1;
   // Reframe the grain clouds, full assembly, and finished cup around the center.
   const wide=smooth(1.3,2.08,s),hero=smooth(3.95,4.4,s);
   const camera=[mix(mix(130,70,wide),195,hero),mix(mix(180,60,wide),398,hero),mix(mix(640,760,wide),510,hero),mix(mix(470,880,wide),535,hero)];
-  n('assembly-art').setAttribute('viewBox',camera.map(v=>v.toFixed(2)).join(' '));
+  const space=smooth(0,.4,facts),endFrame=window.innerWidth>760?[-20,140,940,550]:camera;
+  root.style.setProperty('--grain-facts',String(space));
+  n('assembly-art').setAttribute('viewBox',camera.map((v,i)=>mix(v,endFrame[i],space).toFixed(2)).join(' '));
   viewX+=(pointerX-viewX)*.06;viewY+=(pointerY-viewY)*.06;
   transform(n('assembly-scene'),`translate(${viewX*5} ${viewY*3+Math.sin(time*.7)*1.2*idle}) rotate(${viewX*.45} 450 480)`);
   transform(n('orbital-field'),`rotate(${s*5+time*.9*idle} 450 440)`);opacity(n('orbital-field'),mix(.9,.36,cup)*(1-hero));
@@ -195,12 +197,12 @@
  function applyReducedMotion(){stopTour();staticMode=motionPreference.matches;root.classList.toggle('is-static',staticMode&&!flow);display=flow?measuredProgress():staticMode?1:measuredProgress();if(flow)paint(display,0);else request()}
  motionPreference.addEventListener('change',applyReducedMotion);
  if(flow){
-  let lastFlowPaint=-1,lastFlowReduced=null;
+  let lastFlowPaint=-1,lastFlowReduced=null,lastFlowFacts=-1,lastFlowWidth=0;
   flow.onFrame(state=>{
    const raw=1-state.reverse;display=staticMode?positions[Math.round(raw*(positions.length-1))]:raw;
-   if(display===lastFlowPaint&&staticMode===lastFlowReduced)return;
-   lastFlowPaint=display;lastFlowReduced=staticMode;
-   paint(display,state.reverse*26);
+   if(display===lastFlowPaint&&staticMode===lastFlowReduced&&state.facts===lastFlowFacts&&window.innerWidth===lastFlowWidth)return;
+   lastFlowPaint=display;lastFlowReduced=staticMode;lastFlowFacts=state.facts;lastFlowWidth=window.innerWidth;
+   paint(display,state.reverse*26,state.facts);
   });
  }else{
   if(staticMode){root.classList.add('is-static');display=1}

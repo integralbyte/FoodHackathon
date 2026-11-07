@@ -303,7 +303,7 @@ button:focus-visible{outline:3px solid #ad450c;outline-offset:4px}
 @media print{.shelf-hook{height:100vh;break-after:page}.hook-pin{position:relative}}
 
 /* One sticky viewport keeps the selected cup in place across both scenes. */
-.product-journey{position:relative;height:1200svh;background:#421823;isolation:isolate;--journey-transfer:0;--journey-shelf:1;--journey-assembly:0}
+.product-journey{position:relative;height:1400svh;background:#421823;isolation:isolate;--journey-transfer:0;--journey-shelf:1;--journey-assembly:0}
 .journey-pin{position:sticky;top:0;height:100svh;overflow:clip;background:#421823;isolation:isolate}
 .journey-backdrop{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 46%,#fffdf6 0,#fff3d9 55%,#f7e3ba 100%);opacity:var(--journey-transfer);pointer-events:none}
 .product-journey .shelf-hook,.product-journey .assembly-intro{position:absolute;inset:0;height:100%;background:transparent}
@@ -316,9 +316,35 @@ button:focus-visible{outline:3px solid #ad450c;outline-offset:4px}
 .journey-transfer-cup{position:absolute;left:0;top:0;width:300px;height:348px;overflow:visible;z-index:5;visibility:hidden;pointer-events:none;filter:drop-shadow(4px 12px 8px #24101933);transform-origin:0 0;will-change:transform,width,height}
 .product-journey.is-transferring .hook-sorami{visibility:hidden}
 .product-journey.is-transferring .journey-transfer-cup{visibility:visible}
-@media(max-width:760px){.product-journey{height:1120svh}.product-journey .assembly-layout{inset:12px 8px 22px}}
+@media(max-width:760px){.product-journey{height:1320svh}.product-journey .assembly-layout{inset:12px 8px 22px}}
 @media(prefers-reduced-motion:reduce){.journey-transfer-cup{will-change:auto}}
 @media print{.product-journey{height:200vh}.journey-pin{position:relative;overflow:visible}.product-journey .shelf-hook{height:100vh}.product-journey .assembly-intro{top:100vh;height:100vh;opacity:1}.journey-transfer-cup{display:none}}
+
+/* The ingredients get the last word: no new panel or page break. */
+.grain-benefits{position:absolute;inset:0;z-index:4;visibility:hidden;pointer-events:none;color:#5c321e;isolation:isolate}
+.grain-benefit-column{position:absolute;top:44%;transform:translateY(-50%);width:clamp(170px,17vw,248px);display:flex;flex-direction:column;gap:22px}
+.grain-benefit-sorghum{left:clamp(24px,5vw,100px)}.grain-benefit-millet{right:clamp(24px,5vw,100px)}
+.grain-benefit-row{position:relative;clip-path:inset(0 100% 0 0);transform-origin:0 50%;pointer-events:auto;will-change:clip-path,transform;text-decoration:none;color:inherit;--benefit-draw:0}
+.grain-benefit-rule{display:block;height:1px;background:#b88748;transform:scaleX(var(--benefit-draw));transform-origin:left;margin-bottom:13px;opacity:.7}
+.grain-benefit-heading{display:block;font:400 clamp(20px,2.1vw,29px)/1.15 Georgia,serif;letter-spacing:-.025em}
+.grain-fibre-value{display:inline-flex;align-items:baseline;gap:4px;color:#8a2835;text-decoration:none;line-height:1.2;margin:7px 0 2px}
+.grain-fibre-value strong{font:400 clamp(45px,5vw,68px)/1 Georgia,serif;font-variant-numeric:tabular-nums;letter-spacing:-.065em}.grain-fibre-value>span{font:italic 25px Georgia,serif}
+.grain-fibre-value i,.grain-benefit-feature>i{font:12px var(--font);font-style:normal;color:#a27841;margin-left:7px;align-self:flex-start;padding-top:5px}
+.grain-benefit-fibre>small{display:block;font:10px/1.45 var(--font);color:#86694b}
+.grain-benefit-feature{display:grid;grid-template-columns:42px 1fr auto;align-items:center;column-gap:12px;padding-bottom:15px}
+.grain-benefit-feature>svg{width:42px;height:42px;fill:none;stroke:#a2773e;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}.grain-benefit-feature path{stroke-dasharray:1;stroke-dashoffset:calc(1 - var(--benefit-draw))}
+.grain-benefit-feature strong{font:400 clamp(19px,1.9vw,27px)/1.13 Georgia,serif;letter-spacing:-.02em}.grain-benefit-feature .grain-benefit-rule{position:absolute;left:0;right:0;bottom:0;margin:0}
+.grain-benefits a:hover{color:#a33238}.grain-benefits a:focus-visible{outline:2px solid #9d3c36;outline-offset:6px}
+@media(max-width:1000px) and (min-width:761px){.grain-benefit-column{width:174px}.grain-benefit-feature{grid-template-columns:32px 1fr auto;gap:8px}.grain-benefit-feature>svg{width:32px;height:32px}.grain-benefit-feature strong{font-size:21px}}
+@media(max-width:760px){
+ .product-journey .assembly-art{transform:translateY(calc(var(--grain-facts,0) * -17svh))}
+ .grain-benefit-column{top:51%;transform:none;width:calc(50% - 36px);gap:18px}.grain-benefit-sorghum{left:24px}.grain-benefit-millet{right:24px}
+ .grain-benefit-heading{font-size:20px}.grain-fibre-value strong{font-size:49px}.grain-fibre-value>span{font-size:22px}.grain-benefit-fibre>small{font-size:8px;min-height:24px}.grain-benefit-rule{margin-bottom:10px}
+ .grain-benefit-feature{grid-template-columns:28px 1fr;gap:9px;padding-bottom:13px}.grain-benefit-feature>svg{width:28px;height:28px}.grain-benefit-feature strong{font-size:20px}.grain-benefit-feature>i{display:none}
+}
+@media(max-height:680px){.grain-benefit-column{gap:14px}.grain-benefit-feature{padding-bottom:10px}.grain-fibre-value strong{font-size:42px}.grain-benefit-heading{font-size:20px}.grain-benefit-feature strong{font-size:19px}}
+@media(max-height:480px){.grain-benefit-column{top:48%;width:190px;gap:10px}.grain-benefit-heading{font-size:18px}.grain-fibre-value{margin:4px 0 0}.grain-fibre-value strong{font-size:35px}.grain-benefit-feature strong{font-size:18px}.grain-benefit-feature>svg{width:26px;height:26px}.grain-benefit-feature{grid-template-columns:26px 1fr auto;gap:9px}.grain-benefit-fibre>small{font-size:8px}.grain-benefit-rule{margin-bottom:8px}}
+@media(prefers-reduced-motion:reduce){.grain-benefit-row{will-change:auto}}
 </style>
 </head>
 <body>
@@ -455,6 +481,7 @@ button:focus-visible{outline:3px solid #ad450c;outline-offset:4px}
  </div>
 </section>
 
+  <div class="grain-benefits" id="grain-benefits" aria-label="Benefits of sorghum and millet grains" aria-hidden="true"><section class="grain-benefit-column grain-benefit-sorghum" aria-label="Sorghum benefits"><h2 class="sr-only">Sorghum</h2><div class="grain-benefit-row grain-benefit-fibre" data-benefit-row="0"><span class="grain-benefit-rule"></span><span class="grain-benefit-heading">Rich in fibre</span><a class="grain-fibre-value" href="https://www.ars.usda.gov/ARSUserFiles/80400535/Data/SR/SR28/reports/sr28fg20.pdf#page=386" target="_blank" rel="noopener" aria-label="Sorghum: 6.7 grams fibre per 100g raw white sorghum, USDA source"><strong>6.7</strong><span>g</span><i aria-hidden="true">↗</i></a><small>Per 100g raw white sorghum</small></div><a class="grain-benefit-row grain-benefit-feature" data-benefit-row="1" href="https://www.fao.org/millets-2023/about/" target="_blank" rel="noopener" aria-label="Sorghum grain is naturally gluten-free, FAO source"><svg viewBox="0 0 48 48" aria-hidden="true"><path pathLength="1" d="M12 39L33 12M19 30c-10 1-13-6-12-10 8-2 14 2 12 10Zm7-9c-8 0-11-6-10-10 7-2 13 2 10 10Zm-6 8c0 9 7 13 12 12 1-8-3-14-12-12Zm7-9c0 8 6 12 11 11 1-7-3-13-11-11ZM6 6l36 36"/></svg><strong>Naturally<br>gluten-free</strong><i aria-hidden="true">↗</i><span class="grain-benefit-rule"></span></a><a class="grain-benefit-row grain-benefit-feature" data-benefit-row="2" href="https://sorghum.ucdavis.edu/" target="_blank" rel="noopener" aria-label="Sorghum is drought-tolerant, agronomy source"><svg viewBox="0 0 48 48" aria-hidden="true"><path pathLength="1" d="M25 7V2m10 9 4-4M39 21h6M15 10l-4-4M25 14a7 7 0 1 1-7 7M4 43h39M20 43c-3-11 1-21 10-24M21 34c-9 1-12-4-11-9 7-1 12 3 11 9Zm1-4c7 2 12-1 13-6-7-3-12-1-13 6Z"/></svg><strong>Drought-<br>tolerant</strong><i aria-hidden="true">↗</i><span class="grain-benefit-rule"></span></a></section><section class="grain-benefit-column grain-benefit-millet" aria-label="Millet benefits"><h2 class="sr-only">Millet</h2><div class="grain-benefit-row grain-benefit-fibre" data-benefit-row="0"><span class="grain-benefit-rule"></span><span class="grain-benefit-heading">Rich in fibre</span><a class="grain-fibre-value" href="https://www.ars.usda.gov/ARSUserFiles/80400535/Data/SR/SR28/reports/sr28fg20.pdf#page=130" target="_blank" rel="noopener" aria-label="Millet: 8.5 grams fibre per 100g raw proso millet, USDA source"><strong>8.5</strong><span>g</span><i aria-hidden="true">↗</i></a><small>Per 100g raw proso millet</small></div><a class="grain-benefit-row grain-benefit-feature" data-benefit-row="1" href="https://www.fao.org/millets-2023/about/" target="_blank" rel="noopener" aria-label="Millet grain is naturally gluten-free, FAO source"><svg viewBox="0 0 48 48" aria-hidden="true"><path pathLength="1" d="M12 39L33 12M19 30c-10 1-13-6-12-10 8-2 14 2 12 10Zm7-9c-8 0-11-6-10-10 7-2 13 2 10 10Zm-6 8c0 9 7 13 12 12 1-8-3-14-12-12Zm7-9c0 8 6 12 11 11 1-7-3-13-11-11ZM6 6l36 36"/></svg><strong>Naturally<br>gluten-free</strong><i aria-hidden="true">↗</i><span class="grain-benefit-rule"></span></a><a class="grain-benefit-row grain-benefit-feature" data-benefit-row="2" href="https://www.fao.org/europe/news/detail/millet--the--forgotten-crop--is-making-a-comeback/en" target="_blank" rel="noopener" aria-label="Millet is drought-tolerant, agronomy source"><svg viewBox="0 0 48 48" aria-hidden="true"><path pathLength="1" d="M25 7V2m10 9 4-4M39 21h6M15 10l-4-4M25 14a7 7 0 1 1-7 7M4 43h39M20 43c-3-11 1-21 10-24M21 34c-9 1-12-4-11-9 7-1 12 3 11 9Zm1-4c7 2 12-1 13-6-7-3-12-1-13 6Z"/></svg><strong>Drought-<br>tolerant</strong><i aria-hidden="true">↗</i><span class="grain-benefit-rule"></span></a></section></div>
   <svg class="journey-transfer-cup" id="journey-transfer-cup" viewBox="0 0 300 348" aria-hidden="true"><use href="#sorami-finished-cup" width="300" height="348"/></svg>
  </div>
 </section>
@@ -551,12 +578,12 @@ button:focus-visible{outline:3px solid #ad450c;outline-offset:4px}
  const shelf=document.getElementById('noodle-shelf'),assembly=document.getElementById('cup-story'),cup=document.getElementById('journey-transfer-cup');
  const motion=matchMedia('(prefers-reduced-motion: reduce)'),listeners=new Set();
  const clamp=x=>Math.min(1,Math.max(0,x)),ease=x=>{x=clamp(x);return x*x*(3-2*x)};
- const phases={shelfEnd:.46,transferEnd:.54,reverseEnd:.97};
+ const phases={shelfEnd:.39,transferEnd:.46,reverseEnd:.82,factsEnd:.96};
  let frame=0,visible=true;
  function sample(){
   const rect=root.getBoundingClientRect(),distance=Math.max(1,root.offsetHeight-window.innerHeight),progress=clamp(-rect.top/distance);
   const transfer=clamp((progress-phases.shelfEnd)/(phases.transferEnd-phases.shelfEnd));
-  return {progress,shelf:clamp(progress/phases.shelfEnd),transfer,reverse:clamp((progress-phases.transferEnd)/(phases.reverseEnd-phases.transferEnd)),reduced:motion.matches,active:rect.top<=0&&rect.bottom>=window.innerHeight};
+  return {progress,shelf:clamp(progress/phases.shelfEnd),transfer,reverse:clamp((progress-phases.transferEnd)/(phases.reverseEnd-phases.transferEnd)),facts:clamp((progress-phases.reverseEnd)/(phases.factsEnd-phases.reverseEnd)),reduced:motion.matches,active:rect.top<=0&&rect.bottom>=window.innerHeight};
  }
  function seek(progress,behavior='instant'){
   window.scrollTo({top:window.scrollY+root.getBoundingClientRect().top+clamp(progress)*(root.offsetHeight-window.innerHeight),behavior});request();
@@ -704,13 +731,15 @@ button:focus-visible{outline:3px solid #ad450c;outline-offset:4px}
   current=index;n('assembly-announcement').textContent=chapters[index];
   root.querySelectorAll('[data-story-step]').forEach((e,i)=>{if(i===index)e.setAttribute('aria-current','step');else e.removeAttribute('aria-current')});
  }
- function paint(p,time){
+ function paint(p,time,facts=0){
   const s=p*4.4;root.style.setProperty('--story-progress',String(p));root.dataset.stage=String(chapterAt(s));setChapter(chapterAt(s));
   const cup=smooth(1.75,2.48,s),close=smooth(3.82,4.38,s),idle=staticMode||flow?0:1;
   // Reframe the grain clouds, full assembly, and finished cup around the center.
   const wide=smooth(1.3,2.08,s),hero=smooth(3.95,4.4,s);
   const camera=[mix(mix(130,70,wide),195,hero),mix(mix(180,60,wide),398,hero),mix(mix(640,760,wide),510,hero),mix(mix(470,880,wide),535,hero)];
-  n('assembly-art').setAttribute('viewBox',camera.map(v=>v.toFixed(2)).join(' '));
+  const space=smooth(0,.4,facts),endFrame=window.innerWidth>760?[-20,140,940,550]:camera;
+  root.style.setProperty('--grain-facts',String(space));
+  n('assembly-art').setAttribute('viewBox',camera.map((v,i)=>mix(v,endFrame[i],space).toFixed(2)).join(' '));
   viewX+=(pointerX-viewX)*.06;viewY+=(pointerY-viewY)*.06;
   transform(n('assembly-scene'),`translate(${viewX*5} ${viewY*3+Math.sin(time*.7)*1.2*idle}) rotate(${viewX*.45} 450 480)`);
   transform(n('orbital-field'),`rotate(${s*5+time*.9*idle} 450 440)`);opacity(n('orbital-field'),mix(.9,.36,cup)*(1-hero));
@@ -790,12 +819,12 @@ button:focus-visible{outline:3px solid #ad450c;outline-offset:4px}
  function applyReducedMotion(){stopTour();staticMode=motionPreference.matches;root.classList.toggle('is-static',staticMode&&!flow);display=flow?measuredProgress():staticMode?1:measuredProgress();if(flow)paint(display,0);else request()}
  motionPreference.addEventListener('change',applyReducedMotion);
  if(flow){
-  let lastFlowPaint=-1,lastFlowReduced=null;
+  let lastFlowPaint=-1,lastFlowReduced=null,lastFlowFacts=-1,lastFlowWidth=0;
   flow.onFrame(state=>{
    const raw=1-state.reverse;display=staticMode?positions[Math.round(raw*(positions.length-1))]:raw;
-   if(display===lastFlowPaint&&staticMode===lastFlowReduced)return;
-   lastFlowPaint=display;lastFlowReduced=staticMode;
-   paint(display,state.reverse*26);
+   if(display===lastFlowPaint&&staticMode===lastFlowReduced&&state.facts===lastFlowFacts&&window.innerWidth===lastFlowWidth)return;
+   lastFlowPaint=display;lastFlowReduced=staticMode;lastFlowFacts=state.facts;lastFlowWidth=window.innerWidth;
+   paint(display,state.reverse*26,state.facts);
   });
  }else{
   if(staticMode){root.classList.add('is-static');display=1}
@@ -1122,6 +1151,21 @@ button:focus-visible{outline:3px solid #ad450c;outline-offset:4px}
  new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;if(visible)request()}).observe(root);
  motion.addEventListener('change',request);
  if(flow)flow.onFrame(state=>{if(state.transfer<1)render(state.shelf)});else{render(target());request();}
+})();
+
+(() => {
+ const root=document.getElementById('grain-benefits'),flow=document.getElementById('product-journey')?.soramiFlow;if(!root||!flow)return;
+ const columns=[...root.querySelectorAll('.grain-benefit-column')];
+ const clamp=x=>Math.max(0,Math.min(1,x)),ease=x=>{x=clamp(x);return 1-(1-x)**3};
+ flow.onFrame(state=>{
+  const p=state.facts,open=p>0;root.style.visibility=open?'visible':'hidden';root.inert=!open;root.setAttribute('aria-hidden',String(!open));
+  columns.forEach((column,side)=>column.querySelectorAll('[data-benefit-row]').forEach((row,index)=>{
+   const delay=index*.19+side*.045,t=state.reduced?(p>delay?1:0):ease((p-delay)/.36);
+   row.style.clipPath=`inset(0 ${(1-t)*100}% 0 0)`;
+   row.style.transform=state.reduced?'none':`translateX(${(side?1:-1)*(1-t)*22}px)`;
+   row.style.setProperty('--benefit-draw',String(t));row.inert=t<.99;row.setAttribute('aria-hidden',String(t<.99));
+  }));
+ });
 })();
 </script>
 </body>

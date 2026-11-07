@@ -1,0 +1,24 @@
+[
+  {
+    "id": "sorghum",
+    "name": "Sorghum",
+    "fibre": 6.7,
+    "basis": "Per 100g raw white sorghum",
+    "nutritionSource": "https://www.ars.usda.gov/ARSUserFiles/80400535/Data/SR/SR28/reports/sr28fg20.pdf#page=386",
+    "nutritionRecord": "USDA SR28 (2015), NDB 20067, Sorghum grain",
+    "fibreNote": "USDA's fibre footnote specifies white sorghum. Values vary by variety and processing.",
+    "grainSource": "https://www.fao.org/millets-2023/about/",
+    "agronomySource": "https://sorghum.ucdavis.edu/"
+  },
+  {
+    "id": "millet",
+    "name": "Millet",
+    "fibre": 8.5,
+    "basis": "Per 100g raw proso millet",
+    "nutritionSource": "https://www.ars.usda.gov/ARSUserFiles/80400535/Data/SR/SR28/reports/sr28fg20.pdf#page=130",
+    "nutritionRecord": "USDA SR28 (2015), NDB 20031, Millet, raw (Panicum miliaceum)",
+    "fibreNote": "This is the proso millet entry, not a value for every millet species or a cooked noodle cup.",
+    "grainSource": "https://www.fao.org/millets-2023/about/",
+    "agronomySource": "https://www.fao.org/europe/news/detail/millet--the--forgotten-crop--is-making-a-comeback/en"
+  }
+]
