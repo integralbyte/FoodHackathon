@@ -8,7 +8,7 @@ Open `index.html` directly in a browser; the complete experience works offline. 
 
 ## The flow
 
-The page opens with **21 cups and bowls on stocked shelves**: twenty selected U.S. and UK products from Nissin, Nongshim, Buldak, NOMI, immi and Miyoka, with Sorami in the middle. The opening is entirely scroll-driven: the shopper's headline, four centered title-only preference cards, the products, and the final Sorami reveal. There is no header slogan, comparison button or dialog, footer, numeric counter, playback bar, stage navigation, or bottom explanatory text. The shelves use the reclaimed space. Left/right arrow keys also advance stages; reduced-motion scrolling switches directly between completed stages.
+The page opens with **21 cups and bowls on stocked shelves**: twenty selected U.S. and UK products from Nissin, Nongshim, Buldak, NOMI, immi and Miyoka, with Sorami in the middle. The opening is entirely scroll-driven: the shopper's headline, four centered title-only preference cards, the products, and the final Sorami reveal. There is no header slogan, comparison button or dialog, footer, numeric counter, playback bar, stage navigation, or bottom explanatory text. The shelves use the reclaimed space. Nutrition badges above the cups and numerical cross-out labels are removed; all crosses use red ink. Left/right arrow keys also advance stages; reduced-motion scrolling switches directly between completed stages.
 
 The sequence is **protein ≥10g → sodium <900mg → fibre ≥6g → not deep-fried**, applied to each complete cup with seasoning. The four displayed cards contain only their plain-language titles. The illustrated progression remains **21 → 11 → 8 → 5 → 1**:
 
