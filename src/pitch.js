@@ -185,7 +185,7 @@
   }
  }
  function measured(){const rect=root.getBoundingClientRect(),distance=root.offsetHeight-window.innerHeight;return clamp(distance>0?-rect.top/distance:0)*count}
- function sceneAt(value,now){const index=Math.min(count-1,Math.floor(value));if(index!==active){active=index;if(forcedEntry!==index)forcedEntry=-1;scenes.forEach((s,i)=>{s.hidden=i!==index;s.inert=i!==index});chapterButtons.forEach((b,i)=>{if(i===index)b.setAttribute('aria-current','step');else b.removeAttribute('aria-current')});$('pitch-count').textContent=`${String(index+1).padStart(2,'0')} / ${count}`;$('pitch-current-title').textContent=scenes[index].dataset.chapter;$('pitch-prev').disabled=index===0;$('pitch-next').disabled=index===count-1;}
+ function sceneAt(value,now){const index=Math.min(count-1,Math.floor(value));if(index!==active){active=index;root.dataset.tone=scenes[index].dataset.tone;$('pitch-folio').textContent=String(index+1).padStart(2,'0');if(forcedEntry!==index)forcedEntry=-1;scenes.forEach((s,i)=>{s.hidden=i!==index;s.inert=i!==index});chapterButtons.forEach((b,i)=>{if(i===index)b.setAttribute('aria-current','step');else b.removeAttribute('aria-current')});$('pitch-count').textContent=`${String(index+1).padStart(2,'0')} / ${count}`;$('pitch-current-title').textContent=scenes[index].dataset.chapter;$('pitch-prev').disabled=index===0;$('pitch-next').disabled=index===count-1;}
   let local=clamp(value-index);if(reduced)local=1;else if(forcedEntry===index){local=Math.min(local,(now-entryStart)/1600);if(now-entryStart>=1600)forcedEntry=-1}
   paint(local,now);
  }

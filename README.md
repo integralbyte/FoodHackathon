@@ -1,6 +1,6 @@
 # Sorami — From Grain to Campus
 
-A self-contained opening film, scroll-driven product animation, and interactive eleven-chapter pitch based on the supplied **SORAMI Pitch: Access & Innovation** deck. The original Sorami logo, orange, gold, and warm cream palette carry through the experience.
+A self-contained opening film, scroll-driven product animation, and interactive eleven-chapter pitch based on the supplied **SORAMI Pitch: Access & Innovation** deck. The Sorami logo and packaging anchor a textured visual system: burgundy, dark cocoa, toasted wheat, and olive chapters, with gold accents, fine paper grain, botanical engravings, and serif display type.
 
 ## Open it
 
@@ -26,6 +26,8 @@ The deck follows in its original order, rebuilt as objects and interactions rath
 10. **The growers:** stems draw, leaves unfurl, seed heads assemble, and partnership choices explain the ambition.
 11. **The easy choice:** a grain sun assembles around the cup; replay returns to the opening grains.
 
+The chapter palette follows the story: burgundy for the product reveal and close, cocoa for the late-night student and business scenes, toasted wheat for the product and market, and olive for access and growers. Controls, source panels, diagrams, and labels share the current palette. The background texture is a local SVG noise tile, so the theme adds no network dependency.
+
 The pitch supports scrolling, chapter navigation, a progress scrubber, left/right arrows, and guided playback. Wheel, touch, or interacting with a control pauses playback. Space toggles playback when no interactive control has focus. The chapter menu jumps directly to any part. The **Sources & assumptions** dialog explains the numbers and their limits.
 
 Reduced motion presents each chapter in its completed state. Play is an explicit opt-in to animation. Inactive chapters are hidden and inert, inputs are labeled, and only the on-screen scene runs. Short screens can scroll a chapter internally.
@@ -36,6 +38,7 @@ Reduced motion presents each chapter in its completed state. Play is an explicit
 - `src/film.html`, `src/film.css`, `src/film.js`: full-screen opening, theme treatment, and motion-aware playback.
 - `assets/sorami-opening.mp4`, `assets/sorami-opening-poster.jpg`: optimized silent H.264 copy of the supplied film and its first-scene poster. The opening uses the replacement clip supplied as `copy_C90F67D0-9C83-4B85-9295-8A3D744B1F67.MOV`, optimized to 1080p H.264 at 30 fps. A soft, feathered blur obscures the bottom-right watermark from 6.000 seconds through the end; all earlier frames bypass the blur. The logo stays outside the filtered region. The source video remains unchanged. Both assets are embedded by the build so direct-file viewing still works offline.
 - `src/pitch.html`, `src/pitch.css`, `src/pitch.js`: deck scenes, visuals, interactions, sources, and choreography.
+- `src/pitch-theme.css`: chapter palettes, paper grain, typography, material treatments, and responsive controls. Chapter `data-tone` attributes select the palette.
 - `assets/sorami-package-reference.png`: the unchanged supplied `01-front.png` reference. SVG silhouettes separate its body and foil lid for animation, preserving the original print, cream color, burgundy-and-gold trim, and tall proportions. The same cup artwork is reused throughout the pitch.
 - `src/page.html`: page metadata and wrapper.
 - `scripts/build.mjs`: embeds the logo and all source files into `index.html`.
