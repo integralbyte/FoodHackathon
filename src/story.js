@@ -12,16 +12,7 @@
  let seed=47;const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296};
  const nodes=Object.fromEntries(Array.from(root.querySelectorAll('[id]'),e=>[e.id,e]));
  const n=id=>nodes[id];
- const chapters=[
-  {kicker:'01 / Start with the grain',title:'Two grains.\nOne new ritual.',description:'Meet Sorami. Sorghum and millet, reimagined as a familiar cup of noodles. A little convenience for grains with more to give.',status:'55 : 45 sorghum-to-millet ratio within the grain fraction · proposed'},
-  {kicker:'02 / Rethink the shape',title:'Give good grains\na new shape.',description:'Our starting point: a thin, pre-cooked noodle strand. A shorter path for water, in a form people already know.',status:'Proposed process · pre-cook, shape, and dry without frying'},
-  {kicker:'03 / Build the cup',title:'A new home\nfor ancient grains.',description:'The noodle block settles into a familiar cup. A simple format for a desk, a dorm, or wherever a kettle is close.',status:'Cup and noodle geometry are design assumptions'},
-  {kicker:'04 / Bring it together',title:'Add a little\ncolour.',description:'Vegetables and seasoning bring the cup together. The recipe, texture, and flavour are still ours to develop.',status:'Illustrative toppings · final formulation to be tested'},
-  {kicker:'05 / Just add the ritual',title:'Add hot water.\nKeep the heat.',description:'Pour, cover, and let the cup do its work. Heat retention is one of the design choices we can measure next.',status:'Kettle-only preparation is a design goal, not a tested result'},
-  {kicker:'06 / The cup, reimagined',title:'A familiar ritual.\nReimagined.',description:'Sorami. Sorghum + millet. A kettle-only cup. A five-minute target, with the engineering questions ready to test.',status:'Concept visualization · formulation and preparation time untested'}
- ];
- const captions=['Sorghum × millet','From grain to strand','Every layer has a purpose','A little colour. A lot of character.','The kettle moment','Meet Sorami. Your next everyday ritual.'];
- const callouts=[['','',''],['THE NOODLE BLOCK','Drawn strand by strand.',''],['LAYER BY LAYER','Paper. Sleeve. Foil.',''],['A COLOURFUL FINISH','Vegetables + seasoning.',''],['POUR. COVER. PAUSE.','Kettle-only is the design goal.',''],['SMALL GRAINS. BIG IDEAS.','A new cup concept.','']];
+ const chapters=['Sorghum and millet grains.','Forming the noodle cake.','Assembling the cup.','Adding the toppings.','Pouring the water.','Sorami cup complete.'];
  const particles=[],dust=[],strands=[],loose=[],toppings=[],seasoning=[],ripples=[],splashes=[],steam=[],bubbles=[];
  for(let i=0;i<64;i++){
   const a=i*Math.PI/32,r=i%4===0?254:250;
@@ -141,17 +132,16 @@
  const positions=[0,1.61/5.7,2.48/5.7,3.15/5.7,4.7/5.7,1];
  function setChapter(index){
   if(index===current)return;
-  const previous=current;current=index;const c=chapters[index];
-  n('assembly-kicker').textContent=c.kicker;n('assembly-title').textContent=c.title;n('assembly-description').textContent=c.description;n('assembly-status').textContent=c.status;
-  n('assembly-counter').textContent=String(index+1).padStart(2,'0')+' / 06';n('stage-caption').textContent=captions[index];
-  n('detail-callout-title').textContent=callouts[index][0];n('detail-callout-sub').textContent=callouts[index][1];
+  current=index;n('assembly-announcement').textContent=chapters[index];
   root.querySelectorAll('[data-story-step]').forEach((e,i)=>{if(i===index)e.setAttribute('aria-current','step');else e.removeAttribute('aria-current')});
-  n('assembly-end-link').classList.toggle('is-visible',index===5);
-  if(previous>=0&&!staticMode){for(const [i,id] of ['assembly-kicker','assembly-title','assembly-description'].entries())n(id).animate([{opacity:.15,transform:'translateY(9px)'},{opacity:1,transform:'translateY(0)'}],{duration:330,delay:i*25,easing:'cubic-bezier(.2,.65,.3,1)'});}
  }
  function paint(p,time){
   const s=p*5.7;root.style.setProperty('--story-progress',String(p));root.dataset.stage=String(chapterAt(s));setChapter(chapterAt(s));
   const cup=smooth(1.75,2.48,s),close=smooth(5.12,5.68,s),fill=smooth(3.82,4.65,s),idle=staticMode?0:1;
+  // Reframe the grain clouds, full assembly, and finished cup around the center.
+  const wide=smooth(1.3,2.08,s),hero=smooth(5.25,5.7,s);
+  const camera=[mix(mix(130,90,wide),170,hero),mix(mix(180,80,wide),365,hero),mix(mix(640,720,wide),560,hero),mix(mix(470,710,wide),420,hero)];
+  n('assembly-art').setAttribute('viewBox',camera.map(v=>v.toFixed(2)).join(' '));
   viewX+=(pointerX-viewX)*.06;viewY+=(pointerY-viewY)*.06;
   transform(n('assembly-scene'),`translate(${viewX*5} ${viewY*3+Math.sin(time*.7)*1.2*idle}) rotate(${viewX*.45} 450 480)`);
   transform(n('orbital-field'),`rotate(${s*5+time*.9*idle} 450 440)`);opacity(n('orbital-field'),mix(.9,.36,cup));
@@ -217,7 +207,6 @@
   const pulse=smooth(5.45,5.7,s);transform(n('seal-ring'),`translate(450 472) scale(${1+pulse*.13}) translate(-450 -472)`);opacity(n('seal-ring'),Math.sin(pulse*Math.PI)*.45);
   transform(n('lid-glint'),`translate(${(time%9)/9*620} 0)`);transform(n('cup-glint'),`translate(${(time%9)/9*620} 0)`);opacity(n('cup-glint'),.16+close*.24);
   opacity(n('assembly-shadow'),mix(.035,.2,cup));transform(n('assembly-shadow'),`translate(0 ${mix(-230,0,cup)})`);
-  opacity(n('detail-callout'),smooth(1.82,2.13,s)*(1-smooth(2.6,2.82,s))*.75+(smooth(5.48,5.7,s)*.75));
  }
  function measuredProgress(){const rect=root.getBoundingClientRect(),distance=root.offsetHeight-window.innerHeight;return distance>0?clamp(-rect.top/distance):1}
  function tick(now){
@@ -231,15 +220,15 @@
   if(!staticMode)frame=requestAnimationFrame(tick);
  }
  function request(){if(!frame&&!document.hidden&&visible)frame=requestAnimationFrame(tick)}
- function stopTour(){if(tour){cancelAnimationFrame(tour);tour=0}n('assembly-play').innerHTML='<span aria-hidden="true">▶</span> Play story';n('assembly-play').setAttribute('aria-pressed','false')}
- function enableMotion(){if(staticMode){staticMode=false;root.classList.remove('is-static');n('assembly-cue').innerHTML='Scroll to bring<br>the cup together'}request()}
+ function stopTour(){if(tour){cancelAnimationFrame(tour);tour=0}n('assembly-play').innerHTML='<span aria-hidden="true">▶</span> Play';n('assembly-play').setAttribute('aria-label','Play animation');n('assembly-play').setAttribute('aria-pressed','false')}
+ function enableMotion(){if(staticMode){staticMode=false;root.classList.remove('is-static')}request()}
  function scrollToProgress(p,behavior='smooth'){const top=window.scrollY+root.getBoundingClientRect().top;window.scrollTo({top:top+p*(root.offsetHeight-window.innerHeight),behavior})}
- root.querySelectorAll('a[href="#cup-story"]').forEach(e=>e.addEventListener('click',event=>{event.preventDefault();stopTour();if(!staticMode)scrollToProgress(0);request()}));
+ n('assembly-replay').addEventListener('click',()=>{stopTour();enableMotion();scrollToProgress(0);request()});
  root.querySelectorAll('[data-story-step]').forEach(e=>e.addEventListener('click',()=>{stopTour();enableMotion();scrollToProgress(positions[+e.dataset.storyStep])}));
  n('assembly-play').setAttribute('aria-pressed','false');
  n('assembly-play').addEventListener('click',()=>{
   if(tour){stopTour();return}enableMotion();tourFrom=measuredProgress();if(tourFrom>.94)tourFrom=0;tourStarted=performance.now();scrollToProgress(tourFrom,'instant');
-  n('assembly-play').innerHTML='<span aria-hidden="true">Ⅱ</span> Pause story';n('assembly-play').setAttribute('aria-pressed','true');
+  n('assembly-play').innerHTML='<span aria-hidden="true">Ⅱ</span> Pause';n('assembly-play').setAttribute('aria-label','Pause animation');n('assembly-play').setAttribute('aria-pressed','true');
   function step(now){const p=clamp(tourFrom+(now-tourStarted)/26000);scrollToProgress(p,'instant');if(p<1)tour=requestAnimationFrame(step);else stopTour()}
   tour=requestAnimationFrame(step);
  });
@@ -250,8 +239,8 @@
  document.addEventListener('visibilitychange',()=>{lastClock=0;if(document.hidden)stopTour();else request()});
  new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible){lastClock=0;request()}else stopTour()}).observe(root);
  document.addEventListener('keydown',e=>{if(['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)||(e.key===' '&&document.activeElement===n('assembly-play')))return;if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();stopTour();enableMotion();scrollToProgress(positions[Math.min(5,Math.max(0,current+(e.key==='ArrowRight'?1:-1)))])}else if(['PageDown','PageUp','Home','End','ArrowDown','ArrowUp','Escape',' '].includes(e.key))stopTour()});
- function applyReducedMotion(){stopTour();staticMode=motionPreference.matches;root.classList.toggle('is-static',staticMode);n('assembly-cue').innerHTML=staticMode?'Reduced motion<br>Play to animate':'Scroll to bring<br>the cup together';display=staticMode?1:measuredProgress();request()}
+ function applyReducedMotion(){stopTour();staticMode=motionPreference.matches;root.classList.toggle('is-static',staticMode);display=staticMode?1:measuredProgress();request()}
  motionPreference.addEventListener('change',applyReducedMotion);
- if(staticMode){root.classList.add('is-static');n('assembly-cue').innerHTML='Reduced motion<br>Play to animate';display=1}
+ if(staticMode){root.classList.add('is-static');display=1}
  display=staticMode?1:measuredProgress();paint(display,0);request();
 })();

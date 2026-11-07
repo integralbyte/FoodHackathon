@@ -6,108 +6,54 @@
  <meta name="theme-color" content="#fff7e8">
  <meta name="description" content="Sorami: a scroll-driven sorghum–millet noodle cup concept. Watch grains, noodles, toppings, water, and a lid come together.">
  <title>Sorami · From Grain to Cup</title>
- <style>/* Shared page primitives; all artwork and motion are local. */
-:root{--orange:#ff6c14;--gold:#fbc644;--charcoal:#383837;--cream:#fff7e8;--font:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color-scheme:light}
-*{box-sizing:border-box}html,body{margin:0;background:#fff7e8;color:#383837;font:16px/1.5 var(--font)}
-button,a{touch-action:manipulation}button{font:inherit;cursor:pointer;color:inherit}a{color:inherit}
-button:focus-visible,a:focus-visible{outline:3px solid #ad450c;outline-offset:4px}
-.eyebrow{font-size:12px;letter-spacing:1.7px;text-transform:uppercase;font-weight:650}
-.assembly-intro{position:relative;height:590svh;background:#fff7e8;color:#383837;--story-progress:0;isolation:isolate}
-.assembly-pin{position:sticky;top:0;height:100svh;min-height:620px;overflow:clip;background:radial-gradient(ellipse at 73% 46%,#fffdf5 0,#fff4df 43%,#f4e4c6 100%)}
-.assembly-header{position:absolute;inset:13px 36px auto;z-index:4;display:flex;justify-content:space-between;align-items:center;gap:20px}
-.assembly-brand{display:block;flex-shrink:0;text-decoration:none;line-height:0;mix-blend-mode:multiply}.brand-logo{display:block;width:122px;height:70px}
-.assembly-header .eyebrow{font-size:10px;color:#776750;letter-spacing:2px}
-.assembly-jump{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:13px;color:#383837;border-bottom:1px solid #ce9a58;padding:7px 0}
-.assembly-layout{position:absolute;inset:118px 36px 112px;max-width:1320px;margin:auto;display:grid;grid-template-columns:39% 61%;align-items:center}
-.assembly-copy{position:relative;z-index:2;align-self:center;padding-bottom:18px;pointer-events:none}
-.assembly-kicker{font-size:11px;font-weight:650;letter-spacing:2.4px;text-transform:uppercase;color:#a44a18;display:flex;align-items:center;gap:11px;margin-bottom:25px}
-.assembly-kicker:before{content:'';width:28px;height:1px;background:#a44a18}
-.assembly-copy h1{font:400 clamp(44px,5.6vw,79px)/.98 Georgia,serif;letter-spacing:-3px;margin:0 0 25px;max-width:510px;white-space:pre-line}
-.assembly-copy p{font-size:15px;line-height:1.7;color:#6d6254;max-width:335px;margin:0 0 19px;min-height:76px}
-.assembly-status{font-size:11px;letter-spacing:.35px;color:#92591f;display:block;padding-top:17px;border-top:1px solid #e7d4af;max-width:315px}
-.assembly-stage{width:117%;margin-left:-5%;height:100%;position:relative;align-self:center;min-width:0;pointer-events:none}
-.assembly-stage:before{content:'';position:absolute;width:75%;aspect-ratio:1;left:12%;top:4%;border-radius:50%;background:radial-gradient(circle,#fff8df 0%,#f8dfa1 70%);opacity:.65}
-.assembly-art{position:absolute;inset:-35px 0 -15px;width:100%;height:calc(100% + 50px);overflow:visible}
-.assembly-art text{font-family:var(--font)}
-.assembly-bottom{position:absolute;left:36px;right:36px;bottom:25px;z-index:4;display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:24px}
-.assembly-cue{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;line-height:1.8;display:flex;align-items:center;gap:13px;color:#776750}
-.assembly-cue span{font-size:24px;font-family:Georgia,serif;color:#e85e12;line-height:1}
-.assembly-controls{display:flex;gap:12px;align-items:center}
-.assembly-play{border:1px solid #e7bc7a;border-radius:30px;padding:9px 16px;font-size:12px;white-space:nowrap;background:transparent;display:inline-flex;gap:10px;align-items:center}
-.assembly-play:hover{background:#ffe6b5}
-.assembly-steps{display:flex;gap:0;align-items:center}
-.assembly-steps button{padding:0;border:0;background:transparent;width:23px;height:28px;border-radius:0;position:relative}
-.assembly-steps button:before{content:'';position:absolute;left:50%;top:50%;width:6px;height:6px;border-radius:50%;background:#ddc797;transform:translate(-50%,-50%);transition:background .2s,transform .2s;pointer-events:none}
-.assembly-steps button[aria-current=step]:before{background:#ff6c14;transform:translate(-50%,-50%) scale(1.5)}
-.assembly-note{text-align:right;font-size:10px;line-height:1.7;color:#7c705e;justify-self:end;max-width:210px}
-.assembly-progress{position:absolute;bottom:0;left:0;height:3px;width:100%;background:#f3dbad}
-.assembly-progress:after{content:'';display:block;transform-origin:left;width:100%;height:100%;background:#ff6c14;transform:scaleX(var(--story-progress))}
-.assembly-end-link{display:inline-flex;align-items:center;gap:13px;text-decoration:none;color:#a33f0c;font-size:14px;border-bottom:1px solid #d78d48;padding:5px 0;pointer-events:auto;visibility:hidden;opacity:0;transition:opacity .25s;position:relative;z-index:3}
-.assembly-end-link.is-visible{visibility:visible;opacity:1}
-.assembly-counter{font-size:11px;letter-spacing:1px;color:#8b6e4a;min-width:42px;font-variant-numeric:tabular-nums}
-.assembly-label{font-size:11px;letter-spacing:2px;fill:#8b6d44;font-weight:500}
-.assembly-intro.is-static{height:auto;min-height:760px}
-.assembly-intro.is-static .assembly-pin{position:relative;height:100svh;min-height:760px}
-.assembly-intro.is-static .assembly-cue{font-size:10px}
-.assembly-intro.is-static .assembly-steps{display:none}
-@media(min-width:1600px){.assembly-layout{top:120px}.assembly-art{top:-70px;height:calc(100% + 100px)}}
-@media(max-width:900px){.assembly-layout{grid-template-columns:41% 59%;left:25px;right:25px}.assembly-copy h1{font-size:55px;letter-spacing:-2px}.assembly-copy p{font-size:14px;max-width:270px}.assembly-stage{width:133%;margin-left:-12%}.assembly-header .eyebrow{display:none}.assembly-header{left:25px;right:25px}.assembly-bottom{left:25px;right:25px;gap:14px}.assembly-note{max-width:175px}.assembly-controls{gap:9px}}
-@media(max-width:620px){.assembly-intro{height:540svh}.assembly-pin{min-height:700px}.assembly-header{top:20px;left:22px;right:22px}.assembly-brand{font-size:25px}.assembly-jump{font-size:12px}.assembly-layout{inset:93px 22px 100px;display:block}.assembly-copy{padding:0}.assembly-kicker{margin-bottom:14px;font-size:9px;letter-spacing:1.7px}.assembly-copy h1{font-size:43px;letter-spacing:-1.9px;max-width:370px;line-height:1.02;margin:0 0 14px;white-space:normal}.assembly-copy p{font-size:13px;line-height:1.6;max-width:310px;min-height:63px;margin-bottom:10px}.assembly-status{font-size:10px;max-width:310px;padding-top:10px}.assembly-stage{position:absolute;top:205px;bottom:-17px;left:-25px;right:-25px;width:auto;height:auto;margin:0}.assembly-art{inset:-10px 0 0;height:100%}.assembly-stage:before{width:75%;top:0;left:12%}.assembly-bottom{left:22px;right:22px;bottom:20px;grid-template-columns:1fr auto;gap:8px}.assembly-cue{font-size:8px;letter-spacing:.8px;max-width:125px;line-height:1.5;gap:9px}.assembly-controls{justify-self:end;gap:13px}.assembly-play{padding:8px 12px;font-size:11px}.assembly-note{grid-column:1/-1;justify-self:center;max-width:none;text-align:center;font-size:9px;margin-top:10px}.assembly-counter{display:none}.assembly-steps{gap:0}.assembly-steps button{width:18px;height:28px}.assembly-steps button:before{width:5px;height:5px}.assembly-end-link{font-size:12px;position:absolute;top:157px;left:0}.assembly-intro.is-static,.assembly-intro.is-static .assembly-pin{min-height:760px}}
-@media(max-width:370px){.assembly-copy h1{font-size:38px}.assembly-stage{top:227px;bottom:-9px}.assembly-copy p{font-size:12px;max-width:270px}.assembly-steps{display:none}.assembly-end-link{top:180px}.assembly-header{left:18px;right:18px}.assembly-layout{left:18px;right:18px}}
-@media(max-height:650px) and (min-width:621px){.assembly-pin{min-height:520px}.assembly-layout{top:88px;bottom:86px}.assembly-copy h1{font-size:55px;letter-spacing:-2px;margin-bottom:17px}.assembly-copy p{font-size:13px;line-height:1.6;min-height:55px;margin-bottom:12px}.assembly-kicker{margin-bottom:15px}.assembly-status{padding-top:11px;font-size:10px}.assembly-bottom{bottom:18px}}
-@media(prefers-reduced-motion:reduce){.assembly-steps button,.assembly-end-link{transition:none}}
-@media print{.assembly-intro{height:100vh}.assembly-pin{position:relative}}
-/* Material, lighting and micro-motion for the expanded assembly. */
-.assembly-intro{height:650svh}
-.assembly-pin{background:radial-gradient(ellipse at 76% 40%,#fffdf6 0,#fff3d9 48%,#f7e3ba 100%)}
+ <style>:root{--orange:#ff6c14;--gold:#fbc644;--charcoal:#383837;--cream:#fff7e8;--font:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color-scheme:light}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--cream);color:var(--charcoal);font:16px/1.5 var(--font)}
+button{font:inherit;cursor:pointer;color:inherit;touch-action:manipulation}
+button:focus-visible{outline:3px solid #ad450c;outline-offset:4px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.assembly-intro{position:relative;height:650svh;background:var(--cream);--story-progress:0;isolation:isolate}
+.assembly-pin{position:sticky;top:0;height:100svh;overflow:clip;background:radial-gradient(ellipse at 50% 46%,#fffdf6 0,#fff3d9 55%,#f7e3ba 100%)}
 .ambient-grain{position:absolute;inset:0;pointer-events:none;opacity:.18;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.76' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23887854' opacity='.18' filter='url(%23n)' d='M0 0h160v160H0z'/%3E%3C/svg%3E");mix-blend-mode:multiply}
-
-.assembly-header{border-bottom:1px solid #d9ad6540;padding-bottom:8px}
-.assembly-stage:before{width:78%;left:11%;top:0;background:radial-gradient(circle at 43% 31%,#fffdf5 0,#ffefc5 48%,#ffd67a 100%);box-shadow:inset 0 0 90px #fff8df,0 30px 80px #fbc64420;opacity:.67}
-.assembly-stage:after{content:'';position:absolute;width:80%;height:12%;bottom:-8%;left:10%;border-radius:50%;background:radial-gradient(ellipse,#cc88351c,transparent 70%);z-index:-1}
-.assembly-art{inset:-63px 0 -32px;height:calc(100% + 95px)}
-.stage-caption{position:absolute;top:-19px;left:9%;right:6%;z-index:1;display:flex;align-items:center;gap:9px;color:#9b7541;font-size:9px;letter-spacing:1.2px;text-transform:uppercase}
-.stage-caption-dot{width:5px;height:5px;border-radius:50%;background:#ff6c14}
-.stage-edition{margin-left:auto;opacity:.65;font-size:8px}
-.art-callout{fill:#946c33;font-size:8px;letter-spacing:1.7px;font-weight:550}
+.assembly-layout{position:absolute;inset:18px 24px 82px;display:grid;place-items:center}
+.assembly-stage{position:relative;width:100%;height:100%;max-width:1400px;min-width:0;pointer-events:none}
+.assembly-stage:before{content:'';position:absolute;width:min(78svh,82vw);aspect-ratio:1;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle at 43% 31%,#fffdf5 0,#ffefc5 48%,#ffd67a 100%);box-shadow:inset 0 0 90px #fff8df,0 30px 80px #fbc64420;opacity:.46}
+.assembly-art{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.assembly-art text{font-family:var(--font)}
+.art-callout{fill:#946c33;font-size:12px;letter-spacing:2.2px;font-weight:550}
 .art-callout path,.art-callout circle{fill:none;stroke:#c59851;stroke-width:.8;opacity:.65}
-.art-callout .art-callout-sub{font-size:8px;letter-spacing:.1px;fill:#a0855c;font-weight:400}
-.assembly-play{background:#fff9eda3;box-shadow:0 3px 8px #a65b1606;transition:background .2s,box-shadow .2s}
-.assembly-play:hover{box-shadow:0 4px 15px #a65b1612}
+.assembly-bottom{position:absolute;left:12px;right:12px;bottom:max(22px,env(safe-area-inset-bottom));z-index:4;display:flex;justify-content:center}
+.assembly-controls{display:flex;align-items:center;gap:7px;padding:5px 6px;border:1px solid #dfbb787a;border-radius:40px;background:#fff9ecc7;backdrop-filter:blur(12px);box-shadow:0 5px 20px #a65b160a}
+.assembly-play{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:86px;height:38px;border:1px solid #e7bc7a;border-radius:24px;padding:0 14px;font-size:12px;white-space:nowrap;background:#fffaf0;transition:background .2s}
+.assembly-play:hover{background:#ffe6b5}
 .assembly-play[aria-pressed=true]{background:var(--orange);color:#34271f;border-color:var(--orange)}
-.assembly-controls{padding:5px 6px 5px 16px;border:1px solid #dfbb7866;border-radius:40px;background:#fff9ecb3;backdrop-filter:blur(12px)}
+.assembly-replay{display:grid;place-items:center;width:38px;height:38px;padding:0;border:0;border-radius:50%;background:transparent;color:#8c6633}
+.assembly-replay:hover{background:#ffe6b5}
+.assembly-replay svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.assembly-steps{display:flex;align-items:center;gap:0}
+.assembly-steps button{padding:0;border:0;background:transparent;width:26px;height:38px;position:relative}
+.assembly-steps button:before{content:'';position:absolute;left:50%;top:50%;width:6px;height:6px;border-radius:50%;background:#ddc797;transform:translate(-50%,-50%);transition:background .2s,transform .2s;pointer-events:none}
+.assembly-steps button[aria-current=step]:before{background:var(--orange);transform:translate(-50%,-50%) scale(1.5)}
+.assembly-progress{position:absolute;bottom:0;left:0;height:2px;width:100%;background:#f3dbad}
+.assembly-progress:after{content:'';display:block;transform-origin:left;width:100%;height:100%;background:linear-gradient(90deg,var(--gold),var(--orange));transform:scaleX(var(--story-progress))}
 .flowing-water{animation:water-flow 1.25s linear infinite}.flow-secondary{animation-duration:1.9s}
 @keyframes water-flow{to{stroke-dashoffset:-194}}
-.assembly-cue>span{animation:scroll-cue 2.8s ease-in-out infinite}
-@keyframes scroll-cue{0%,100%{transform:translateY(-3px);opacity:.6}50%{transform:translateY(3px);opacity:1}}
-.assembly-intro.is-static .flowing-water,.assembly-intro.is-static .assembly-cue>span{animation:none}
-@media(min-width:1600px){.assembly-art{top:-78px;height:calc(100% + 120px)}}
-@media(max-width:900px){.stage-caption{left:15%;right:10%;top:-18px}.stage-edition{display:none}.assembly-controls{padding-left:11px;gap:5px}.assembly-art{top:-55px;height:calc(100% + 90px)}}
-@media(max-width:620px){.assembly-intro{height:600svh}.assembly-pin{min-height:700px}.assembly-header{padding-bottom:12px}.assembly-copy h1{font-size:42px}.assembly-stage{top:220px;bottom:-6px}.assembly-stage:before{width:68%;left:16%;top:3%}.assembly-art{inset:-34px 0 -12px;height:calc(100% + 46px)}.stage-caption{top:-14px;left:14%;right:14%;font-size:7px;letter-spacing:1px}.stage-edition{display:block;font-size:6px}.assembly-controls{gap:6px;padding:3px 4px 3px 9px}.assembly-cue{max-width:105px}.assembly-bottom{gap:3px}.assembly-end-link{top:180px}.art-callout{font-size:8px}.assembly-stage:after{bottom:-2%}}
-@media(max-width:370px){.assembly-copy h1{font-size:36px}.assembly-stage{top:238px;bottom:-5px}.stage-caption{top:-15px}.assembly-end-link{top:198px}.assembly-controls{padding-left:4px}}
-@media(max-height:650px) and (min-width:621px){.assembly-art{top:-42px;height:calc(100% + 65px)}.stage-caption{top:-6px}.assembly-header{top:15px;padding-bottom:12px}.assembly-controls{padding-top:3px;padding-bottom:3px}}
-@media(prefers-reduced-motion:reduce){.flowing-water,.assembly-cue>span{animation:none}.assembly-play{transition:none}}
-
-/* Sorami artwork keeps its original pixels; multiply removes the white box. */
-.assembly-header .eyebrow{color:#7f6848}
-.assembly-copy h1{color:var(--charcoal)}
-.assembly-progress:after{background:linear-gradient(90deg,var(--gold),var(--orange))}
-@media(max-width:900px){.brand-logo{width:112px;height:64px}}
-@media(max-width:620px){.assembly-header{top:9px;padding-bottom:7px}.brand-logo{width:105px;height:60px}.assembly-layout{top:101px}.assembly-jump{padding:6px 0}.assembly-copy h1{color:var(--charcoal)}}
-@media(max-height:650px) and (min-width:621px){.assembly-header{top:5px;padding-bottom:4px}.brand-logo{width:100px;height:57px}.assembly-layout{top:92px}}
+.assembly-intro.is-static{height:100svh}
+.assembly-intro.is-static .assembly-pin{position:relative}
+.assembly-intro.is-static .flowing-water{animation:none}
+@media(max-width:620px){.assembly-intro{height:600svh}.assembly-layout{inset:12px 8px 84px}.assembly-stage:before{width:94vw}.assembly-bottom{bottom:max(18px,env(safe-area-inset-bottom))}.assembly-controls{gap:5px}.assembly-steps button{width:24px}}
+@media(max-height:500px){.assembly-layout{inset:8px 18px 64px}.assembly-bottom{bottom:12px}.assembly-play,.assembly-replay,.assembly-steps button{height:32px}.assembly-replay{width:32px}.assembly-controls{padding:3px 5px}}
+@media(prefers-reduced-motion:reduce){.flowing-water{animation:none}.assembly-play,.assembly-steps button:before{transition:none}}
+@media print{.assembly-intro{height:100vh}.assembly-pin{position:relative}.assembly-bottom,.assembly-progress{display:none}}
 </style>
 </head>
 <body>
  <section class="assembly-intro" id="cup-story" aria-label="From grain to cup: concept assembly animation">
  <div class="assembly-pin">
   <div class="ambient-grain" aria-hidden="true"></div>
-  <header class="assembly-header"><a class="assembly-brand" href="#cup-story" aria-label="Sorami, start of cup story"><svg class="brand-logo" viewBox="0 0 1260 720" aria-hidden="true"><use href="#sorami-logo" width="1260" height="720"/></svg></a><span class="eyebrow">Small grains. A new everyday ritual.</span><a class="assembly-jump" href="#cup-story">Replay story <span aria-hidden="true">↻</span></a></header>
   <div class="assembly-layout">
-   <div class="assembly-copy"><div class="assembly-kicker" id="assembly-kicker">01 / Start with the grain</div><h1 id="assembly-title">Two grains.
-One new ritual.</h1><p id="assembly-description">Sorghum and millet, reimagined as a familiar cup of noodles. A little convenience for grains with more to give.</p><span class="assembly-status" id="assembly-status">55 : 45 sorghum-to-millet ratio within the grain fraction · proposed</span><a class="assembly-end-link" id="assembly-end-link" href="#cup-story">Watch it again <span aria-hidden="true">↻</span></a></div>
    <div class="assembly-stage">
-    <div class="stage-caption" aria-hidden="true"><span class="stage-caption-dot"></span><span id="stage-caption">Sorghum × millet</span><span class="stage-edition">CONCEPT 01</span></div>
-    <svg class="assembly-art" id="assembly-art" viewBox="130 100 640 700" role="img" aria-labelledby="assembly-art-title assembly-art-description">
+    <svg class="assembly-art" id="assembly-art" viewBox="130 180 640 470" role="img" aria-labelledby="assembly-art-title assembly-art-description">
      <title id="assembly-art-title">Sorami sorghum and millet cup noodle concept</title><desc id="assembly-art-description">An original layered illustration: two clouds of grains spiral into drawn noodle strands, a textured paper cup and printed sleeve assemble, vegetables tumble in, broth visibly rises around the noodles, ripples and steams, and a foil lid seals the cup. This is a concept visualization, not a food-process simulation.</desc>
      <defs>
       <!-- The supplied artwork is kept intact. Cropping and multiply blending
@@ -144,7 +90,7 @@ One new ritual.</h1><p id="assembly-description">Sorghum and millet, reimagined 
       <ellipse id="assembly-shadow" cx="450" cy="757" rx="186" ry="20" fill="#6a492c" opacity=".16" filter="url(#soft-shadow)"/>
       <g id="grain-trails" fill="none" stroke-width="1" stroke="#a48d53" opacity=".2"><path d="M211 403C139 211 438 174 453 372S716 581 697 347"/><path d="M224 435C156 238 472 185 472 386S714 558 684 330" stroke-dasharray="2 8"/></g>
       <g id="grain-dust"></g><g id="grain-field"></g>
-      <g id="grain-names" class="art-callout"><path d="M289 504v35h-67M593 504v35h67"/><circle cx="289" cy="504" r="2"/><circle cx="593" cy="504" r="2"/><text x="221" y="560">SORGHUM</text><text x="585" y="560">MILLET</text><text x="221" y="576" class="art-callout-sub">Earthy. Rounded.</text><text x="585" y="576" class="art-callout-sub">Small. Golden.</text></g>
+      <g id="grain-names" class="art-callout"><path d="M289 504v35h-67M593 504v35h67"/><circle cx="289" cy="504" r="2"/><circle cx="593" cy="504" r="2"/><text x="221" y="560">SORGHUM</text><text x="585" y="560">MILLET</text></g>
       <g id="cup-base"><ellipse cx="450" cy="717" rx="151" ry="42" fill="#bca583"/><ellipse cx="450" cy="713" rx="151" ry="40" fill="url(#cup-paper)"/><ellipse cx="450" cy="712" rx="141" ry="33" fill="none" stroke="#eeebd6" stroke-width="2"/></g>
       <g id="cup-back"><path d="M260 470L302 706Q450 766 598 706L640 470Z" fill="url(#cup-paper)"/><ellipse cx="450" cy="470" rx="190" ry="64" fill="url(#cup-rim)"/><ellipse cx="450" cy="470" rx="176" ry="53" fill="url(#cup-inside)"/><path d="M275 465C340 403 560 403 625 465" stroke="#fffce8" stroke-width="3" fill="none" opacity=".7"/><path d="M282 474C343 424 555 424 618 474" stroke="#a28b65" stroke-width="1" fill="none" opacity=".5"/></g>
       <g id="noodle-block">
@@ -194,11 +140,17 @@ One new ritual.</h1><p id="assembly-description">Sorghum and millet, reimagined 
       </g>
       <ellipse id="seal-ring" cx="450" cy="472" rx="202" ry="67" fill="none" stroke="#ff6c14" stroke-width="1"/>
      </g>
-     <g id="detail-callout" class="art-callout"><path id="detail-callout-line" d="M597 350h47l25-28"/><circle cx="597" cy="350" r="2"/><text id="detail-callout-title" x="654" y="306" text-anchor="end">LAYER BY LAYER</text><text id="detail-callout-sub" x="654" y="321" text-anchor="end" class="art-callout-sub">A familiar format, rethought.</text></g>
     </svg>
    </div>
   </div>
-  <div class="assembly-bottom"><div class="assembly-cue"><span aria-hidden="true">↓</span><div id="assembly-cue">Scroll to bring<br>the cup together</div></div><div class="assembly-controls"><span class="assembly-counter" id="assembly-counter">01 / 06</span><div class="assembly-steps" aria-label="Cup assembly chapters"><button aria-label="Start with the grains" aria-current="step" data-story-step="0"></button><button aria-label="Form the noodle block" data-story-step="1"></button><button aria-label="Assemble the cup" data-story-step="2"></button><button aria-label="Add the toppings" data-story-step="3"></button><button aria-label="Pour the water" data-story-step="4"></button><button aria-label="Close the lid" data-story-step="5"></button></div><button class="assembly-play" id="assembly-play"><span aria-hidden="true">▶</span> Play story</button></div><div class="assembly-note">Concept visualization<br>Formulation and five-minute target untested</div></div>
+  <div class="assembly-bottom">
+   <div class="assembly-controls" role="group" aria-label="Animation controls">
+    <button class="assembly-replay" id="assembly-replay" aria-label="Replay animation" title="Replay animation"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/></svg></button>
+    <div class="assembly-steps" aria-label="Cup assembly chapters"><button aria-label="Start with the grains" aria-current="step" data-story-step="0"></button><button aria-label="Form the noodle block" data-story-step="1"></button><button aria-label="Assemble the cup" data-story-step="2"></button><button aria-label="Add the toppings" data-story-step="3"></button><button aria-label="Pour the water" data-story-step="4"></button><button aria-label="Close the lid" data-story-step="5"></button></div>
+    <button class="assembly-play" id="assembly-play" aria-label="Play animation"><span aria-hidden="true">▶</span> Play</button>
+   </div>
+  </div>
+  <p class="sr-only" id="assembly-announcement" aria-live="polite">Sorghum and millet grains.</p>
   <div class="assembly-progress" aria-hidden="true"></div>
  </div>
 </section>
@@ -217,16 +169,7 @@ One new ritual.</h1><p id="assembly-description">Sorghum and millet, reimagined 
  let seed=47;const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296};
  const nodes=Object.fromEntries(Array.from(root.querySelectorAll('[id]'),e=>[e.id,e]));
  const n=id=>nodes[id];
- const chapters=[
-  {kicker:'01 / Start with the grain',title:'Two grains.\nOne new ritual.',description:'Meet Sorami. Sorghum and millet, reimagined as a familiar cup of noodles. A little convenience for grains with more to give.',status:'55 : 45 sorghum-to-millet ratio within the grain fraction · proposed'},
-  {kicker:'02 / Rethink the shape',title:'Give good grains\na new shape.',description:'Our starting point: a thin, pre-cooked noodle strand. A shorter path for water, in a form people already know.',status:'Proposed process · pre-cook, shape, and dry without frying'},
-  {kicker:'03 / Build the cup',title:'A new home\nfor ancient grains.',description:'The noodle block settles into a familiar cup. A simple format for a desk, a dorm, or wherever a kettle is close.',status:'Cup and noodle geometry are design assumptions'},
-  {kicker:'04 / Bring it together',title:'Add a little\ncolour.',description:'Vegetables and seasoning bring the cup together. The recipe, texture, and flavour are still ours to develop.',status:'Illustrative toppings · final formulation to be tested'},
-  {kicker:'05 / Just add the ritual',title:'Add hot water.\nKeep the heat.',description:'Pour, cover, and let the cup do its work. Heat retention is one of the design choices we can measure next.',status:'Kettle-only preparation is a design goal, not a tested result'},
-  {kicker:'06 / The cup, reimagined',title:'A familiar ritual.\nReimagined.',description:'Sorami. Sorghum + millet. A kettle-only cup. A five-minute target, with the engineering questions ready to test.',status:'Concept visualization · formulation and preparation time untested'}
- ];
- const captions=['Sorghum × millet','From grain to strand','Every layer has a purpose','A little colour. A lot of character.','The kettle moment','Meet Sorami. Your next everyday ritual.'];
- const callouts=[['','',''],['THE NOODLE BLOCK','Drawn strand by strand.',''],['LAYER BY LAYER','Paper. Sleeve. Foil.',''],['A COLOURFUL FINISH','Vegetables + seasoning.',''],['POUR. COVER. PAUSE.','Kettle-only is the design goal.',''],['SMALL GRAINS. BIG IDEAS.','A new cup concept.','']];
+ const chapters=['Sorghum and millet grains.','Forming the noodle cake.','Assembling the cup.','Adding the toppings.','Pouring the water.','Sorami cup complete.'];
  const particles=[],dust=[],strands=[],loose=[],toppings=[],seasoning=[],ripples=[],splashes=[],steam=[],bubbles=[];
  for(let i=0;i<64;i++){
   const a=i*Math.PI/32,r=i%4===0?254:250;
@@ -346,17 +289,16 @@ One new ritual.</h1><p id="assembly-description">Sorghum and millet, reimagined 
  const positions=[0,1.61/5.7,2.48/5.7,3.15/5.7,4.7/5.7,1];
  function setChapter(index){
   if(index===current)return;
-  const previous=current;current=index;const c=chapters[index];
-  n('assembly-kicker').textContent=c.kicker;n('assembly-title').textContent=c.title;n('assembly-description').textContent=c.description;n('assembly-status').textContent=c.status;
-  n('assembly-counter').textContent=String(index+1).padStart(2,'0')+' / 06';n('stage-caption').textContent=captions[index];
-  n('detail-callout-title').textContent=callouts[index][0];n('detail-callout-sub').textContent=callouts[index][1];
+  current=index;n('assembly-announcement').textContent=chapters[index];
   root.querySelectorAll('[data-story-step]').forEach((e,i)=>{if(i===index)e.setAttribute('aria-current','step');else e.removeAttribute('aria-current')});
-  n('assembly-end-link').classList.toggle('is-visible',index===5);
-  if(previous>=0&&!staticMode){for(const [i,id] of ['assembly-kicker','assembly-title','assembly-description'].entries())n(id).animate([{opacity:.15,transform:'translateY(9px)'},{opacity:1,transform:'translateY(0)'}],{duration:330,delay:i*25,easing:'cubic-bezier(.2,.65,.3,1)'});}
  }
  function paint(p,time){
   const s=p*5.7;root.style.setProperty('--story-progress',String(p));root.dataset.stage=String(chapterAt(s));setChapter(chapterAt(s));
   const cup=smooth(1.75,2.48,s),close=smooth(5.12,5.68,s),fill=smooth(3.82,4.65,s),idle=staticMode?0:1;
+  // Reframe the grain clouds, full assembly, and finished cup around the center.
+  const wide=smooth(1.3,2.08,s),hero=smooth(5.25,5.7,s);
+  const camera=[mix(mix(130,90,wide),170,hero),mix(mix(180,80,wide),365,hero),mix(mix(640,720,wide),560,hero),mix(mix(470,710,wide),420,hero)];
+  n('assembly-art').setAttribute('viewBox',camera.map(v=>v.toFixed(2)).join(' '));
   viewX+=(pointerX-viewX)*.06;viewY+=(pointerY-viewY)*.06;
   transform(n('assembly-scene'),`translate(${viewX*5} ${viewY*3+Math.sin(time*.7)*1.2*idle}) rotate(${viewX*.45} 450 480)`);
   transform(n('orbital-field'),`rotate(${s*5+time*.9*idle} 450 440)`);opacity(n('orbital-field'),mix(.9,.36,cup));
@@ -422,7 +364,6 @@ One new ritual.</h1><p id="assembly-description">Sorghum and millet, reimagined 
   const pulse=smooth(5.45,5.7,s);transform(n('seal-ring'),`translate(450 472) scale(${1+pulse*.13}) translate(-450 -472)`);opacity(n('seal-ring'),Math.sin(pulse*Math.PI)*.45);
   transform(n('lid-glint'),`translate(${(time%9)/9*620} 0)`);transform(n('cup-glint'),`translate(${(time%9)/9*620} 0)`);opacity(n('cup-glint'),.16+close*.24);
   opacity(n('assembly-shadow'),mix(.035,.2,cup));transform(n('assembly-shadow'),`translate(0 ${mix(-230,0,cup)})`);
-  opacity(n('detail-callout'),smooth(1.82,2.13,s)*(1-smooth(2.6,2.82,s))*.75+(smooth(5.48,5.7,s)*.75));
  }
  function measuredProgress(){const rect=root.getBoundingClientRect(),distance=root.offsetHeight-window.innerHeight;return distance>0?clamp(-rect.top/distance):1}
  function tick(now){
@@ -436,15 +377,15 @@ One new ritual.</h1><p id="assembly-description">Sorghum and millet, reimagined 
   if(!staticMode)frame=requestAnimationFrame(tick);
  }
  function request(){if(!frame&&!document.hidden&&visible)frame=requestAnimationFrame(tick)}
- function stopTour(){if(tour){cancelAnimationFrame(tour);tour=0}n('assembly-play').innerHTML='<span aria-hidden="true">▶</span> Play story';n('assembly-play').setAttribute('aria-pressed','false')}
- function enableMotion(){if(staticMode){staticMode=false;root.classList.remove('is-static');n('assembly-cue').innerHTML='Scroll to bring<br>the cup together'}request()}
+ function stopTour(){if(tour){cancelAnimationFrame(tour);tour=0}n('assembly-play').innerHTML='<span aria-hidden="true">▶</span> Play';n('assembly-play').setAttribute('aria-label','Play animation');n('assembly-play').setAttribute('aria-pressed','false')}
+ function enableMotion(){if(staticMode){staticMode=false;root.classList.remove('is-static')}request()}
  function scrollToProgress(p,behavior='smooth'){const top=window.scrollY+root.getBoundingClientRect().top;window.scrollTo({top:top+p*(root.offsetHeight-window.innerHeight),behavior})}
- root.querySelectorAll('a[href="#cup-story"]').forEach(e=>e.addEventListener('click',event=>{event.preventDefault();stopTour();if(!staticMode)scrollToProgress(0);request()}));
+ n('assembly-replay').addEventListener('click',()=>{stopTour();enableMotion();scrollToProgress(0);request()});
  root.querySelectorAll('[data-story-step]').forEach(e=>e.addEventListener('click',()=>{stopTour();enableMotion();scrollToProgress(positions[+e.dataset.storyStep])}));
  n('assembly-play').setAttribute('aria-pressed','false');
  n('assembly-play').addEventListener('click',()=>{
   if(tour){stopTour();return}enableMotion();tourFrom=measuredProgress();if(tourFrom>.94)tourFrom=0;tourStarted=performance.now();scrollToProgress(tourFrom,'instant');
-  n('assembly-play').innerHTML='<span aria-hidden="true">Ⅱ</span> Pause story';n('assembly-play').setAttribute('aria-pressed','true');
+  n('assembly-play').innerHTML='<span aria-hidden="true">Ⅱ</span> Pause';n('assembly-play').setAttribute('aria-label','Pause animation');n('assembly-play').setAttribute('aria-pressed','true');
   function step(now){const p=clamp(tourFrom+(now-tourStarted)/26000);scrollToProgress(p,'instant');if(p<1)tour=requestAnimationFrame(step);else stopTour()}
   tour=requestAnimationFrame(step);
  });
@@ -455,9 +396,9 @@ One new ritual.</h1><p id="assembly-description">Sorghum and millet, reimagined 
  document.addEventListener('visibilitychange',()=>{lastClock=0;if(document.hidden)stopTour();else request()});
  new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible){lastClock=0;request()}else stopTour()}).observe(root);
  document.addEventListener('keydown',e=>{if(['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)||(e.key===' '&&document.activeElement===n('assembly-play')))return;if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();stopTour();enableMotion();scrollToProgress(positions[Math.min(5,Math.max(0,current+(e.key==='ArrowRight'?1:-1)))])}else if(['PageDown','PageUp','Home','End','ArrowDown','ArrowUp','Escape',' '].includes(e.key))stopTour()});
- function applyReducedMotion(){stopTour();staticMode=motionPreference.matches;root.classList.toggle('is-static',staticMode);n('assembly-cue').innerHTML=staticMode?'Reduced motion<br>Play to animate':'Scroll to bring<br>the cup together';display=staticMode?1:measuredProgress();request()}
+ function applyReducedMotion(){stopTour();staticMode=motionPreference.matches;root.classList.toggle('is-static',staticMode);display=staticMode?1:measuredProgress();request()}
  motionPreference.addEventListener('change',applyReducedMotion);
- if(staticMode){root.classList.add('is-static');n('assembly-cue').innerHTML='Reduced motion<br>Play to animate';display=1}
+ if(staticMode){root.classList.add('is-static');display=1}
  display=staticMode?1:measuredProgress();paint(display,0);request();
 })();
 </script>
