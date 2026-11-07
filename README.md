@@ -1,6 +1,6 @@
 # rAAmen — From Grain to Cup
 
-A standalone scroll-driven animation of a proposed sorghum–millet noodle cup. Two clouds of shaded grains spiral into individually drawn noodle strands. A textured paper cup, botanical sleeve, base, and embossed foil lid assemble in separate layers. Vegetables tumble in, a kettle spout pours into a visibly rising broth surface that submerges the flat-bottomed noodle brick, toppings float with the liquid, splashes and ripples follow the water level, steam drifts upward, and the lid closes with a sealing pulse and moving highlights. This page contains only the product story; there are no simulation or research sections below it.
+A standalone scroll-driven animation of a proposed sorghum–millet noodle cup. Two clouds of shaded grains spiral into individually drawn noodle strands. The thick noodle cake uses one shared projection for its textured top, front, and left faces, with irregular strand spacing and distinct face shading. A textured paper cup, botanical sleeve, base, and embossed foil lid assemble in separate layers. Vegetables tumble in, a kettle spout pours into a visibly rising broth surface that submerges the flat-bottomed noodle brick, toppings float with the liquid, splashes and ripples follow the water level, steam drifts upward, and the lid closes with a sealing pulse and moving highlights. This page contains only the product story; there are no simulation or research sections below it.
 
 ## Open it
 

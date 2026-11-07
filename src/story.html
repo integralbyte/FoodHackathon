@@ -14,7 +14,9 @@ One new ritual.</h1><p id="assembly-description">Sorghum and millet, reimagined 
       <linearGradient id="cup-green"><stop stop-color="#113b2e"/><stop offset=".2" stop-color="#275e44"/><stop offset=".48" stop-color="#356c4d"/><stop offset=".74" stop-color="#285940"/><stop offset="1" stop-color="#102f25"/></linearGradient>
       <linearGradient id="cup-rim" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fffbed"/><stop offset=".4" stop-color="#eee5cd"/><stop offset=".7" stop-color="#b6b69a"/><stop offset="1" stop-color="#8b997c"/></linearGradient>
       <radialGradient id="cup-inside" cx=".46" cy=".28" r=".8"><stop stop-color="#b9ae86"/><stop offset=".7" stop-color="#8b8e68"/><stop offset="1" stop-color="#4f6550"/></radialGradient>
-      <linearGradient id="noodle-gold" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f0d68d"/><stop offset=".5" stop-color="#d6ad59"/><stop offset="1" stop-color="#9a692d"/></linearGradient>
+      <linearGradient id="noodle-gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ebce90"/><stop offset="1" stop-color="#c9a05a"/></linearGradient>
+      <linearGradient id="noodle-front-shade" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#c39b55"/><stop offset="1" stop-color="#a47d3d"/></linearGradient>
+      <linearGradient id="noodle-left-shade" x1="0" y1="0" x2="1" y2=".4"><stop stop-color="#916b36"/><stop offset="1" stop-color="#b48a46"/></linearGradient>
       <radialGradient id="sorghum-seed" cx=".29" cy=".24" r=".8"><stop stop-color="#e3bb82"/><stop offset=".42" stop-color="#c88f58"/><stop offset=".77" stop-color="#9d5c37"/><stop offset="1" stop-color="#663e2c"/></radialGradient>
       <radialGradient id="millet-seed" cx=".29" cy=".21" r=".8"><stop stop-color="#fff0b3"/><stop offset=".36" stop-color="#e4c774"/><stop offset=".75" stop-color="#be9346"/><stop offset="1" stop-color="#8a692e"/></radialGradient>
       <linearGradient id="water-ink"><stop stop-color="#77a9a6" stop-opacity=".15"/><stop offset=".3" stop-color="#a2cbc4" stop-opacity=".85"/><stop offset=".6" stop-color="#effcf0"/><stop offset="1" stop-color="#80aba6" stop-opacity=".4"/></linearGradient>
@@ -43,8 +45,8 @@ One new ritual.</h1><p id="assembly-description">Sorghum and millet, reimagined 
       <g id="cup-base"><ellipse cx="450" cy="717" rx="151" ry="42" fill="#9b9e82"/><ellipse cx="450" cy="713" rx="151" ry="40" fill="url(#cup-paper)"/><ellipse cx="450" cy="712" rx="141" ry="33" fill="none" stroke="#eeebd6" stroke-width="2"/></g>
       <g id="cup-back"><path d="M260 470L302 706Q450 766 598 706L640 470Z" fill="url(#cup-paper)"/><ellipse cx="450" cy="470" rx="190" ry="64" fill="url(#cup-rim)"/><ellipse cx="450" cy="470" rx="176" ry="53" fill="url(#cup-inside)"/><path d="M275 465C340 403 560 403 625 465" stroke="#fffce8" stroke-width="3" fill="none" opacity=".7"/><path d="M282 474C343 424 555 424 618 474" stroke="#718161" stroke-width="1" fill="none" opacity=".5"/></g>
       <g id="noodle-block">
-       <ellipse cx="7" cy="57" rx="146" ry="19" fill="#715322" opacity=".14" filter="url(#ingredient-shadow)"/>
-       <g id="noodle-core"><path d="M-144-49H117L148 17H-113Z" fill="url(#noodle-gold)"/><path d="M117-49L148 17V45L117-21Z" fill="#b38a43"/><path d="M-113 17H148V42Q148 46 144 46H-109Q-113 46-113 42Z" fill="#c29a50"/></g>
+       <ellipse cx="4" cy="123" rx="143" ry="21" fill="#715322" opacity=".18" filter="url(#ingredient-shadow)"/>
+       <g id="noodle-core"><path id="noodle-left-face" fill="url(#noodle-left-shade)"/><path id="noodle-front-face" fill="url(#noodle-front-shade)"/><path id="noodle-top-face" fill="url(#noodle-gold)"/></g>
        <g id="noodle-strands"></g><g id="noodle-speckles"></g>
       </g>
       <g id="floating-noodles" fill="none" stroke-linecap="round"></g>

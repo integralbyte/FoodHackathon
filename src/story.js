@@ -37,23 +37,49 @@
  for(let i=0;i<50;i++){
   dust.push({e:node('circle',{r:.5+random()*1.2,fill:i%2?'#b89a5e':'#9da17b'},n('grain-dust')),x:200+random()*490,y:220+random()*360,phase:random()*6.28});
  }
- // A shallow rectangular noodle brick: planar top, straight front, and a thin side.
- // The strand rows follow those planes instead of bending into a bowl-shaped base.
- for(let row=0;row<32;row++){
-  const front=row>=23,v=front?(row-23)/8:row/22;
-  const start=front?-110:mix(-141,-111,v),end=front?145:mix(115,145,v);
-  const y=front?mix(21,43,v):mix(-46,14,v),amplitude=front?1.7:2.6;let d='';
-  for(let k=0;k<=44;k++){
-   const x=mix(start,end,k/44),wiggle=Math.sin(k*2.1+row*.84)*amplitude;
-   if(!k)d=`M${x.toFixed(2)} ${(y+wiggle).toFixed(2)}`;
-   else d+=`Q${(x-4.1).toFixed(2)} ${(y+(k%2?-amplitude*1.45:amplitude*1.45)).toFixed(2)} ${x.toFixed(2)} ${(y+wiggle).toFixed(2)}`;
+ // One orthographic box projection defines every face and noodle layer.
+ // u: width, v: depth, h: downward thickness. Shared corners cannot drift apart.
+ // These are illustration proportions, not a measured product specification.
+ const brickPoint=(u,v,h=0)=>({x:-151+235*u+65*v,y:-80+24*u+78*v+72*h});
+ const polygon=points=>points.map((p,i)=>`${i?'L':'M'}${p.x} ${p.y}`).join('')+'Z';
+ n('noodle-left-face').setAttribute('d',polygon([brickPoint(0,0),brickPoint(0,1),brickPoint(0,1,1),brickPoint(0,0,1)]));
+ n('noodle-front-face').setAttribute('d',polygon([brickPoint(0,1),brickPoint(1,1),brickPoint(1,1,1),brickPoint(0,1,1)]));
+ n('noodle-top-face').setAttribute('d',polygon([brickPoint(0,0),brickPoint(1,0),brickPoint(1,1),brickPoint(0,1)]));
+ const curve=points=>{
+  let d=`M${points[0].x.toFixed(2)} ${points[0].y.toFixed(2)}`;
+  for(let k=0;k<points.length-1;k++){
+   const a=points[Math.max(0,k-1)],b=points[k],c=points[k+1],e=points[Math.min(points.length-1,k+2)];
+   d+=`C${(b.x+(c.x-a.x)/6).toFixed(2)} ${(b.y+(c.y-a.y)/6).toFixed(2)} ${(c.x-(e.x-b.x)/6).toFixed(2)} ${(c.y-(e.y-b.y)/6).toFixed(2)} ${c.x.toFixed(2)} ${c.y.toFixed(2)}`;
   }
-  const e=node('g',{},n('noodle-strands'));
-  const paths=[['#926c32',4.5],['#cba85f',3.4],[front?'#e0bc75':row%3?'#f0d38e':'#f6dda4',2.2],['#fff0bd',.5]].map(([stroke,width])=>node('path',{d,fill:'none',stroke,'stroke-width':width,'stroke-linecap':'round',pathLength:1,'stroke-dasharray':1},e));
-  strands.push({e,paths});
+  return d;
+ };
+ const faces=[
+  {name:'left',rows:17,samples:64,cycles:11,amplitude:1.8,colours:['#624825','#987039','#bb8f4b','#d2af6b'],point:(t,r)=>brickPoint(0,t,r)},
+  {name:'front',rows:17,samples:144,cycles:23,amplitude:2.8,colours:['#86612e','#c39b55','#e1bb78','#f3dca4'],point:(t,r)=>brickPoint(t,1,r)},
+  {name:'top',rows:27,samples:144,cycles:24,amplitude:3.3,colours:['#9e783f','#d5af6b','#efcf91','#fff0c4'],point:(t,r)=>brickPoint(t,r)}
+ ];
+ for(const face of faces){
+  const layer=node('g',{'data-noodle-face':face.name},n('noodle-strands'));
+  for(let row=0;row<face.rows;row++){
+   const r=.025+.95*row/(face.rows-1),phase=random()*Math.PI*2,cycles=face.cycles+(random()-.5)*3,amp=face.amplitude*(.8+random()*.35);
+   const first=face.point(0,r),last=face.point(1,r),dx=last.x-first.x,dy=last.y-first.y,length=Math.hypot(dx,dy),nx=-dy/length,ny=dx/length;
+   const points=[];
+   for(let k=0;k<=face.samples;k++){
+    const t=k/face.samples,p=face.point(t,r);
+    const wave=amp*Math.sin(t*Math.PI*2*cycles+phase)+.75*Math.sin(t*19+phase*2)+.35*Math.sin(t*63+phase);
+    points.push({x:p.x+nx*wave,y:p.y+ny*wave});
+   }
+   const d=curve(points),e=node('g',{},layer);
+   const widths=face.name==='left'?[4.8,3.5,2.4,.55]:[5.4,4.1,2.8,.65];
+   const paths=face.colours.map((stroke,i)=>node('path',{d,fill:'none',stroke,'stroke-width':widths[i],'stroke-linecap':'round','stroke-linejoin':'round',pathLength:1,'stroke-dasharray':1,opacity:i===3?.65:1},e));
+   strands.push({e,paths});
+  }
  }
- for(let i=0;i<65;i++){
-  const v=random();node('ellipse',{cx:mix(-138,-109,v)+random()*250,cy:mix(-45,14,v),rx:.4+random()*.65,ry:.3+random()*.5,fill:'#9d733c',opacity:.35},n('noodle-speckles'));
+ // Small grain inclusions and tiny holes break up the regular strand pattern.
+ for(let i=0;i<125;i++){
+  const face=i%3,u=.035+random()*.93,v=.04+random()*.92,h=.04+random()*.92;
+  const q=face===0?brickPoint(0,v,h):face===1?brickPoint(u,1,h):brickPoint(u,v);
+  node('ellipse',{cx:q.x,cy:q.y,rx:.35+random()*.85,ry:.3+random()*.5,fill:face===0?'#70532d':'#96703c',opacity:.18+random()*.18},n('noodle-speckles'));
  }
  for(let i=0;i<5;i++){
   const y=-90-i*15;
@@ -146,12 +172,12 @@
   for(const id of ['cup-back','cup-front']){transform(n(id),`translate(${(1-cup)*40} ${cupY}) rotate(${(1-cup)*9} 450 700)`);opacity(n(id),cupOpacity);}
   const base=smooth(1.72,2.52,s);transform(n('cup-base'),`translate(0 ${(1-base)*175})`);opacity(n('cup-base'),smooth(1.7,2.05,s));
   const sleeve=smooth(1.96,2.65,s);transform(n('cup-sleeve'),`translate(${(1-sleeve)*-30} ${(1-sleeve)*88}) rotate(${(1-sleeve)*-9} 450 620)`);opacity(n('cup-sleeve'),smooth(1.84,2.13,s));
-  const blockY=mix(361,465,cup)+fill*27;
+  const blockY=mix(345,470,cup)+fill*64;
   const liquidY=mix(574,477,fill),liquidRx=mix(150,171,fill),liquidRy=mix(42,49,fill);
   root.dataset.fill=fill.toFixed(3);
   transform(n('noodle-block'),`translate(450 ${blockY}) rotate(${mix(-7,0,cup)}) scale(${mix(1.2,.99,cup)-fill*.02})`);opacity(n('noodle-block'),smooth(.65,.85,s));
   opacity(n('noodle-core'),smooth(.98,1.5,s));opacity(n('noodle-speckles'),smooth(1.05,1.52,s));
-  if(s<1.85){strandsFinished=false;strands.forEach(({e,paths},i)=>{const t=smooth(.63+i*.013,1.15+i*.013,s);transform(e,`translate(${(1-t)*Math.sin(i*.85)*33} ${(1-t)*(-90+i*2)})`);paths.forEach(path=>path.setAttribute('stroke-dashoffset',String(1-t)));});}
+  if(s<1.85){strandsFinished=false;strands.forEach(({e,paths},i)=>{const delay=.4*i/(strands.length-1),t=smooth(.63+delay,1.15+delay,s);transform(e,`translate(${(1-t)*Math.sin(i*.85)*33} ${(1-t)*(-90+i*2)})`);paths.forEach(path=>path.setAttribute('stroke-dashoffset',String(1-t)));});}
   else if(!strandsFinished){strandsFinished=true;strands.forEach(({e,paths})=>{transform(e,'translate(0 0)');paths.forEach(path=>path.setAttribute('stroke-dashoffset','0'))});}
   opacity(n('floating-noodles'),smooth(.53,.88,s)*(1-smooth(1.08,1.55,s)));
   if(s<1.7)loose.forEach(({g,path,light},i)=>{const t=smooth(.55+i*.045,1.27+i*.045,s);transform(g,`translate(450 ${mix(440,370,t)}) rotate(${mix(-18+i*7,0,t)} 0 -100)`);path.setAttribute('stroke-dashoffset',1-t);light.setAttribute('stroke-dashoffset',1-t);});
