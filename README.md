@@ -1,6 +1,6 @@
 # Sorami — From Grain to Campus
 
-A self-contained, scroll-driven product animation followed by an interactive, eleven-chapter pitch based on the supplied **SORAMI Pitch: Access & Innovation** deck. The original Sorami logo, orange, gold, and warm cream palette carry through both parts.
+A self-contained opening film, scroll-driven product animation, and interactive eleven-chapter pitch based on the supplied **SORAMI Pitch: Access & Innovation** deck. The original Sorami logo, orange, gold, and warm cream palette carry through the experience.
 
 ## Open it
 
@@ -8,7 +8,9 @@ Open `index.html` directly in a browser; the complete experience works offline. 
 
 ## The flow
 
-The opening keeps the cup centered: sorghum and millet grains spiral into a thick, three-sided noodle cake, the cup assembles, vegetables fall, water fills the interior, steam rises, and the lid closes. Scroll to build or reverse it, use the dots to jump, or choose **Play** for a 26-second guided sequence. **The story** appears beside the controls at the final stage; a small **Skip to the pitch** link is available at the top of the page.
+The page opens with the supplied ten-second Sorami concept film as a full-screen background. Warm color treatment, a translucent logo badge, and a cream gradient connect the footage to the rest of the site. The film loops silently, pauses outside the viewport or when the page is hidden, and includes a play/pause control. Reduced-motion preferences show the poster until the visitor explicitly chooses to play. The **From grain to cup** link enters the assembly; **Explore the pitch** jumps straight to the deck.
+
+The next stage keeps the cup centered: sorghum and millet grains spiral into a thick, three-sided noodle cake, the cup assembles, vegetables fall, water fills the interior, steam rises, and the lid closes. Scroll to build or reverse it, use the dots to jump, or choose **Play** for a 26-second guided sequence. **The story** appears beside the controls at the final stage.
 
 The deck follows in its original order, rebuilt as objects and interactions rather than slide screenshots:
 
@@ -31,6 +33,8 @@ Reduced motion presents each chapter in its completed state. Play is an explicit
 ## Edit and rebuild
 
 - `src/story.html`, `src/style.css`, `src/story.js`: original cup assembly.
+- `src/film.html`, `src/film.css`, `src/film.js`: full-screen opening, theme treatment, and motion-aware playback.
+- `assets/sorami-opening.mp4`, `assets/sorami-opening-poster.jpg`: optimized silent H.264 copy of the supplied film and its first-scene poster. The source video remains unchanged. Both assets are embedded by the build so direct-file viewing still works offline.
 - `src/pitch.html`, `src/pitch.css`, `src/pitch.js`: deck scenes, visuals, interactions, sources, and choreography.
 - `src/page.html`: page metadata and wrapper.
 - `scripts/build.mjs`: embeds the logo and all source files into `index.html`.
@@ -54,4 +58,4 @@ Default economics are $3.99 price − $1.20 store share − $1.60 production cos
 
 ## Validation
 
-The build and JavaScript syntax checks pass. Synthetic DOM checks exercise all eleven chapters, SVG and label references, progress navigation, playback, controls, source selection, modal behavior, negative margins, and grain-demand calculations. SVG artwork was separately rendered for geometry inspection. Those checks do not replace browser layout and touch testing; local browser access was disabled in Work settings during implementation.
+The build and JavaScript syntax checks pass. The optimized video decodes successfully; media-state checks cover muted playback, manual pause persistence, offscreen/page-hidden pause, reduced-motion opt-in, the progress indicator, and the handoff to the cup animation. Synthetic DOM checks exercise all eleven chapters, SVG and label references, progress navigation, playback, controls, source selection, modal behavior, negative margins, and grain-demand calculations. SVG artwork was separately rendered for geometry inspection. Those checks do not replace browser layout and touch testing; local browser access was disabled in Work settings during implementation.
