@@ -11,16 +11,6 @@ Checked 7 November 2026. The ending presents ingredient benefits, separately fro
 
 The raw-grain figures do not establish Sorami's finished-cup fibre content or retention through processing. Protein is deliberately omitted from this ingredient scene so the presentation focuses on the selected strengths.
 
-## Glycaemic index
-
-The sorghum column includes a linked **“Lower-GI potential”** note with the visible basis **“Pasta study · Sorami untested.”** This is a development hypothesis inferred from research on particular sorghum foods, not a measured GI for raw grain or for Sorami noodles. No numeric GI is assigned to the cup.
-
-- [Prasad et al., *Glycaemic index and glycaemic load of sorghum products*, 2015 (online 2014), DOI 10.1002/jsfa.6861](https://pubmed.ncbi.nlm.nih.gov/25092385/): tested sorghum pasta, coarse/fine semolina upma and flakes poha had significantly lower GI than their respective wheat/rice controls. The authors classified these specific preparations as low GI. This does not establish that all sorghum preparations are low GI.
-- [Khan et al., *Effect of sorghum flour-containing pasta on postprandial glycemia, appetite and energy intake in healthy individuals*, 2025 (online December 2024)](https://www.nature.com/articles/s41430-024-01554-1): a crossover trial with 20 participants reported lower glucose response for pasta containing 30% red sorghum versus durum-wheat pasta. The formulation- and variety-specific result reinforces the need to test the actual recipe; glucose response is not interchangeable with a certified GI value.
-- [McSweeney et al., *Glycaemic response of proso millet-based (Panicum miliaceum) products*, 2017, DOI 10.1080/09637486.2017.1301890](https://pubmed.ncbi.nlm.nih.gov/28292202/): in a 12-person crossover study, individual proso-millet products did not have significantly lower glycaemic responses than their refined-corn comparisons. The authors attributed the response to the product matrix. The current millet figures use proso millet, so a blanket lower-GI claim is deliberately omitted from that column.
-
-Processing, particle size, formulation and cooking affect glycaemic response. The page makes no diabetes-management, blood-sugar-control, or “lower GI than competitor ramen” claim.
-
 ## Minerals
 
 The same USDA records provide the mineral values displayed beside each grain:
