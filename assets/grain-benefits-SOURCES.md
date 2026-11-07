@@ -6,8 +6,8 @@ Checked 7 November 2026. The ending presents ingredient benefits, separately fro
 
 [USDA National Nutrient Database, Standard Reference Release 28 (2015), cereal-grains report](https://www.ars.usda.gov/ARSUserFiles/80400535/Data/SR/SR28/reports/sr28fg20.pdf) reports values per 100g edible portion:
 
-- **Sorghum grain, NDB 20067:** 6.7g total dietary fibre, PDF page 386. The record's fibre footnote specifies white sorghum; varieties and processing can change the amount. The page displays “Per 100g raw white sorghum.”
-- **Millet, raw, NDB 20031:** 8.5g total dietary fibre, PDF page 130. The record identifies *Panicum miliaceum* (proso millet). The page displays “Per 100g raw proso millet”; this is not a value for every millet species.
+- **Sorghum grain, NDB 20067:** 6.7g total dietary fibre, PDF page 386. The record's fibre footnote specifies white sorghum; varieties and processing can change the amount.
+- **Millet, raw, NDB 20031:** 8.5g total dietary fibre, PDF page 130. The record identifies *Panicum miliaceum* (proso millet); this is not a value for every millet species.
 
 The raw-grain figures do not establish Sorami's finished-cup fibre content or retention through processing. Protein is deliberately omitted from this ingredient scene so the presentation focuses on the selected strengths.
 
@@ -30,7 +30,7 @@ The same USDA records provide the mineral values displayed beside each grain:
 | Sorghum grain, NDB 20067, PDF page 386 | 165mg | 289mg |
 | Proso millet, NDB 20031, PDF page 130 | 114mg | 285mg |
 
-The callout is titled “Minerals” and names magnesium and phosphorus with their amounts, rather than applying a blanket “high in every mineral” claim. Its raw-grain basis is displayed in each row, and clicking the row opens the exact USDA record. These ingredient values are not a tested mineral analysis of the finished cup, and no absorption or health-outcome claim is made.
+The callout is titled “Rich in minerals” and names magnesium and phosphorus with their amounts. The raw-grain basis is retained in source data and accessible labels; the per-100g captions are omitted from the visible presentation. Clicking each source link opens the exact USDA record. These ingredient values are not a tested mineral analysis of the finished cup, and no absorption or health-outcome claim is made.
 
 ## Naturally gluten-free grains
 
