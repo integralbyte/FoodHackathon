@@ -1,6 +1,6 @@
 # Sorami — From Grain to Campus
 
-A self-contained opening film, scroll-driven product animation, and interactive eleven-chapter pitch based on the supplied **SORAMI Pitch: Access & Innovation** deck. The Sorami logo and packaging anchor a textured visual system: burgundy, dark cocoa, toasted wheat, and olive chapters, with gold accents, fine paper grain, botanical engravings, and serif display type.
+A self-contained interactive noodle aisle, opening film, scroll-driven product animation, and interactive eleven-chapter pitch based on the supplied **SORAMI Pitch: Access & Innovation** deck. The Sorami logo and packaging anchor a textured visual system: burgundy, dark cocoa, toasted wheat, and olive chapters, with gold accents, fine paper grain, botanical engravings, and serif display type.
 
 ## Open it
 
@@ -8,7 +8,24 @@ Open `index.html` directly in a browser; the complete experience works offline. 
 
 ## The flow
 
-The page opens with the supplied 8.5-second Sorami concept film as a full-screen background. Warm color treatment, a translucent logo badge, and a cream gradient connect the footage to the rest of the site. The film loops silently, pauses outside the viewport or when the page is hidden, and includes a play/pause control. Reduced-motion preferences show the poster until the visitor explicitly chooses to play. The **From grain to cup** link enters the assembly; **Explore the pitch** jumps straight to the deck.
+The page opens with **21 cups and bowls on three stocked shelves** (four shelves on phones): twenty selected U.S. and UK products from Nissin, Nongshim, Buldak, NOMI, immi and Miyoka, with Sorami in the middle. Scroll, use six stage buttons, or choose **Watch the choice** for a 26-second sequence. Each preference folds into place separately, its elimination group is crossed out, and the count updates before the next preference arrives. Click any product to inspect its label and exclusion reason.
+
+The user-approved sequence is **protein ≥10g → sodium <900mg → fibre ≥6g → not deep-fried**, always per complete cup with seasoning. Illustrated counts are **21 → 11 → 8 → 5 → 1**; the final elimination is conditional on explicitly unverified process assumptions:
+
+- Ten standard cups leave at protein, including Buldak Carbonara Cup.
+- Shin Black Cup, Miyoka Chicken and Nissin Protein Rich & Savory Chicken leave at sodium.
+- NOMI Umami Beef, Golden Chicken and Tokyo Curry leave at fibre (5g, 5g and 4g).
+- Nissin Soba Protein Classic and Chilli (18g protein / 15g fibre), and immi Creamy Chicken and Roasted Pork Tonkotsu cups (18g protein / 10g fibre), survive all nutrition filters. Their final cross-outs are labeled **Assumed fried*** and accompanied by a persistent, visible note that their processes are unverified. Their stronger protein and fibre figures remain visible.
+
+The fourth filter is **not deep-fried**, following the user's latest request. The actual `nonfried` values for Soba and immi remain `null`; a separate `demoAssumedDeepFried` field controls the clearly labeled illustrative scenario. There is no evidence that palm oil or “wok-style” wording alone proves their manufacturing process. **The comparison → Confirmed data** switches off assumptions and leaves **5** cups in contention, including Sorami's concept. Known non-fried products can never be excluded by a demo assumption.
+
+Sorami's 400mg sodium, 11g protein, 6.5g fibre and non-fried process are **unvalidated team targets**, not tested results. “Healthiest noodles” is explicitly a shopper's wish, not an overall health ranking. A factual claim that only Sorami meets all four preferences is not yet supported; the final one-cup animation is a conditional illustration. The explanation stays visible through the final reveal and also appears in product inspection, the comparison table, and screen-reader announcements.
+
+These are curated product comparisons, not a representative market survey. The 900mg sodium cutoff is an illustrative preference, **not a low-sodium nutrient claim**. UK Soba values use the complete prepared serving (210g Classic / 220g Chilli), with 2.2g / 1.9g salt converted to 880mg / 760mg sodium. Its labeled preparation drains water before adding sauce; no sodium is guessed or subtracted. The alternate table normalizes whole-cup values to 100g of original dry package weight, not a laboratory dry-product analysis. It never changes the shelf filters.
+
+NOMI Golden Chicken and Tokyo Curry are listed as pre-orders for December 2026 and marked accordingly. NOMI uses labeled SVG schematic cups because reliable standalone pack photographs were unavailable. Other images are unchanged manufacturer artwork. The shelf is illustrative and does not imply retail co-location or physical size parity. Source links and product-specific notes are recorded in `src/shelf-products.json`.
+
+**Discover Sorami** leads into the supplied 8.5-second Sorami concept film as a full-screen background. Warm color treatment, a translucent logo badge, and a cream gradient connect the footage to the rest of the site. The film loops silently, pauses outside the viewport or when the page is hidden, and includes a play/pause control. Reduced-motion preferences show the poster until the visitor explicitly chooses to play. The **From grain to cup** link enters the assembly; **Explore the pitch** jumps straight to the deck.
 
 The next stage keeps the cup centered and matches the supplied Umami Chicken packaging reference: sorghum and millet grains spiral into a thick, three-sided noodle cake, the cup assembles, vegetables fall, water fills the interior, steam rises, and the lid closes. Scroll to build or reverse it, use the dots to jump, or choose **Play** for a 26-second guided sequence. **The story** appears beside the controls at the final stage.
 
@@ -34,6 +51,10 @@ Reduced motion presents each chapter in its completed state. Play is an explicit
 
 ## Edit and rebuild
 
+- `src/hook.html`, `src/hook.css`, `src/hook.js`: responsive shelf, scroll choreography, guided playback, product inspection, and nutrition comparisons.
+- `src/shelf-config.json` sets the numerical preferences; `scripts/shelf-rules.mjs` determines the first failed filter.
+- `src/shelf-products.json`: one source of truth for all 21 products, label values, image framing, and source URLs. `scripts/build-shelf.mjs` generates the shelf cards, evidence table, and runtime data from it.
+- `assets/competitors/`: unchanged manufacturer artwork, with SVG viewBoxes and silhouette clips applied in the page; original image URLs are recorded in `SOURCES.md`. NOMI schematic cups are authored as SVG in the shelf builder and explicitly labeled illustrations.
 - `src/story.html`, `src/style.css`, `src/story.js`: original cup assembly.
 - `src/film.html`, `src/film.css`, `src/film.js`: full-screen opening, theme treatment, and motion-aware playback.
 - `assets/sorami-opening.mp4`, `assets/sorami-opening-poster.jpg`: optimized silent H.264 copy of the supplied film and its first-scene poster. The opening uses the replacement clip supplied as `copy_C90F67D0-9C83-4B85-9295-8A3D744B1F67.MOV`, optimized to 1080p H.264 at 30 fps. A soft, feathered blur obscures the bottom-right watermark from 6.000 seconds through the end; all earlier frames bypass the blur. The logo stays outside the filtered region. The source video remains unchanged. Both assets are embedded by the build so direct-file viewing still works offline.
@@ -47,7 +68,7 @@ Run `npm run build` after editing. Commit the regenerated `index.html` alongside
 
 ## Evidence and assumptions
 
-The animation illustrates a proposed product. It does not predict cooking time or prove manufacturability, nutrition, taste, or commercial performance. The reference packaging includes Umami Chicken, 78g net weight, 11g protein, 400mg sodium, and gluten-free wording as supplied visual concept art; these label claims are not validated by the animation. The pitch calculations still use their original 47g grain assumption, independently of that mockup. The five-minute ritual, 85% formulation, and non-fried process remain development targets.
+The animation illustrates a proposed product. It does not predict cooking time or prove manufacturability, nutrition, taste, or commercial performance. The reference packaging includes Umami Chicken, 78g net weight, 11g protein, 400mg sodium, and gluten-free wording as supplied visual concept art; the team additionally supplies a 6.5g fibre target; these label claims are not validated by the animation. The pitch calculations still use their original 47g grain assumption, independently of that mockup. The five-minute ritual, 85% formulation, and non-fried process remain development targets.
 
 Published sources are linked in the page:
 
@@ -64,4 +85,4 @@ Default economics are $3.99 price − $1.20 store share − $1.60 production cos
 
 Run `npm run test:scroll` for the regression checks covering first entry from the video, restored scroll positions, and reverse scrolling. The observer test reproduces the zero-area boundary notification that previously left the first downward pass frozen.
 
-The build and JavaScript syntax checks pass. The optimized video decodes successfully; media-state checks cover muted playback, manual pause persistence, offscreen/page-hidden pause, reduced-motion opt-in, the progress indicator, and the handoff to the cup animation. Synthetic DOM checks exercise all eleven chapters, SVG and label references, progress navigation, playback, controls, source selection, modal behavior, negative margins, and grain-demand calculations. SVG artwork was separately rendered for geometry inspection. Those checks do not replace browser layout and touch testing; local browser access was disabled in Work settings during implementation.
+The build and JavaScript syntax checks pass. The optimized video decodes successfully; media-state checks cover muted playback, manual pause persistence, offscreen/page-hidden pause, reduced-motion opt-in, the progress indicator, and the handoff to the cup animation. Synthetic DOM checks exercise all eleven chapters, SVG and label references, progress navigation, playback, controls, source selection, modal behavior, negative margins, and grain-demand calculations. SVG artwork was separately rendered for geometry inspection. The earlier grouped shelf was checked in the browser at 1440×900 and 390×844. For the final sequential revision, local browser use was disabled in Work settings, so no fresh browser visual check was possible. Automated checks cover the four elimination groups, data boundaries, primary source coverage, UK salt conversion, stronger competitor attributes, per-package normalization, reverse and restored scroll positions, playback interruption, and reduced-motion controls. Run `npm run test:shelf` to verify the 21 → 11 → 8 → 5 → 1 funnel and its evidence rules, including the five-cup outcome when assumptions are disabled. Synthetic DOM checks also passed for the existing film and eleven-chapter pitch. Browser emulation is not a substitute for testing on a physical phone.
