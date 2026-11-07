@@ -4,7 +4,7 @@ Checked 7 November 2026. Nutrition is per complete cup, including seasoning. The
 
 Sequence: ≥10g protein → <900mg sodium → ≥6g fibre → not deep-fried. Illustrated counts: 21 → 11 → 8 → 5 → 1. Confirmed-data counts: 21 → 11 → 8 → 5 → 5.
 
-**The four final cross-outs are assumptions, not verified process claims.** Soba and immi have unknown frying methods. Their original process fields stay null. The demo visibly labels these cross-outs, and its comparison dialog can disable assumptions.
+**The four final cross-outs are assumptions, not verified process claims.** Soba and immi have unknown frying methods. Their original process fields stay null. The demo labels these cross-outs directly on the four cups. The data rules retain all five survivors when assumptions are disabled; the simplified presentation has no comparison dialog or mode switch.
 
 | Product | Dry package | Protein | Sodium | Fibre | Illustrated first exclusion |
 |---|---:|---:|---:|---:|---|
@@ -150,7 +150,7 @@ Illustrated scenario only: this exact cup is assumed deep-fried for the last eli
 
 ## Comparison limits
 
-Soba Classic uses the UK full 210g prepared serving: 18g protein, 15g fibre and 2.2g salt. Chilli uses the full 220g prepared serving: 18g protein, 15g fibre and 1.9g salt. Sodium = salt ÷ 2.5 × 1,000, giving 880mg and 760mg. Their label preparation drains the water before adding sauce. No sodium is subtracted from soup products by assumption. The alternate table normalizes whole-serving nutrition to original dry package weight; it is not a laboratory dry-product analysis.
+Soba Classic uses the UK full 210g prepared serving: 18g protein, 15g fibre and 2.2g salt. Chilli uses the full 220g prepared serving: 18g protein, 15g fibre and 1.9g salt. Sodium = salt ÷ 2.5 × 1,000, giving 880mg and 760mg. Their label preparation drains the water before adding sauce. No sodium is subtracted from soup products by assumption. The simplified presentation has no alternate nutrition table.
 
 Manufacturer artwork is unchanged, with SVG viewBoxes and silhouette clips applied by the page. NOMI uses original, explicitly labeled schematic SVG cups, not manufacturer packaging replicas. Golden Chicken and Tokyo Curry are pre-orders, while Umami Beef First Batch is listed in stock. Illustrative shelf sizes do not compare physical dimensions or imply retail co-location.
 

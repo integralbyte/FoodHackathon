@@ -11,5 +11,5 @@ export function firstFailure(p, rules, {includeAssumptions=false}={}) {
 }
 
 export function exclusionLabel(p, stage) {
- return ['', `${p.protein}g protein`, `${p.sodium.toLocaleString('en-US')}mg sodium`, `${p.fibre}g fibre`, p.nonfried === false ? 'Deep-fried' : 'Assumed fried*'][stage];
+ return ['', `${p.protein}g protein`, `${p.sodium.toLocaleString('en-US')}mg sodium`, `${p.fibre}g fibre`, p.nonfried === false ? 'Deep-fried' : 'Assumed fried'][stage];
 }
