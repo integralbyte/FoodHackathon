@@ -12,7 +12,7 @@
  let seed=47;const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296};
  const nodes=Object.fromEntries(Array.from(root.querySelectorAll('[id]'),e=>[e.id,e]));
  const n=id=>nodes[id];
- const chapters=['Sorghum and millet grains.','Forming the noodle cake.','Assembling the cup.','Adding the toppings.','Pouring the water.','Sorami cup complete.'];
+ const chapters=['Sorghum and millet grains.','Forming the noodle cake.','Assembling the cup.','Adding the toppings.','Pouring the water.','Sorami Umami Chicken cup complete.'];
  const particles=[],dust=[],strands=[],loose=[],toppings=[],seasoning=[],ripples=[],splashes=[],steam=[],bubbles=[];
  for(let i=0;i<64;i++){
   const a=i*Math.PI/32,r=i%4===0?254:250;
@@ -140,11 +140,11 @@
   const cup=smooth(1.75,2.48,s),close=smooth(5.12,5.68,s),fill=smooth(3.82,4.65,s),idle=staticMode?0:1;
   // Reframe the grain clouds, full assembly, and finished cup around the center.
   const wide=smooth(1.3,2.08,s),hero=smooth(5.25,5.7,s);
-  const camera=[mix(mix(130,90,wide),170,hero),mix(mix(180,80,wide),365,hero),mix(mix(640,720,wide),560,hero),mix(mix(470,710,wide),420,hero)];
+  const camera=[mix(mix(130,70,wide),195,hero),mix(mix(180,60,wide),398,hero),mix(mix(640,760,wide),510,hero),mix(mix(470,880,wide),535,hero)];
   n('assembly-art').setAttribute('viewBox',camera.map(v=>v.toFixed(2)).join(' '));
   viewX+=(pointerX-viewX)*.06;viewY+=(pointerY-viewY)*.06;
   transform(n('assembly-scene'),`translate(${viewX*5} ${viewY*3+Math.sin(time*.7)*1.2*idle}) rotate(${viewX*.45} 450 480)`);
-  transform(n('orbital-field'),`rotate(${s*5+time*.9*idle} 450 440)`);opacity(n('orbital-field'),mix(.9,.36,cup));
+  transform(n('orbital-field'),`rotate(${s*5+time*.9*idle} 450 440)`);opacity(n('orbital-field'),mix(.9,.36,cup)*(1-hero));
   opacity(n('grain-trails'),(1-smooth(.8,1.32,s))*.35);
   transform(n('grain-trails'),`rotate(${s*42+Math.sin(time*.3)*4*idle} 450 390)`);
   if(s<1.85)for(const g of particles){
@@ -159,11 +159,12 @@
   if(s<1.5)for(const d of dust)transform(d.e,`translate(${d.x+Math.sin(time*.35+d.phase)*12} ${d.y+Math.cos(time*.4+d.phase)*13})`);
   opacity(n('grain-names'),1-smooth(.3,.77,s));
   const cupY=(1-cup)*195,cupOpacity=smooth(1.73,2.06,s);
-  for(const id of ['cup-back','cup-front']){transform(n(id),`translate(${(1-cup)*40} ${cupY}) rotate(${(1-cup)*9} 450 700)`);opacity(n(id),cupOpacity);}
-  const base=smooth(1.72,2.52,s);transform(n('cup-base'),`translate(0 ${(1-base)*175})`);opacity(n('cup-base'),smooth(1.7,2.05,s));
+  for(const id of ['cup-back','cup-front']){transform(n(id),`translate(${(1-cup)*40} ${cupY}) rotate(${(1-cup)*9} 450 700)`);opacity(n(id),cupOpacity*(id==='cup-back'?1-close:1));}
+  const base=smooth(1.72,2.52,s);transform(n('cup-base'),`translate(0 ${(1-base)*175})`);opacity(n('cup-base'),smooth(1.7,2.05,s)*(1-close));
   const sleeve=smooth(1.96,2.65,s);transform(n('cup-sleeve'),`translate(${(1-sleeve)*-30} ${(1-sleeve)*88}) rotate(${(1-sleeve)*-9} 450 620)`);opacity(n('cup-sleeve'),smooth(1.84,2.13,s));
+  opacity(n('cup-front-paper'),1-sleeve);
   const blockY=mix(345,470,cup)+fill*64;
-  const liquidY=mix(574,477,fill),liquidRx=mix(150,171,fill),liquidRy=mix(42,49,fill);
+  const liquidY=mix(574,477,fill),liquidRx=mix(150,171,fill),liquidRy=mix(23,27,fill);
   root.dataset.fill=fill.toFixed(3);
   transform(n('noodle-block'),`translate(450 ${blockY}) rotate(${mix(-7,0,cup)}) scale(${mix(1.2,.99,cup)-fill*.02})`);opacity(n('noodle-block'),smooth(.65,.85,s));
   opacity(n('noodle-core'),smooth(.98,1.5,s));opacity(n('noodle-speckles'),smooth(1.05,1.52,s));
@@ -181,8 +182,8 @@
   for(const g of seasoning){const t=smooth(2.88+g.delay,3.55+g.delay,s);transform(g.e,`translate(${g.x+Math.sin(t*6+g.phase)*(1-t)*35} ${mix(210,mix(g.y,liquidY+(g.y-459)*.78-2,smooth(.45,.9,fill)),t)}) rotate(${g.phase*60+t*180})`);opacity(g.e,smooth(2.72+g.delay,2.95+g.delay,s));}
   // Draw liquid AFTER the brick and BEFORE toppings. Its opaque volume hides
   // submerged noodles; the cup's front wall occludes the water below the rim.
-  opacity(n('broth-liquid'),smooth(.015,.08,fill));opacity(n('condensation-field'),fill*(1-close*.7));
-  n('broth-volume').setAttribute('d',`M${450-liquidRx} ${liquidY}H${450+liquidRx}L584 710Q450 750 316 710Z`);
+  opacity(n('broth-liquid'),smooth(.015,.08,fill));opacity(n('condensation-field'),0);
+  n('broth-volume').setAttribute('d',`M${450-liquidRx} ${liquidY}H${450+liquidRx}L586 875Q450 912 316 875Z`);
   for(const id of ['broth-surface','broth-meniscus','broth-clip-ellipse']){
    n(id).setAttribute('cy',liquidY);n(id).setAttribute('rx',liquidRx);n(id).setAttribute('ry',liquidRy);
   }
@@ -203,9 +204,10 @@
   if(steamStrength>.001)steam.forEach((e,i)=>{const t=(time*.17+i/7)%1;transform(e,`translate(${Math.sin(time*.55+i)*9} ${-t*54}) scale(1 ${.8+t*.25})`);opacity(e,Math.sin(t*Math.PI)*.55);});
   const lidShift=smooth(3.6,4.02,s)*(1-close),lidShow=smooth(1.93,2.42,s),hover=Math.sin(time*1.1)*3*(1-close)*idle;
   const bounce=Math.sin(close*Math.PI*2)*Math.sin(close*Math.PI)*7;
-  transform(n('cup-lid'),`translate(${mix(-36,0,close)-lidShift*116} ${mix(-220,22,close)+hover+bounce}) rotate(${mix(-13,0,close)+Math.sin(time*.65)*.8*(1-close)*idle} 450 446)`);opacity(n('cup-lid'),lidShow);
+  transform(n('cup-lid'),`translate(${mix(-36,0,close)-lidShift*116} ${mix(-220,0,close)+hover+bounce}) rotate(${mix(-13,0,close)+Math.sin(time*.65)*.8*(1-close)*idle} 450 470)`);opacity(n('cup-lid'),lidShow);
   const pulse=smooth(5.45,5.7,s);transform(n('seal-ring'),`translate(450 472) scale(${1+pulse*.13}) translate(-450 -472)`);opacity(n('seal-ring'),Math.sin(pulse*Math.PI)*.45);
-  transform(n('lid-glint'),`translate(${(time%9)/9*620} 0)`);transform(n('cup-glint'),`translate(${(time%9)/9*620} 0)`);opacity(n('cup-glint'),.16+close*.24);
+  opacity(n('finished-package'),smooth(5.57,5.68,s));
+  transform(n('lid-glint'),`translate(${(time%9)/9*620} 0)`);transform(n('cup-glint'),`translate(${(time%9)/9*620} 0)`);opacity(n('cup-glint'),.08*(1-close));
   opacity(n('assembly-shadow'),mix(.035,.2,cup));transform(n('assembly-shadow'),`translate(0 ${mix(-230,0,cup)})`);
  }
  function measuredProgress(){const rect=root.getBoundingClientRect(),distance=root.offsetHeight-window.innerHeight;return distance>0?clamp(-rect.top/distance):1}
