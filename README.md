@@ -1,44 +1,57 @@
-# Sorami — From Grain to Cup
+# Sorami — From Grain to Campus
 
-A standalone scroll-driven animation of a proposed sorghum–millet noodle cup. Two clouds of shaded grains spiral into individually drawn noodle strands. The thick noodle cake uses one shared projection for its textured top, front, and left faces, with irregular strand spacing and distinct face shading. A textured paper cup, botanical sleeve, base, and embossed foil lid assemble in separate layers. Vegetables tumble in, a kettle spout pours into a visibly rising broth surface that submerges the flat-bottomed noodle brick, toppings float with the liquid, splashes and ripples follow the water level, steam drifts upward, and the lid closes with a sealing pulse and moving highlights. The animation is centered in a full-screen stage. Only the opening Sorghum and Millet labels, package artwork, and compact playback controls are visible. The camera draws closer to the completed cup; there are no side paragraphs, header, callouts, or additional sections.
+A self-contained, scroll-driven product animation followed by an interactive, eleven-chapter pitch based on the supplied **SORAMI Pitch: Access & Innovation** deck. The original Sorami logo, orange, gold, and warm cream palette carry through both parts.
 
 ## Open it
 
-Open `index.html` in a browser. It is self-contained and works offline, with no external assets or dependencies.
+Open `index.html` directly in a browser; the complete experience works offline. Or run `npm run dev` with Node.js 18+ and open the printed localhost URL. There are no runtime dependencies or external assets. Research links need an internet connection.
 
-For a local server, using Node.js 18 or newer:
+## The flow
 
-```sh
-npm run dev
-```
+The opening keeps the cup centered: sorghum and millet grains spiral into a thick, three-sided noodle cake, the cup assembles, vegetables fall, water fills the interior, steam rises, and the lid closes. Scroll to build or reverse it, use the dots to jump, or choose **Play** for a 26-second guided sequence. **The story** appears beside the controls at the final stage; a small **Skip to the pitch** link is available at the top of the page.
 
-Open the printed localhost URL. No dependency installation is needed.
+The deck follows in its original order, rebuilt as objects and interactions rather than slide screenshots:
 
-## Controls
+1. **The idea:** a cup assembles from alternating vertical strips while grains settle into an orbit.
+2. **The student:** a laptop unfolds, the desk assembles, and a time slider explores the late-night deadline.
+3. **The product:** 100 grains pack into an 85% formulation diagram, then rearrange for the steam and hot-water concepts.
+4. **The structure:** noodle cross-sections grow, channels draw through the porous strand, and a scrubber or replay traces water paths.
+5. **The flavor:** a branching diagram connects and research selections flip the numeric readout with context and source links.
+6. **The opening:** three products unfold onto a shelf; selecting one explains its market position.
+7. **The business:** coins stack into the cup economics; price, cost, and pantry allocation update the remaining amount, including negative scenarios.
+8. **The access:** a 100-person grid highlights the 23% statistic; clicking the pantry control demonstrates the proposed 20+1 model.
+9. **The habit:** a sales slider fills a grain silo and recalculates tonnes of grain demand; distribution buttons explore campus channels.
+10. **The growers:** stems draw, leaves unfurl, seed heads assemble, and partnership choices explain the ambition.
+11. **The easy choice:** a grain sun assembles around the cup; replay returns to the opening grains.
 
-- Scroll down to assemble the cup and up to reverse it.
-- Click **Play** for a 26-second guided sequence; click again to pause the scroll. Steam, water, and subtle floating motion continue while a scene is on screen.
-- Move the pointer for a small depth/parallax effect. Background animation pauses when the page is hidden.
-- Use the chapter dots or left/right arrow keys to jump between stages.
-- Click the **Replay** icon to return to the grains.
-- Wheel, touch, and Escape stop guided playback.
+The pitch supports scrolling, chapter navigation, a progress scrubber, left/right arrows, and guided playback. Wheel, touch, or interacting with a control pauses playback. Space toggles playback when no interactive control has focus. The chapter menu jumps directly to any part. The **Sources & assumptions** dialog explains the numbers and their limits.
 
-The page respects reduced motion by showing the finished cup initially. **Play** opts into motion for this page.
+Reduced motion presents each chapter in its completed state. Play is an explicit opt-in to animation. Inactive chapters are hidden and inert, inputs are labeled, and only the on-screen scene runs. Short screens can scroll a chapter internally.
 
 ## Edit and rebuild
 
-Edit `src/story.html` for the artwork, `src/style.css` for styling, and `src/story.js` for choreography and copy. `src/page.html` is the document wrapper.
+- `src/story.html`, `src/style.css`, `src/story.js`: original cup assembly.
+- `src/pitch.html`, `src/pitch.css`, `src/pitch.js`: deck scenes, visuals, interactions, sources, and choreography.
+- `src/page.html`: page metadata and wrapper.
+- `scripts/build.mjs`: embeds the logo and all source files into `index.html`.
 
-```sh
-npm run build
-```
+Run `npm run build` after editing. Commit the regenerated `index.html` alongside its sources; any static host can serve it at the site root.
 
-This regenerates the committed `index.html`. Any static host can serve that file as the site root.
+## Evidence and assumptions
 
-## Branding
+The animation illustrates a proposed product. It does not predict cooking time or prove manufacturability, nutrition, taste, or commercial performance. The five-minute ritual, 85% formulation, and non-fried process remain development targets.
 
-The supplied Sorami logo lives in `assets/sorami-logo-original.png`. The build embeds it once and reuses it on the cup sleeve and lid. SVG framing removes the empty margins; multiply blending integrates its white backdrop with the warm ivory surfaces while preserving the original pixels. Orange `#ff6c14`, yellow `#fbc644`, and charcoal `#383837` define the theme.
+Published sources are linked in the page:
 
-## Scope
+- [GAO-24-107074](https://www.gao.gov/products/gao-24-107074): 23% of U.S. college students experienced food insecurity in 2020.
+- [2019 model chicken broth sensory study](https://pmc.ncbi.nlm.nih.gov/articles/PMC6542971/): about 30% bitterness reduction with sodium chloride under the study conditions.
+- [2024 yeast-extract receptor study](https://www.sciencedirect.com/science/article/pii/S0963996924006665): at least 40% inhibition of seven receptors with an AMP-rich extract, measured in a cell-based assay.
+- [Related sorghum sensory study](https://researchhub.buan.ac.bw/handle/13049/502): cultivar-dependent sensory properties. The deck's exact 57% comparison has not been traced and is explicitly marked unverified.
 
-The original SVG artwork illustrates a product concept. Its timing and geometry are not a manufacturing or cooking simulation. The formulation and five-minute preparation target remain untested.
+The deck's 13.5 million tonnes / 38 African countries / 2024 millet statistic still needs a dataset citation. The $6.50 comparison is a deck benchmark, not a live market survey. These limitations are visible beside the claims, as well as in the evidence dialog.
+
+Default economics are $3.99 price − $1.20 store share − $1.60 production cost = $1.19 remaining. The proposed 20+1 pantry allocation subtracts another $0.08, leaving $1.11, before overhead, distribution, taxes, waste, and program costs. These are scenario inputs, not quotes or profit forecasts. The grain-demand calculation uses the deck's rounded 47g/cup: 100,000 cups × 47g = 4.7 tonnes. Pantry distribution and farmer partnerships are proposals, not active commitments.
+
+## Validation
+
+The build and JavaScript syntax checks pass. Synthetic DOM checks exercise all eleven chapters, SVG and label references, progress navigation, playback, controls, source selection, modal behavior, negative margins, and grain-demand calculations. SVG artwork was separately rendered for geometry inspection. Those checks do not replace browser layout and touch testing; local browser access was disabled in Work settings during implementation.

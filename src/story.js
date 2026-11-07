@@ -238,7 +238,7 @@
  root.addEventListener('pointerleave',()=>{pointerX=pointerY=0});
  document.addEventListener('visibilitychange',()=>{lastClock=0;if(document.hidden)stopTour();else request()});
  new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible){lastClock=0;request()}else stopTour()}).observe(root);
- document.addEventListener('keydown',e=>{if(['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)||(e.key===' '&&document.activeElement===n('assembly-play')))return;if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();stopTour();enableMotion();scrollToProgress(positions[Math.min(5,Math.max(0,current+(e.key==='ArrowRight'?1:-1)))])}else if(['PageDown','PageUp','Home','End','ArrowDown','ArrowUp','Escape',' '].includes(e.key))stopTour()});
+ document.addEventListener('keydown',e=>{if(!visible||root.getBoundingClientRect().bottom<window.innerHeight*.6||['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)||(e.key===' '&&document.activeElement===n('assembly-play')))return;if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();stopTour();enableMotion();scrollToProgress(positions[Math.min(5,Math.max(0,current+(e.key==='ArrowRight'?1:-1)))])}else if(['PageDown','PageUp','Home','End','ArrowDown','ArrowUp','Escape',' '].includes(e.key))stopTour()});
  function applyReducedMotion(){stopTour();staticMode=motionPreference.matches;root.classList.toggle('is-static',staticMode);display=staticMode?1:measuredProgress();request()}
  motionPreference.addEventListener('change',applyReducedMotion);
  if(staticMode){root.classList.add('is-static');display=1}
