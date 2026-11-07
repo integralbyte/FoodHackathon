@@ -8,7 +8,7 @@ Open `index.html` directly in a browser; the complete experience works offline. 
 
 ## The flow
 
-The page opens with the supplied ten-second Sorami concept film as a full-screen background. Warm color treatment, a translucent logo badge, and a cream gradient connect the footage to the rest of the site. The film loops silently, pauses outside the viewport or when the page is hidden, and includes a play/pause control. Reduced-motion preferences show the poster until the visitor explicitly chooses to play. The **From grain to cup** link enters the assembly; **Explore the pitch** jumps straight to the deck.
+The page opens with the supplied 8.5-second Sorami concept film as a full-screen background. Warm color treatment, a translucent logo badge, and a cream gradient connect the footage to the rest of the site. The film loops silently, pauses outside the viewport or when the page is hidden, and includes a play/pause control. Reduced-motion preferences show the poster until the visitor explicitly chooses to play. The **From grain to cup** link enters the assembly; **Explore the pitch** jumps straight to the deck.
 
 The next stage keeps the cup centered: sorghum and millet grains spiral into a thick, three-sided noodle cake, the cup assembles, vegetables fall, water fills the interior, steam rises, and the lid closes. Scroll to build or reverse it, use the dots to jump, or choose **Play** for a 26-second guided sequence. **The story** appears beside the controls at the final stage.
 
@@ -34,7 +34,7 @@ Reduced motion presents each chapter in its completed state. Play is an explicit
 
 - `src/story.html`, `src/style.css`, `src/story.js`: original cup assembly.
 - `src/film.html`, `src/film.css`, `src/film.js`: full-screen opening, theme treatment, and motion-aware playback.
-- `assets/sorami-opening.mp4`, `assets/sorami-opening-poster.jpg`: optimized silent H.264 copy of the supplied film and its first-scene poster. A soft, feathered blur obscures the bottom-right watermark only on frame 0 and from frame 71 (about 2.96 seconds) to the end. Frames 1–70, including the Sorami logo’s entrance and exit fades, bypass the filter. This adjusts the initially requested 0.1s / 2.8s boundaries to protect the logo. The source video remains unchanged. Both assets are embedded by the build so direct-file viewing still works offline.
+- `assets/sorami-opening.mp4`, `assets/sorami-opening-poster.jpg`: optimized silent H.264 copy of the supplied film and its first-scene poster. The opening uses the replacement clip supplied as `copy_C90F67D0-9C83-4B85-9295-8A3D744B1F67.MOV`, optimized to 1080p H.264 at 30 fps. A soft, feathered blur obscures the bottom-right watermark from 6.000 seconds through the end; all earlier frames bypass the blur. The logo stays outside the filtered region. The source video remains unchanged. Both assets are embedded by the build so direct-file viewing still works offline.
 - `src/pitch.html`, `src/pitch.css`, `src/pitch.js`: deck scenes, visuals, interactions, sources, and choreography.
 - `src/page.html`: page metadata and wrapper.
 - `scripts/build.mjs`: embeds the logo and all source files into `index.html`.
