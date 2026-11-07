@@ -528,7 +528,10 @@ button:focus-visible{outline:3px solid #ad450c;outline-offset:4px}
  root.addEventListener('pointermove',e=>{if(e.pointerType==='mouse'&&!staticMode){pointerX=(e.clientX/window.innerWidth-.5)*2;pointerY=(e.clientY/window.innerHeight-.5)*2;}});
  root.addEventListener('pointerleave',()=>{pointerX=pointerY=0});
  document.addEventListener('visibilitychange',()=>{lastClock=0;if(document.hidden)stopTour();else request()});
- new IntersectionObserver(entries=>{visible=entries[0].isIntersecting&&entries[0].intersectionRatio>0;if(visible){lastClock=0;request()}else stopTour()}).observe(root);
+ // At the film boundary the section can intersect with zero area. With the
+ // default threshold, entering farther does not trigger a second callback.
+ // Accept that first intersection so the initial downward scroll can render.
+ new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible){lastClock=0;request()}else stopTour()}).observe(root);
  document.addEventListener('keydown',e=>{if(!visible||root.getBoundingClientRect().bottom<window.innerHeight*.6||['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)||(e.key===' '&&document.activeElement===n('assembly-play')))return;if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();stopTour();enableMotion();scrollToProgress(positions[Math.min(5,Math.max(0,current+(e.key==='ArrowRight'?1:-1)))])}else if(['PageDown','PageUp','Home','End','ArrowDown','ArrowUp','Escape',' '].includes(e.key))stopTour()});
  function applyReducedMotion(){stopTour();staticMode=motionPreference.matches;root.classList.toggle('is-static',staticMode);display=staticMode?1:measuredProgress();request()}
  motionPreference.addEventListener('change',applyReducedMotion);

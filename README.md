@@ -59,4 +59,6 @@ Default economics are $3.99 price − $1.20 store share − $1.60 production cos
 
 ## Validation
 
+Run `npm run test:scroll` for the regression checks covering first entry from the video, restored scroll positions, and reverse scrolling. The observer test reproduces the zero-area boundary notification that previously left the first downward pass frozen.
+
 The build and JavaScript syntax checks pass. The optimized video decodes successfully; media-state checks cover muted playback, manual pause persistence, offscreen/page-hidden pause, reduced-motion opt-in, the progress indicator, and the handoff to the cup animation. Synthetic DOM checks exercise all eleven chapters, SVG and label references, progress navigation, playback, controls, source selection, modal behavior, negative margins, and grain-demand calculations. SVG artwork was separately rendered for geometry inspection. Those checks do not replace browser layout and touch testing; local browser access was disabled in Work settings during implementation.
