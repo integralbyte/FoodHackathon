@@ -1,0 +1,19 @@
+/* One sticky viewport keeps the selected cup in place across both scenes. */
+.product-journey{position:relative;height:1200svh;background:#421823;isolation:isolate;--journey-transfer:0;--journey-shelf:1;--journey-assembly:0}
+.journey-pin{position:sticky;top:0;height:100svh;overflow:clip;background:#421823;isolation:isolate}
+.journey-backdrop{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 46%,#fffdf6 0,#fff3d9 55%,#f7e3ba 100%);opacity:var(--journey-transfer);pointer-events:none}
+.product-journey .shelf-hook,.product-journey .assembly-intro{position:absolute;inset:0;height:100%;background:transparent}
+.product-journey .hook-pin,.product-journey .assembly-pin{position:absolute;inset:0;height:100%;background:transparent}
+.product-journey .shelf-hook{z-index:2;opacity:var(--journey-shelf)}
+.product-journey .assembly-intro{z-index:1;opacity:var(--journey-assembly)}
+.product-journey .assembly-layout{inset:18px 24px 26px}
+.product-journey .assembly-bottom,.product-journey .assembly-progress{display:none}
+.product-journey .assembly-stage:before{opacity:calc(.46 * var(--journey-assembly))}
+.journey-transfer-cup{position:absolute;left:0;top:0;width:300px;height:348px;overflow:visible;z-index:5;visibility:hidden;pointer-events:none;filter:drop-shadow(4px 12px 8px #24101933);transform-origin:0 0;will-change:transform,width,height}
+.product-journey.is-transferring .hook-sorami{visibility:hidden}
+.product-journey.is-transferring .journey-transfer-cup{visibility:visible}
+@media(max-width:760px){.product-journey{height:1120svh}.product-journey .assembly-layout{inset:12px 8px 22px}}
+@media(prefers-reduced-motion:reduce){.journey-transfer-cup{will-change:auto}}
+@media print{.product-journey{height:200vh}.journey-pin{position:relative;overflow:visible}.product-journey .shelf-hook{height:100vh}.product-journey .assembly-intro{top:100vh;height:100vh;opacity:1}.journey-transfer-cup{display:none}}
+
+.product-journey .flowing-water{animation-direction:reverse}

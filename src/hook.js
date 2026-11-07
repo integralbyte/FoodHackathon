@@ -1,5 +1,6 @@
 (() => {
  const root=document.getElementById('noodle-shelf');if(!root)return;
+ const flow=document.getElementById('product-journey')?.soramiFlow;
  const motion=matchMedia('(prefers-reduced-motion: reduce)');
  const first=root.querySelector('.hook-request-first'),filterTitle=root.querySelector('.hook-request-filter'),final=root.querySelector('.hook-request-final'),filters=root.querySelector('.hook-filters'),chips=[...root.querySelectorAll('.hook-filter')];
  const {catalog,rules,counts}=/*__SHELF_DATA__*/{};
@@ -11,8 +12,8 @@
  const stageAt=p=>p>=.86?5:p<starts[1]?0:p<starts[2]?1:p<starts[3]?2:p<starts[4]?3:4;
  const set=(el,key,value)=>el.style.setProperty(key,String(value));
  let frame=0,visible=true,beat=-1;
- function request(){if(!frame&&visible&&!document.hidden)frame=requestAnimationFrame(tick)}
- function target(){const r=root.getBoundingClientRect();return clamp(-r.top/Math.max(1,root.offsetHeight-window.innerHeight))}
+ function request(){if(flow)return;if(!frame&&visible&&!document.hidden)frame=requestAnimationFrame(tick)}
+ function target(){if(flow)return flow.sample().shelf;const r=root.getBoundingClientRect();return clamp(-r.top/Math.max(1,root.offsetHeight-window.innerHeight))}
  function textPose(el,amount){el.style.visibility=amount>.001?'visible':'hidden';el.style.clipPath=`inset(${(1-amount)*100}% 0 0)`;el.style.transform=motion.matches?'none':`translateY(${(1-amount)*28}px) rotateX(${(1-amount)*-32}deg)`}
  function render(raw){
   // Without motion, scrolling still advances the complete story in discrete stages.
@@ -53,13 +54,14 @@
  document.addEventListener('visibilitychange',request);
  document.addEventListener('keydown',e=>{
   const r=root.getBoundingClientRect();
+  if(flow&&flow.sample().progress>=flow.phases.shelfEnd)return;
   if(!visible||r.top>0||r.bottom<window.innerHeight*.5||['INPUT','SELECT','TEXTAREA','BUTTON','A'].includes(document.activeElement.tagName))return;
   if(e.key==='ArrowRight'||e.key==='ArrowLeft'){
    e.preventDefault();const index=clamp(beat+(e.key==='ArrowRight'?1:-1),0,points.length-1);
-   window.scrollTo({top:r.top+window.scrollY+points[index]*Math.max(1,root.offsetHeight-window.innerHeight),behavior:'instant'});request();
+   if(flow)flow.seek(points[index]*flow.phases.shelfEnd);else window.scrollTo({top:r.top+window.scrollY+points[index]*Math.max(1,root.offsetHeight-window.innerHeight),behavior:'instant'});request();
   }
  });
  new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;if(visible)request()}).observe(root);
  motion.addEventListener('change',request);
- render(target());request();
+ if(flow)flow.onFrame(state=>{if(state.transfer<1)render(state.shelf)});else{render(target());request();}
 })();

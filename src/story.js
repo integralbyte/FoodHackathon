@@ -3,6 +3,7 @@
  'use strict';
  const root=document.getElementById('cup-story');
  if(!root)return;
+ const flow=document.getElementById('product-journey')?.soramiFlow;
  const $=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg';
  const clamp=x=>Math.min(1,Math.max(0,x)),mix=(a,b,t)=>a+(b-a)*t;
  const smooth=(a,b,x)=>{const t=clamp((x-a)/(b-a));return t*t*(3-2*t)};
@@ -137,7 +138,7 @@
  }
  function paint(p,time){
   const s=p*5.7;root.style.setProperty('--story-progress',String(p));root.dataset.stage=String(chapterAt(s));setChapter(chapterAt(s));
-  const cup=smooth(1.75,2.48,s),close=smooth(5.12,5.68,s),fill=smooth(3.82,4.65,s),idle=staticMode?0:1;
+  const cup=smooth(1.75,2.48,s),close=smooth(5.12,5.68,s),fill=smooth(3.82,4.65,s),idle=staticMode||flow?0:1;
   // Reframe the grain clouds, full assembly, and finished cup around the center.
   const wide=smooth(1.3,2.08,s),hero=smooth(5.25,5.7,s);
   const camera=[mix(mix(130,70,wide),195,hero),mix(mix(180,60,wide),398,hero),mix(mix(640,760,wide),510,hero),mix(mix(470,880,wide),535,hero)];
@@ -210,7 +211,7 @@
   transform(n('lid-glint'),`translate(${(time%9)/9*620} 0)`);transform(n('cup-glint'),`translate(${(time%9)/9*620} 0)`);opacity(n('cup-glint'),.08*(1-close));
   opacity(n('assembly-shadow'),mix(.035,.2,cup));transform(n('assembly-shadow'),`translate(0 ${mix(-230,0,cup)})`);
  }
- function measuredProgress(){const rect=root.getBoundingClientRect(),distance=root.offsetHeight-window.innerHeight;return distance>0?clamp(-rect.top/distance):1}
+ function measuredProgress(){if(flow)return 1-flow.sample().reverse;const rect=root.getBoundingClientRect(),distance=root.offsetHeight-window.innerHeight;return distance>0?clamp(-rect.top/distance):1}
  function tick(now){
   frame=0;if(document.hidden||!visible)return;
   const target=staticMode?1:measuredProgress(),moving=Math.abs(target-display)>.00015;
@@ -221,31 +222,41 @@
   paint(display,sceneTime);
   if(!staticMode)frame=requestAnimationFrame(tick);
  }
- function request(){if(!frame&&!document.hidden&&visible)frame=requestAnimationFrame(tick)}
+ function request(){if(flow)return;if(!frame&&!document.hidden&&visible)frame=requestAnimationFrame(tick)}
  function stopTour(){if(tour){cancelAnimationFrame(tour);tour=0}n('assembly-play').innerHTML='<span aria-hidden="true">▶</span> Play';n('assembly-play').setAttribute('aria-label','Play animation');n('assembly-play').setAttribute('aria-pressed','false')}
  function enableMotion(){if(staticMode){staticMode=false;root.classList.remove('is-static')}request()}
- function scrollToProgress(p,behavior='smooth'){const top=window.scrollY+root.getBoundingClientRect().top;window.scrollTo({top:top+p*(root.offsetHeight-window.innerHeight),behavior})}
- n('assembly-replay').addEventListener('click',()=>{stopTour();enableMotion();scrollToProgress(0);request()});
+ function scrollToProgress(p,behavior='smooth'){if(flow){flow.seek(flow.phases.transferEnd+(1-p)*(flow.phases.reverseEnd-flow.phases.transferEnd),behavior);return}const top=window.scrollY+root.getBoundingClientRect().top;window.scrollTo({top:top+p*(root.offsetHeight-window.innerHeight),behavior})}
+ n('assembly-replay').addEventListener('click',()=>{stopTour();enableMotion();if(flow)flow.seek(0,'smooth');else scrollToProgress(0);request()});
  root.querySelectorAll('[data-story-step]').forEach(e=>e.addEventListener('click',()=>{stopTour();enableMotion();scrollToProgress(positions[+e.dataset.storyStep])}));
  n('assembly-play').setAttribute('aria-pressed','false');
  n('assembly-play').addEventListener('click',()=>{
-  if(tour){stopTour();return}enableMotion();tourFrom=measuredProgress();if(tourFrom>.94)tourFrom=0;tourStarted=performance.now();scrollToProgress(tourFrom,'instant');
+  if(tour){stopTour();return}enableMotion();tourFrom=flow?1-measuredProgress():measuredProgress();if(tourFrom>.94)tourFrom=0;tourStarted=performance.now();scrollToProgress(flow?1-tourFrom:tourFrom,'instant');
   n('assembly-play').innerHTML='<span aria-hidden="true">Ⅱ</span> Pause';n('assembly-play').setAttribute('aria-label','Pause animation');n('assembly-play').setAttribute('aria-pressed','true');
-  function step(now){const p=clamp(tourFrom+(now-tourStarted)/26000);scrollToProgress(p,'instant');if(p<1)tour=requestAnimationFrame(step);else stopTour()}
+  function step(now){const p=clamp(tourFrom+(now-tourStarted)/26000);scrollToProgress(flow?1-p:p,'instant');if(p<1)tour=requestAnimationFrame(step);else stopTour()}
   tour=requestAnimationFrame(step);
  });
  window.addEventListener('scroll',request,{passive:true});window.addEventListener('resize',request,{passive:true});
  window.addEventListener('wheel',stopTour,{passive:true});window.addEventListener('touchstart',stopTour,{passive:true});
- root.addEventListener('pointermove',e=>{if(e.pointerType==='mouse'&&!staticMode){pointerX=(e.clientX/window.innerWidth-.5)*2;pointerY=(e.clientY/window.innerHeight-.5)*2;}});
+ root.addEventListener('pointermove',e=>{if(e.pointerType==='mouse'&&!staticMode&&!flow){pointerX=(e.clientX/window.innerWidth-.5)*2;pointerY=(e.clientY/window.innerHeight-.5)*2;}});
  root.addEventListener('pointerleave',()=>{pointerX=pointerY=0});
  document.addEventListener('visibilitychange',()=>{lastClock=0;if(document.hidden)stopTour();else request()});
  // At the film boundary the section can intersect with zero area. With the
  // default threshold, entering farther does not trigger a second callback.
  // Accept that first intersection so the initial downward scroll can render.
  new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible){lastClock=0;request()}else stopTour()}).observe(root);
- document.addEventListener('keydown',e=>{if(!visible||root.getBoundingClientRect().bottom<window.innerHeight*.6||['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)||(e.key===' '&&document.activeElement===n('assembly-play')))return;if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();stopTour();enableMotion();scrollToProgress(positions[Math.min(5,Math.max(0,current+(e.key==='ArrowRight'?1:-1)))])}else if(['PageDown','PageUp','Home','End','ArrowDown','ArrowUp','Escape',' '].includes(e.key))stopTour()});
- function applyReducedMotion(){stopTour();staticMode=motionPreference.matches;root.classList.toggle('is-static',staticMode);display=staticMode?1:measuredProgress();request()}
+ document.addEventListener('keydown',e=>{if(flow&&(!flow.sample().active||flow.sample().progress<flow.phases.transferEnd))return;if(!visible||root.getBoundingClientRect().bottom<window.innerHeight*.6||['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)||(e.key===' '&&document.activeElement===n('assembly-play')))return;if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();stopTour();enableMotion();scrollToProgress(positions[Math.min(5,Math.max(0,current+(e.key==='ArrowRight'?(flow?-1:1):(flow?1:-1))))])}else if(['PageDown','PageUp','Home','End','ArrowDown','ArrowUp','Escape',' '].includes(e.key))stopTour()});
+ function applyReducedMotion(){stopTour();staticMode=motionPreference.matches;root.classList.toggle('is-static',staticMode&&!flow);display=flow?measuredProgress():staticMode?1:measuredProgress();if(flow)paint(display,0);else request()}
  motionPreference.addEventListener('change',applyReducedMotion);
- if(staticMode){root.classList.add('is-static');display=1}
- display=staticMode?1:measuredProgress();paint(display,0);request();
+ if(flow){
+  let lastFlowPaint=-1,lastFlowReduced=null;
+  flow.onFrame(state=>{
+   const raw=1-state.reverse;display=staticMode?positions[Math.round(raw*5)]:raw;
+   if(display===lastFlowPaint&&staticMode===lastFlowReduced)return;
+   lastFlowPaint=display;lastFlowReduced=staticMode;
+   paint(display,state.reverse*26);
+  });
+ }else{
+  if(staticMode){root.classList.add('is-static');display=1}
+  display=staticMode?1:measuredProgress();paint(display,0);request();
+ }
 })();

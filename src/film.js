@@ -27,6 +27,5 @@
  new IntersectionObserver(([entry])=>{inView=entry.isIntersecting&&entry.intersectionRatio>=.12;reconcile()},{threshold:[0,.12,.5]}).observe(root);
  document.addEventListener('visibilitychange',reconcile);
  motion.addEventListener('change',()=>{explicitPlay=false;reconcile()});
- root.querySelectorAll('a[href="#cup-story"]').forEach(link=>link.addEventListener('click',e=>{e.preventDefault();document.getElementById('assembly-replay').click()}));
  updateControl();
 })();
