@@ -22,7 +22,7 @@
  ];
  const captions=['Sorghum × millet','From grain to strand','Every layer has a purpose','A little colour. A lot of character.','The kettle moment','Meet your next everyday ritual'];
  const callouts=[['','',''],['THE NOODLE BLOCK','Drawn strand by strand.',''],['LAYER BY LAYER','Paper. Sleeve. Foil.',''],['A COLOURFUL FINISH','Vegetables + seasoning.',''],['POUR. COVER. PAUSE.','Kettle-only is the design goal.',''],['SMALL GRAINS. BIG IDEAS.','A new cup concept.','']];
- const particles=[],dust=[],strands=[],loose=[],toppings=[],seasoning=[],ripples=[],splashes=[],steam=[];
+ const particles=[],dust=[],strands=[],loose=[],toppings=[],seasoning=[],ripples=[],splashes=[],steam=[],bubbles=[];
  for(let i=0;i<64;i++){
   const a=i*Math.PI/32,r=i%4===0?254:250;
   node('path',{d:`M${450+Math.cos(a)*r} ${440+Math.sin(a)*r}L${450+Math.cos(a)*246} ${440+Math.sin(a)*246}`,opacity:i%4===0?.32:.16},n('orbit-ticks'));
@@ -37,18 +37,24 @@
  for(let i=0;i<50;i++){
   dust.push({e:node('circle',{r:.5+random()*1.2,fill:i%2?'#b89a5e':'#9da17b'},n('grain-dust')),x:200+random()*490,y:220+random()*360,phase:random()*6.28});
  }
+ // A shallow rectangular noodle brick: planar top, straight front, and a thin side.
+ // The strand rows follow those planes instead of bending into a bowl-shaped base.
  for(let row=0;row<32;row++){
-  const y=-47+row*3.15;let d='';
+  const front=row>=23,v=front?(row-23)/8:row/22;
+  const start=front?-110:mix(-141,-111,v),end=front?145:mix(115,145,v);
+  const y=front?mix(21,43,v):mix(-46,14,v),amplitude=front?1.7:2.6;let d='';
   for(let k=0;k<=44;k++){
-   const x=-141+k*6.4,base=y-16*(1-(x/145)**2),wiggle=Math.sin(k*2.1+row*.84)*5.1;
-   if(!k)d=`M${x.toFixed(2)} ${(base+wiggle).toFixed(2)}`;
-   else d+=`Q${(x-4.5).toFixed(2)} ${(base+(k%2?-7.6:7.6)).toFixed(2)} ${x.toFixed(2)} ${(base+wiggle).toFixed(2)}`;
+   const x=mix(start,end,k/44),wiggle=Math.sin(k*2.1+row*.84)*amplitude;
+   if(!k)d=`M${x.toFixed(2)} ${(y+wiggle).toFixed(2)}`;
+   else d+=`Q${(x-4.1).toFixed(2)} ${(y+(k%2?-amplitude*1.45:amplitude*1.45)).toFixed(2)} ${x.toFixed(2)} ${(y+wiggle).toFixed(2)}`;
   }
   const e=node('g',{},n('noodle-strands'));
-  const paths=[['#91672f',5.5],['#c6a05a',4.1],[row%3?'#efcf87':'#f6dc9e',2.7],['#fff0ba',.55]].map(([stroke,width])=>node('path',{d,fill:'none',stroke,'stroke-width':width,'stroke-linecap':'round',pathLength:1,'stroke-dasharray':1},e));
+  const paths=[['#926c32',4.5],['#cba85f',3.4],[front?'#e0bc75':row%3?'#f0d38e':'#f6dda4',2.2],['#fff0bd',.5]].map(([stroke,width])=>node('path',{d,fill:'none',stroke,'stroke-width':width,'stroke-linecap':'round',pathLength:1,'stroke-dasharray':1},e));
   strands.push({e,paths});
  }
- for(let i=0;i<85;i++)node('ellipse',{cx:-135+random()*270,cy:-48+random()*92,rx:.4+random()*.65,ry:.3+random()*.5,fill:'#9d733c',opacity:.35},n('noodle-speckles'));
+ for(let i=0;i<65;i++){
+  const v=random();node('ellipse',{cx:mix(-138,-109,v)+random()*250,cy:mix(-45,14,v),rx:.4+random()*.65,ry:.3+random()*.5,fill:'#9d733c',opacity:.35},n('noodle-speckles'));
+ }
  for(let i=0;i<5;i++){
   const y=-90-i*15;
   const d=`M-177 ${y+20}C-125 ${y-70} -80 ${y+70} -26 ${y}S91 ${y-50} 167 ${y+15}`;
@@ -77,6 +83,20 @@
   node('ellipse',{cx:290+random()*310,cy:510+random()*33,rx:1+random()*2,ry:1.5+random()*2.8,fill:'#fffbea',stroke:'#96aa8e','stroke-width':.35,opacity:.45},n('condensation-field'));
  }
  for(let i=0;i<30;i++)node('ellipse',{cx:300+random()*300,cy:440+random()*55,rx:1+random()*2.5,ry:.4+random(),fill:i%2?'#f5dda0':'#7a7b45',opacity:.45},n('broth-flecks'));
+ // Loose surface strands become visible as the rising broth covers the dry brick.
+ // This is illustrative preparation choreography, not a hydration prediction.
+ for(let i=0;i<17;i++){
+  const y=443+i*3.1,reach=Math.sqrt(Math.max(.1,1-((y-470)/34)**2));
+  const left=450-112*reach+Math.sin(i*2)*9,right=450+112*reach+Math.cos(i)*8;let d='';
+  for(let k=0;k<=23;k++){
+   const x=mix(left,right,k/23),yy=y+Math.sin(k*1.4+i*.91)*3.4;
+   d+=k?`Q${x-4} ${yy+(k%2?-5:5)} ${x} ${yy}`:`M${x} ${yy}`;
+  }
+  node('path',{d,stroke:'#9a7137','stroke-width':4.1,opacity:.7},n('hydrated-strands'));
+  node('path',{d,stroke:'#efd196','stroke-width':2.7},n('hydrated-strands'));
+  node('path',{d,stroke:'#fff0bd','stroke-width':.6,opacity:.7},n('hydrated-strands'));
+ }
+ for(let i=0;i<12;i++)bubbles.push({e:node('ellipse',{cx:330+random()*240,cy:445+random()*51,rx:1,ry:.5},n('broth-bubbles')),phase:random(),size:1+random()*2.2});
  for(let i=0;i<5;i++)ripples.push(node('ellipse',{cx:505,cy:462,rx:1,ry:1},n('ripple-field')));
  for(let i=0;i<19;i++)splashes.push({e:node('ellipse',{rx:1.2+random()*2,ry:2+random()*2.5,fill:'#deebd3',stroke:'#99bdb2','stroke-width':.35},n('splash-field')),phase:random(),angle:random()*Math.PI*2,range:25+random()*65,height:18+random()*45});
  for(let i=0;i<7;i++){
@@ -91,8 +111,8 @@
  let pointerX=0,pointerY=0,viewX=0,viewY=0;
  const motionPreference=window.matchMedia('(prefers-reduced-motion: reduce)');
  let staticMode=motionPreference.matches,visible=true;
- const chapterAt=s=>s<.76?0:s<1.77?1:s<2.72?2:s<3.82?3:s<5.02?4:5;
- const positions=[0,1.4/5.7,2.48/5.7,3.15/5.7,4.45/5.7,1];
+ const chapterAt=s=>s<.76?0:s<1.77?1:s<2.72?2:s<3.82?3:s<5.12?4:5;
+ const positions=[0,1.61/5.7,2.48/5.7,3.15/5.7,4.7/5.7,1];
  function setChapter(index){
   if(index===current)return;
   const previous=current;current=index;const c=chapters[index];
@@ -105,7 +125,7 @@
  }
  function paint(p,time){
   const s=p*5.7;root.style.setProperty('--story-progress',String(p));root.dataset.stage=String(chapterAt(s));setChapter(chapterAt(s));
-  const cup=smooth(1.57,2.48,s),close=smooth(4.98,5.64,s),fill=smooth(3.82,4.78,s),idle=staticMode?0:1;
+  const cup=smooth(1.75,2.48,s),close=smooth(5.12,5.68,s),fill=smooth(3.82,4.65,s),idle=staticMode?0:1;
   viewX+=(pointerX-viewX)*.06;viewY+=(pointerY-viewY)*.06;
   transform(n('assembly-scene'),`translate(${viewX*5} ${viewY*3+Math.sin(time*.7)*1.2*idle}) rotate(${viewX*.45} 450 480)`);
   transform(n('orbital-field'),`rotate(${s*5+time*.9*idle} 450 440)`);opacity(n('orbital-field'),mix(.9,.36,cup));
@@ -122,30 +142,47 @@
   opacity(n('grain-dust'),(1-smooth(.7,1.45,s))*.5);
   if(s<1.5)for(const d of dust)transform(d.e,`translate(${d.x+Math.sin(time*.35+d.phase)*12} ${d.y+Math.cos(time*.4+d.phase)*13})`);
   opacity(n('grain-names'),1-smooth(.3,.77,s));
-  const cupY=(1-cup)*195,cupOpacity=smooth(1.54,1.98,s);
+  const cupY=(1-cup)*195,cupOpacity=smooth(1.73,2.06,s);
   for(const id of ['cup-back','cup-front']){transform(n(id),`translate(${(1-cup)*40} ${cupY}) rotate(${(1-cup)*9} 450 700)`);opacity(n(id),cupOpacity);}
   const base=smooth(1.72,2.52,s);transform(n('cup-base'),`translate(0 ${(1-base)*175})`);opacity(n('cup-base'),smooth(1.7,2.05,s));
   const sleeve=smooth(1.96,2.65,s);transform(n('cup-sleeve'),`translate(${(1-sleeve)*-30} ${(1-sleeve)*88}) rotate(${(1-sleeve)*-9} 450 620)`);opacity(n('cup-sleeve'),smooth(1.84,2.13,s));
-  const blockY=mix(361,455,cup)+fill*23;
+  const blockY=mix(361,465,cup)+fill*27;
+  const liquidY=mix(574,477,fill),liquidRx=mix(150,171,fill),liquidRy=mix(42,49,fill);
+  root.dataset.fill=fill.toFixed(3);
   transform(n('noodle-block'),`translate(450 ${blockY}) rotate(${mix(-7,0,cup)}) scale(${mix(1.2,.99,cup)-fill*.02})`);opacity(n('noodle-block'),smooth(.65,.85,s));
   opacity(n('noodle-core'),smooth(.98,1.5,s));opacity(n('noodle-speckles'),smooth(1.05,1.52,s));
   if(s<1.85){strandsFinished=false;strands.forEach(({e,paths},i)=>{const t=smooth(.63+i*.013,1.15+i*.013,s);transform(e,`translate(${(1-t)*Math.sin(i*.85)*33} ${(1-t)*(-90+i*2)})`);paths.forEach(path=>path.setAttribute('stroke-dashoffset',String(1-t)));});}
   else if(!strandsFinished){strandsFinished=true;strands.forEach(({e,paths})=>{transform(e,'translate(0 0)');paths.forEach(path=>path.setAttribute('stroke-dashoffset','0'))});}
-  opacity(n('floating-noodles'),smooth(.53,.88,s)*(1-smooth(1.08,1.66,s)));
+  opacity(n('floating-noodles'),smooth(.53,.88,s)*(1-smooth(1.08,1.55,s)));
   if(s<1.7)loose.forEach(({g,path,light},i)=>{const t=smooth(.55+i*.045,1.27+i*.045,s);transform(g,`translate(450 ${mix(440,370,t)}) rotate(${mix(-18+i*7,0,t)} 0 -100)`);path.setAttribute('stroke-dashoffset',1-t);light.setAttribute('stroke-dashoffset',1-t);});
   for(const g of toppings){
    const t=smooth(2.58+g.delay,3.36+g.delay,s),lift=Math.sin(t*Math.PI),settle=Math.sin(t*Math.PI*3)*(1-t)*9;
-   const bob=fill>0&&close<.9?Math.sin(time*1.7+g.phase)*fill*1.4*idle:0;
-   transform(g.e,`translate(${mix(g.x,g.tx,t)+lift*g.arc} ${mix(g.y,g.ty,t)-lift*32+settle+bob}) rotate(${g.rotation*(1-t)+Math.sin(time+g.phase)*fill*.8*idle}) scale(${mix(1.18,1,t)})`);
+   const floating=smooth(.45,.9,fill),floatY=mix(g.ty+fill*24,liquidY+(g.ty-459)*.78-3,floating);
+   const bob=close<.9?Math.sin(time*1.7+g.phase)*floating*1.5*idle:0;
+   transform(g.e,`translate(${mix(g.x,g.tx,t)+lift*g.arc} ${mix(g.y,floatY,t)-lift*32+settle+bob}) rotate(${g.rotation*(1-t)+Math.sin(time+g.phase)*fill*.8*idle}) scale(${mix(1.18,1,t)})`);
    opacity(g.e,smooth(2.34+g.delay,2.55+g.delay,s));
   }
-  for(const g of seasoning){const t=smooth(2.88+g.delay,3.55+g.delay,s);transform(g.e,`translate(${g.x+Math.sin(t*6+g.phase)*(1-t)*35} ${mix(210,g.y,t)}) rotate(${g.phase*60+t*180})`);opacity(g.e,smooth(2.72+g.delay,2.95+g.delay,s));}
-  opacity(n('broth-surface'),fill);opacity(n('condensation-field'),fill*(1-close*.7));
-  const water=smooth(3.82,4.08,s)*(1-smooth(4.78,5.03,s));opacity(n('water-pour'),water);
-  transform(n('water-pour'),`translate(0 ${-15*(1-water)})`);
-  opacity(n('kettle-spout'),smooth(3.64,3.98,s)*(1-smooth(4.78,5.02,s)));transform(n('kettle-spout'),`translate(${(1-water)*70} ${(1-water)*-40}) rotate(${(1-water)*-15} 700 135)`);
-  ripples.forEach((e,i)=>{const t=(time*.58+i/5)%1;const size=8+t*150;e.setAttribute('rx',size);e.setAttribute('ry',size*.28);opacity(e,(1-t)*.65*water);});
-  if(water>.001)splashes.forEach(g=>{const t=(time*1.05+g.phase)%1;transform(g.e,`translate(${506+Math.cos(g.angle)*g.range*t} ${454+Math.sin(g.angle)*g.range*.25*t-Math.sin(t*Math.PI)*g.height}) rotate(${Math.cos(g.angle)*t*80}) scale(${1-t*.55})`);opacity(g.e,Math.sin(t*Math.PI)*.9);});
+  for(const g of seasoning){const t=smooth(2.88+g.delay,3.55+g.delay,s);transform(g.e,`translate(${g.x+Math.sin(t*6+g.phase)*(1-t)*35} ${mix(210,mix(g.y,liquidY+(g.y-459)*.78-2,smooth(.45,.9,fill)),t)}) rotate(${g.phase*60+t*180})`);opacity(g.e,smooth(2.72+g.delay,2.95+g.delay,s));}
+  // Draw liquid AFTER the brick and BEFORE toppings. Its opaque volume hides
+  // submerged noodles; the cup's front wall occludes the water below the rim.
+  opacity(n('broth-liquid'),smooth(.015,.08,fill));opacity(n('condensation-field'),fill*(1-close*.7));
+  n('broth-volume').setAttribute('d',`M${450-liquidRx} ${liquidY}H${450+liquidRx}L584 710Q450 750 316 710Z`);
+  for(const id of ['broth-surface','broth-meniscus','broth-clip-ellipse']){
+   n(id).setAttribute('cy',liquidY);n(id).setAttribute('rx',liquidRx);n(id).setAttribute('ry',liquidRy);
+  }
+  transform(n('broth-detail-plane'),`translate(450 ${liquidY}) scale(${liquidRx/171} ${liquidRy/49}) translate(-450 -470)`);
+  opacity(n('hydrated-strands'),smooth(.3,.88,fill));
+  const water=smooth(3.82,4.08,s)*(1-smooth(4.7,4.86,s));opacity(n('water-pour'),water);
+  // Keep the end of the stream, splash and ripple center on the rising surface.
+  const impactY=liquidY-8;
+  for(const id of ['water-shadow','water-stream'])n(id).setAttribute('d',`M606 168C607 257 518 290 506 ${impactY}`);
+  n('water-highlight').setAttribute('d',`M603 168C603 257 514 295 503 ${impactY-3}`);
+  n('water-secondary').setAttribute('d',`M611 168C612 261 525 289 513 ${impactY-2}`);
+  n('water-impact').setAttribute('cy',impactY);
+  opacity(n('kettle-spout'),smooth(3.64,3.98,s)*(1-smooth(4.7,4.88,s)));transform(n('kettle-spout'),`translate(${(1-water)*70} ${(1-water)*-40}) rotate(${(1-water)*-15} 700 135)`);
+  ripples.forEach((e,i)=>{const t=(time*.58+i/5)%1,size=8+t*150;e.setAttribute('rx',size);e.setAttribute('ry',size*.28);opacity(e,(1-t)*(.25+.55*water)*smooth(.15,.55,fill));});
+  bubbles.forEach(g=>{const t=(time*.4+g.phase)%1;g.e.setAttribute('rx',g.size*(.4+t));g.e.setAttribute('ry',g.size*(.4+t)*.48);opacity(g.e,Math.sin(t*Math.PI)*smooth(.3,.65,fill)*.55);});
+  if(water>.001)splashes.forEach(g=>{const t=(time*1.05+g.phase)%1;transform(g.e,`translate(${506+Math.cos(g.angle)*g.range*t} ${impactY+Math.sin(g.angle)*g.range*.25*t-Math.sin(t*Math.PI)*g.height}) rotate(${Math.cos(g.angle)*t*80}) scale(${1-t*.55})`);opacity(g.e,Math.sin(t*Math.PI)*.9);});
   const steamStrength=smooth(4.05,4.5,s)*(1-close);opacity(n('steam-field'),steamStrength);
   if(steamStrength>.001)steam.forEach((e,i)=>{const t=(time*.17+i/7)%1;transform(e,`translate(${Math.sin(time*.55+i)*9} ${-t*54}) scale(1 ${.8+t*.25})`);opacity(e,Math.sin(t*Math.PI)*.55);});
   const lidShift=smooth(3.6,4.02,s)*(1-close),lidShow=smooth(1.93,2.42,s),hover=Math.sin(time*1.1)*3*(1-close)*idle;
