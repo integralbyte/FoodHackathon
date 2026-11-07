@@ -94,7 +94,7 @@ Team-supplied, unvalidated nutrition and process targets. Not a manufactured-pro
 - [Manufacturer product page](https://www.miyoka.us/products/25g-of-protein-chicken-flavored-ramen)
 - [Manufacturer artwork](https://cdn.shopify.com/s/files/1/0902/3877/9576/files/rn-image_picker_lib_temp_55575daf-73c3-47e1-80f0-cd25ce13e726.png?v=1790716077) → `miyoka-chicken.png`
 
-Current chicken-specific text label: 77.5g, 1,220mg sodium. Older product-page images may show earlier formulations; no spicy-cup figures are used.
+Current chicken-specific text label: 77.5g, 1,220mg sodium. Older product-page images may show earlier formulations; no spicy-cup figures are used. The shelf adds a fitted SVG lid above the open serving-photo rim.
 
 ## Nissin Soba Protein Chilli (UK)
 - [Manufacturer product page](https://www.nissin-foods.eu/uk/products/nissin-soba-cup-protein-chilli)
@@ -152,6 +152,6 @@ Illustrated scenario only: this exact cup is assumed deep-fried for the last eli
 
 Soba Classic uses the UK full 210g prepared serving: 18g protein, 15g fibre and 2.2g salt. Chilli uses the full 220g prepared serving: 18g protein, 15g fibre and 1.9g salt. Sodium = salt ÷ 2.5 × 1,000, giving 880mg and 760mg. Their label preparation drains the water before adding sauce. No sodium is subtracted from soup products by assumption. The simplified presentation has no alternate nutrition table.
 
-Manufacturer artwork is unchanged, with SVG viewBoxes and silhouette clips applied by the page. NOMI uses original, explicitly labeled schematic SVG cups, not manufacturer packaging replicas. Golden Chicken and Tokyo Curry are pre-orders, while Umami Beef First Batch is listed in stock. Illustrative shelf sizes do not compare physical dimensions or imply retail co-location.
+Manufacturer artwork pixels are unchanged, with SVG viewBoxes and silhouette clips applied by the page. Miyoka’s source is an open serving photo; a fitted SVG lid is added above the rim as an illustrative packaging element. NOMI uses original schematic SVG cups, without overlay badges. Golden Chicken and Tokyo Curry are pre-orders, while Umami Beef First Batch is listed in stock. Illustrative shelf sizes do not compare physical dimensions or imply retail co-location.
 
 The <900mg cutoff is an illustrative preference, not a low-sodium nutrient claim. The comparison omits other nutrients, protein quality, price, taste, and health outcomes. The shopper’s “healthiest” wish is not substantiated as an overall product ranking.

@@ -21,7 +21,7 @@ function scene({initialScroll=0}={}){
   addEventListener(type,fn){(this.listeners[type]??=[]).push(fn)}
  }
  const ids=new Map([...markup.matchAll(/\bid="([^"]+)"/g)].map(m=>[m[1],new Element(m[1])]));
- const root=ids.get('cup-story'),steps=Array.from({length:6},(_,i)=>Object.assign(new Element(),{dataset:{storyStep:String(i)}}));
+ const root=ids.get('cup-story'),steps=Array.from({length:5},(_,i)=>Object.assign(new Element(),{dataset:{storyStep:String(i)}}));
  let scrollY=initialScroll,now=0,frameID=0,observerNotifications=0;
  const frames=new Map(),events={},observers=[];
  const viewport=900,sectionTop=900,height=5850;
@@ -51,19 +51,19 @@ function scene({initialScroll=0}={}){
 
 test('first downward scroll animates after an edge-only initial observer entry',()=>{
  const app=scene();app.flush();assert.equal(app.root.dataset.stage,'0');
- app.atProgress(.43);app.flush();
+ app.atProgress(.57);app.flush();
  assert.equal(app.observerNotifications,1,'No second observer notification occurs when the ratio changes from zero to positive');
  assert.equal(app.root.dataset.stage,'2','The cup must assemble on the first pass without leaving the section');
  assert.ok(Number(app.ids.get('cup-front').style.opacity)>.99);
- app.atProgress(.78);app.flush();assert.equal(app.root.dataset.stage,'4');assert.ok(Number(app.root.dataset.fill)>.5);
+ app.atProgress(.78);app.flush();assert.equal(app.root.dataset.stage,'3');assert.equal(app.ids.has('water-pour'),false);assert.equal(app.ids.has('kettle-spout'),false);
 });
 
 test('a restored scroll position starts at the correct animation stage',()=>{
- const app=scene({initialScroll:900+.6*4950});app.flush();assert.equal(app.root.dataset.stage,'3');
+ const app=scene({initialScroll:900+.6*4950});app.flush();assert.equal(app.root.dataset.stage,'2');
 });
 
 test('offscreen rendering stops and reverse scrolling wakes the scene again',()=>{
- const app=scene();app.atProgress(1);app.flush();assert.equal(app.root.dataset.stage,'5');
+ const app=scene();app.atProgress(1);app.flush();assert.equal(app.root.dataset.stage,'4');
  app.scroll(7000);app.flush();assert.equal(app.pendingFrames,0);
  app.atProgress(.28);app.flush();assert.equal(app.root.dataset.stage,'1');
 });

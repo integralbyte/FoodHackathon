@@ -13,8 +13,8 @@
  let seed=47;const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296};
  const nodes=Object.fromEntries(Array.from(root.querySelectorAll('[id]'),e=>[e.id,e]));
  const n=id=>nodes[id];
- const chapters=['Sorghum and millet grains.','Forming the noodle cake.','Assembling the cup.','Adding the toppings.','Pouring the water.','Sorami Umami Chicken cup complete.'];
- const particles=[],dust=[],strands=[],loose=[],toppings=[],seasoning=[],ripples=[],splashes=[],steam=[],bubbles=[];
+ const chapters=['Sorghum and millet grains.','Forming the noodle cake.','Assembling the cup.','Adding the toppings.','Sorami Umami Chicken cup complete.'];
+ const particles=[],dust=[],strands=[],loose=[],toppings=[],seasoning=[];
  for(let i=0;i<64;i++){
   const a=i*Math.PI/32,r=i%4===0?254:250;
   node('path',{d:`M${450+Math.cos(a)*r} ${440+Math.sin(a)*r}L${450+Math.cos(a)*246} ${440+Math.sin(a)*246}`,opacity:i%4===0?.32:.16},n('orbit-ticks'));
@@ -97,50 +97,23 @@
   const x=268+i*13.5;
   node('path',{d:`M${x} 490L${mix(x,450,.21)} 739`},n('paper-ribs'));
  }
- for(let i=0;i<20;i++){
-  node('ellipse',{cx:290+random()*310,cy:510+random()*33,rx:1+random()*2,ry:1.5+random()*2.8,fill:'#fffbea',stroke:'#96aa8e','stroke-width':.35,opacity:.45},n('condensation-field'));
- }
- for(let i=0;i<30;i++)node('ellipse',{cx:300+random()*300,cy:440+random()*55,rx:1+random()*2.5,ry:.4+random(),fill:i%2?'#f5dda0':'#7a7b45',opacity:.45},n('broth-flecks'));
- // Loose surface strands become visible as the rising broth covers the dry brick.
- // This is illustrative preparation choreography, not a hydration prediction.
- for(let i=0;i<17;i++){
-  const y=443+i*3.1,reach=Math.sqrt(Math.max(.1,1-((y-470)/34)**2));
-  const left=450-112*reach+Math.sin(i*2)*9,right=450+112*reach+Math.cos(i)*8;let d='';
-  for(let k=0;k<=23;k++){
-   const x=mix(left,right,k/23),yy=y+Math.sin(k*1.4+i*.91)*3.4;
-   d+=k?`Q${x-4} ${yy+(k%2?-5:5)} ${x} ${yy}`:`M${x} ${yy}`;
-  }
-  node('path',{d,stroke:'#9a7137','stroke-width':4.1,opacity:.7},n('hydrated-strands'));
-  node('path',{d,stroke:'#efd196','stroke-width':2.7},n('hydrated-strands'));
-  node('path',{d,stroke:'#fff0bd','stroke-width':.6,opacity:.7},n('hydrated-strands'));
- }
- for(let i=0;i<12;i++)bubbles.push({e:node('ellipse',{cx:330+random()*240,cy:445+random()*51,rx:1,ry:.5},n('broth-bubbles')),phase:random(),size:1+random()*2.2});
- for(let i=0;i<5;i++)ripples.push(node('ellipse',{cx:505,cy:462,rx:1,ry:1},n('ripple-field')));
- for(let i=0;i<19;i++)splashes.push({e:node('ellipse',{rx:1.2+random()*2,ry:2+random()*2.5,fill:'#deebd3',stroke:'#99bdb2','stroke-width':.35},n('splash-field')),phase:random(),angle:random()*Math.PI*2,range:25+random()*65,height:18+random()*45});
- for(let i=0;i<7;i++){
-  const x=366+i*28;
-  const e=node('g',{},n('steam-field'));
-  node('path',{d:`M${x} 443C${x-32} 407 ${x+26} 393 ${x} 356S${x+26} 300 ${x+4} 277`,stroke:'#f5f3da','stroke-width':9,opacity:.55,filter:'url(#steam-soft)'},e);
-  node('path',{d:`M${x} 443C${x-32} 407 ${x+26} 393 ${x} 356S${x+26} 300 ${x+4} 277`,stroke:'#9aae93','stroke-width':1.8,opacity:.45},e);
-  steam.push(e);
- }
  let strandsFinished=false;
  let current=-1,display=0,frame=0,tour=0,tourStarted=0,tourFrom=0,lastPaint=0,sceneTime=0,lastClock=0;
  let pointerX=0,pointerY=0,viewX=0,viewY=0;
  const motionPreference=window.matchMedia('(prefers-reduced-motion: reduce)');
  let staticMode=motionPreference.matches,visible=true;
- const chapterAt=s=>s<.76?0:s<1.77?1:s<2.72?2:s<3.82?3:s<5.12?4:5;
- const positions=[0,1.61/5.7,2.48/5.7,3.15/5.7,4.7/5.7,1];
+ const chapterAt=s=>s<.76?0:s<1.77?1:s<2.72?2:s<3.82?3:4;
+ const positions=[0,1.61/4.4,2.48/4.4,3.15/4.4,1];
  function setChapter(index){
   if(index===current)return;
   current=index;n('assembly-announcement').textContent=chapters[index];
   root.querySelectorAll('[data-story-step]').forEach((e,i)=>{if(i===index)e.setAttribute('aria-current','step');else e.removeAttribute('aria-current')});
  }
  function paint(p,time){
-  const s=p*5.7;root.style.setProperty('--story-progress',String(p));root.dataset.stage=String(chapterAt(s));setChapter(chapterAt(s));
-  const cup=smooth(1.75,2.48,s),close=smooth(5.12,5.68,s),fill=smooth(3.82,4.65,s),idle=staticMode||flow?0:1;
+  const s=p*4.4;root.style.setProperty('--story-progress',String(p));root.dataset.stage=String(chapterAt(s));setChapter(chapterAt(s));
+  const cup=smooth(1.75,2.48,s),close=smooth(3.82,4.38,s),idle=staticMode||flow?0:1;
   // Reframe the grain clouds, full assembly, and finished cup around the center.
-  const wide=smooth(1.3,2.08,s),hero=smooth(5.25,5.7,s);
+  const wide=smooth(1.3,2.08,s),hero=smooth(3.95,4.4,s);
   const camera=[mix(mix(130,70,wide),195,hero),mix(mix(180,60,wide),398,hero),mix(mix(640,760,wide),510,hero),mix(mix(470,880,wide),535,hero)];
   n('assembly-art').setAttribute('viewBox',camera.map(v=>v.toFixed(2)).join(' '));
   viewX+=(pointerX-viewX)*.06;viewY+=(pointerY-viewY)*.06;
@@ -164,10 +137,8 @@
   const base=smooth(1.72,2.52,s);transform(n('cup-base'),`translate(0 ${(1-base)*175})`);opacity(n('cup-base'),smooth(1.7,2.05,s)*(1-close));
   const sleeve=smooth(1.96,2.65,s);transform(n('cup-sleeve'),`translate(${(1-sleeve)*-30} ${(1-sleeve)*88}) rotate(${(1-sleeve)*-9} 450 620)`);opacity(n('cup-sleeve'),smooth(1.84,2.13,s));
   opacity(n('cup-front-paper'),1-sleeve);
-  const blockY=mix(345,470,cup)+fill*64;
-  const liquidY=mix(574,477,fill),liquidRx=mix(150,171,fill),liquidRy=mix(23,27,fill);
-  root.dataset.fill=fill.toFixed(3);
-  transform(n('noodle-block'),`translate(450 ${blockY}) rotate(${mix(-7,0,cup)}) scale(${mix(1.2,.99,cup)-fill*.02})`);opacity(n('noodle-block'),smooth(.65,.85,s));
+  const blockY=mix(345,470,cup);
+  transform(n('noodle-block'),`translate(450 ${blockY}) rotate(${mix(-7,0,cup)}) scale(${mix(1.2,.99,cup)})`);opacity(n('noodle-block'),smooth(.65,.85,s));
   opacity(n('noodle-core'),smooth(.98,1.5,s));opacity(n('noodle-speckles'),smooth(1.05,1.52,s));
   if(s<1.85){strandsFinished=false;strands.forEach(({e,paths},i)=>{const delay=.4*i/(strands.length-1),t=smooth(.63+delay,1.15+delay,s);transform(e,`translate(${(1-t)*Math.sin(i*.85)*33} ${(1-t)*(-90+i*2)})`);paths.forEach(path=>path.setAttribute('stroke-dashoffset',String(1-t)));});}
   else if(!strandsFinished){strandsFinished=true;strands.forEach(({e,paths})=>{transform(e,'translate(0 0)');paths.forEach(path=>path.setAttribute('stroke-dashoffset','0'))});}
@@ -175,39 +146,15 @@
   if(s<1.7)loose.forEach(({g,path,light},i)=>{const t=smooth(.55+i*.045,1.27+i*.045,s);transform(g,`translate(450 ${mix(440,370,t)}) rotate(${mix(-18+i*7,0,t)} 0 -100)`);path.setAttribute('stroke-dashoffset',1-t);light.setAttribute('stroke-dashoffset',1-t);});
   for(const g of toppings){
    const t=smooth(2.58+g.delay,3.36+g.delay,s),lift=Math.sin(t*Math.PI),settle=Math.sin(t*Math.PI*3)*(1-t)*9;
-   const floating=smooth(.45,.9,fill),floatY=mix(g.ty+fill*24,liquidY+(g.ty-459)*.78-3,floating);
-   const bob=close<.9?Math.sin(time*1.7+g.phase)*floating*1.5*idle:0;
-   transform(g.e,`translate(${mix(g.x,g.tx,t)+lift*g.arc} ${mix(g.y,floatY,t)-lift*32+settle+bob}) rotate(${g.rotation*(1-t)+Math.sin(time+g.phase)*fill*.8*idle}) scale(${mix(1.18,1,t)})`);
+   transform(g.e,`translate(${mix(g.x,g.tx,t)+lift*g.arc} ${mix(g.y,g.ty,t)-lift*32+settle}) rotate(${g.rotation*(1-t)}) scale(${mix(1.18,1,t)})`);
    opacity(g.e,smooth(2.34+g.delay,2.55+g.delay,s));
   }
-  for(const g of seasoning){const t=smooth(2.88+g.delay,3.55+g.delay,s);transform(g.e,`translate(${g.x+Math.sin(t*6+g.phase)*(1-t)*35} ${mix(210,mix(g.y,liquidY+(g.y-459)*.78-2,smooth(.45,.9,fill)),t)}) rotate(${g.phase*60+t*180})`);opacity(g.e,smooth(2.72+g.delay,2.95+g.delay,s));}
-  // Draw liquid AFTER the brick and BEFORE toppings. Its opaque volume hides
-  // submerged noodles; the cup's front wall occludes the water below the rim.
-  opacity(n('broth-liquid'),smooth(.015,.08,fill));opacity(n('condensation-field'),0);
-  n('broth-volume').setAttribute('d',`M${450-liquidRx} ${liquidY}H${450+liquidRx}L586 875Q450 912 316 875Z`);
-  for(const id of ['broth-surface','broth-meniscus','broth-clip-ellipse']){
-   n(id).setAttribute('cy',liquidY);n(id).setAttribute('rx',liquidRx);n(id).setAttribute('ry',liquidRy);
-  }
-  transform(n('broth-detail-plane'),`translate(450 ${liquidY}) scale(${liquidRx/171} ${liquidRy/49}) translate(-450 -470)`);
-  opacity(n('hydrated-strands'),smooth(.3,.88,fill));
-  const water=smooth(3.82,4.08,s)*(1-smooth(4.7,4.86,s));opacity(n('water-pour'),water);
-  // Keep the end of the stream, splash and ripple center on the rising surface.
-  const impactY=liquidY-8;
-  for(const id of ['water-shadow','water-stream'])n(id).setAttribute('d',`M606 168C607 257 518 290 506 ${impactY}`);
-  n('water-highlight').setAttribute('d',`M603 168C603 257 514 295 503 ${impactY-3}`);
-  n('water-secondary').setAttribute('d',`M611 168C612 261 525 289 513 ${impactY-2}`);
-  n('water-impact').setAttribute('cy',impactY);
-  opacity(n('kettle-spout'),smooth(3.64,3.98,s)*(1-smooth(4.7,4.88,s)));transform(n('kettle-spout'),`translate(${(1-water)*70} ${(1-water)*-40}) rotate(${(1-water)*-15} 700 135)`);
-  ripples.forEach((e,i)=>{const t=(time*.58+i/5)%1,size=8+t*150;e.setAttribute('rx',size);e.setAttribute('ry',size*.28);opacity(e,(1-t)*(.25+.55*water)*smooth(.15,.55,fill));});
-  bubbles.forEach(g=>{const t=(time*.4+g.phase)%1;g.e.setAttribute('rx',g.size*(.4+t));g.e.setAttribute('ry',g.size*(.4+t)*.48);opacity(g.e,Math.sin(t*Math.PI)*smooth(.3,.65,fill)*.55);});
-  if(water>.001)splashes.forEach(g=>{const t=(time*1.05+g.phase)%1;transform(g.e,`translate(${506+Math.cos(g.angle)*g.range*t} ${impactY+Math.sin(g.angle)*g.range*.25*t-Math.sin(t*Math.PI)*g.height}) rotate(${Math.cos(g.angle)*t*80}) scale(${1-t*.55})`);opacity(g.e,Math.sin(t*Math.PI)*.9);});
-  const steamStrength=smooth(4.05,4.5,s)*(1-close);opacity(n('steam-field'),steamStrength);
-  if(steamStrength>.001)steam.forEach((e,i)=>{const t=(time*.17+i/7)%1;transform(e,`translate(${Math.sin(time*.55+i)*9} ${-t*54}) scale(1 ${.8+t*.25})`);opacity(e,Math.sin(t*Math.PI)*.55);});
-  const lidShift=smooth(3.6,4.02,s)*(1-close),lidShow=smooth(1.93,2.42,s),hover=Math.sin(time*1.1)*3*(1-close)*idle;
+  for(const g of seasoning){const t=smooth(2.88+g.delay,3.55+g.delay,s);transform(g.e,`translate(${g.x+Math.sin(t*6+g.phase)*(1-t)*35} ${mix(210,g.y,t)}) rotate(${g.phase*60+t*180})`);opacity(g.e,smooth(2.72+g.delay,2.95+g.delay,s));}
+  const lidShow=smooth(1.93,2.42,s),hover=Math.sin(time*1.1)*3*(1-close)*idle;
   const bounce=Math.sin(close*Math.PI*2)*Math.sin(close*Math.PI)*7;
-  transform(n('cup-lid'),`translate(${mix(-36,0,close)-lidShift*116} ${mix(-220,0,close)+hover+bounce}) rotate(${mix(-13,0,close)+Math.sin(time*.65)*.8*(1-close)*idle} 450 470)`);opacity(n('cup-lid'),lidShow);
-  const pulse=smooth(5.45,5.7,s);transform(n('seal-ring'),`translate(450 472) scale(${1+pulse*.13}) translate(-450 -472)`);opacity(n('seal-ring'),Math.sin(pulse*Math.PI)*.45);
-  opacity(n('finished-package'),smooth(5.57,5.68,s));
+  transform(n('cup-lid'),`translate(${mix(-152,0,close)} ${mix(-220,0,close)+hover+bounce}) rotate(${mix(-13,0,close)+Math.sin(time*.65)*.8*(1-close)*idle} 450 470)`);opacity(n('cup-lid'),lidShow);
+  const pulse=smooth(4.15,4.4,s);transform(n('seal-ring'),`translate(450 472) scale(${1+pulse*.13}) translate(-450 -472)`);opacity(n('seal-ring'),Math.sin(pulse*Math.PI)*.45);
+  opacity(n('finished-package'),smooth(4.27,4.38,s));
   transform(n('lid-glint'),`translate(${(time%9)/9*620} 0)`);transform(n('cup-glint'),`translate(${(time%9)/9*620} 0)`);opacity(n('cup-glint'),.08*(1-close));
   opacity(n('assembly-shadow'),mix(.035,.2,cup));transform(n('assembly-shadow'),`translate(0 ${mix(-230,0,cup)})`);
  }
@@ -244,13 +191,13 @@
  // default threshold, entering farther does not trigger a second callback.
  // Accept that first intersection so the initial downward scroll can render.
  new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible){lastClock=0;request()}else stopTour()}).observe(root);
- document.addEventListener('keydown',e=>{if(flow&&(!flow.sample().active||flow.sample().progress<flow.phases.transferEnd))return;if(!visible||root.getBoundingClientRect().bottom<window.innerHeight*.6||['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)||(e.key===' '&&document.activeElement===n('assembly-play')))return;if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();stopTour();enableMotion();scrollToProgress(positions[Math.min(5,Math.max(0,current+(e.key==='ArrowRight'?(flow?-1:1):(flow?1:-1))))])}else if(['PageDown','PageUp','Home','End','ArrowDown','ArrowUp','Escape',' '].includes(e.key))stopTour()});
+ document.addEventListener('keydown',e=>{if(flow&&(!flow.sample().active||flow.sample().progress<flow.phases.transferEnd))return;if(!visible||root.getBoundingClientRect().bottom<window.innerHeight*.6||['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)||(e.key===' '&&document.activeElement===n('assembly-play')))return;if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();stopTour();enableMotion();scrollToProgress(positions[Math.min(positions.length-1,Math.max(0,current+(e.key==='ArrowRight'?(flow?-1:1):(flow?1:-1))))])}else if(['PageDown','PageUp','Home','End','ArrowDown','ArrowUp','Escape',' '].includes(e.key))stopTour()});
  function applyReducedMotion(){stopTour();staticMode=motionPreference.matches;root.classList.toggle('is-static',staticMode&&!flow);display=flow?measuredProgress():staticMode?1:measuredProgress();if(flow)paint(display,0);else request()}
  motionPreference.addEventListener('change',applyReducedMotion);
  if(flow){
   let lastFlowPaint=-1,lastFlowReduced=null;
   flow.onFrame(state=>{
-   const raw=1-state.reverse;display=staticMode?positions[Math.round(raw*5)]:raw;
+   const raw=1-state.reverse;display=staticMode?positions[Math.round(raw*(positions.length-1))]:raw;
    if(display===lastFlowPaint&&staticMode===lastFlowReduced)return;
    lastFlowPaint=display;lastFlowReduced=staticMode;
    paint(display,state.reverse*26);

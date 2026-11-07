@@ -28,12 +28,9 @@ button:focus-visible{outline:3px solid #ad450c;outline-offset:4px}
 .assembly-steps button[aria-current=step]:before{background:var(--orange);transform:translate(-50%,-50%) scale(1.5)}
 .assembly-progress{position:absolute;bottom:0;left:0;height:2px;width:100%;background:#f3dbad}
 .assembly-progress:after{content:'';display:block;transform-origin:left;width:100%;height:100%;background:linear-gradient(90deg,var(--gold),var(--orange));transform:scaleX(var(--story-progress))}
-.flowing-water{animation:water-flow 1.25s linear infinite}.flow-secondary{animation-duration:1.9s}
-@keyframes water-flow{to{stroke-dashoffset:-194}}
 .assembly-intro.is-static{height:100svh}
 .assembly-intro.is-static .assembly-pin{position:relative}
-.assembly-intro.is-static .flowing-water{animation:none}
 @media(max-width:620px){.assembly-intro{height:600svh}.assembly-layout{inset:12px 8px 84px}.assembly-stage:before{width:94vw}.assembly-bottom{bottom:max(18px,env(safe-area-inset-bottom))}.assembly-controls{gap:5px}.assembly-steps button{width:24px}}
 @media(max-height:500px){.assembly-layout{inset:8px 18px 64px}.assembly-bottom{bottom:12px}.assembly-play,.assembly-replay,.assembly-steps button{height:32px}.assembly-replay{width:32px}.assembly-controls{padding:3px 5px}}
-@media(prefers-reduced-motion:reduce){.flowing-water{animation:none}.assembly-play,.assembly-steps button:before{transition:none}}
+@media(prefers-reduced-motion:reduce){.assembly-play,.assembly-steps button:before{transition:none}}
 @media print{.assembly-intro{height:100vh}.assembly-pin{position:relative}.assembly-bottom,.assembly-progress{display:none}}

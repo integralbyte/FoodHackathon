@@ -19,7 +19,6 @@
 .hook-filter strong{font:500 clamp(13px,1.5vw,21px)/1.25 var(--font);white-space:nowrap;letter-spacing:-.025em}
 .hook-filter.is-current{background:#f6d27c;border-color:#ffe8ad;box-shadow:0 0 0 2px #d69739,3px 7px 0 #1f0d1324}
 .hook-filter.is-complete{background:#bba77f;border-color:#d0bc95}
-.hook-art-note{position:absolute;left:50%;bottom:3%;transform:translateX(-50%);font-size:5px;letter-spacing:.3px;white-space:nowrap;background:#2e151c;color:#f5d9aa;padding:2px 4px;pointer-events:none;opacity:calc(1 - var(--reveal))}
 .hook-shelf-stage{position:relative;z-index:2;flex:1;min-height:0;width:min(1320px,94%);margin:0 auto;perspective:1400px;isolation:isolate}
 .hook-shelf-rack{position:absolute;inset:0;pointer-events:none;opacity:calc(1 - var(--reveal)*.6)}
 .hook-shelf-board{position:absolute;left:-3%;right:-3%;top:calc((var(--row) + 1)*100%/3 - 27px);height:18px;border-top:2px solid #e2ba7a;border-bottom:4px solid #65412f;background:linear-gradient(90deg,#805032,#c28e56 15%,#e9c38b 50%,#a87646 85%,#805032);box-shadow:0 15px 25px #17080e80;z-index:0}

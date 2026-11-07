@@ -15,5 +15,3 @@
 @media(max-width:760px){.product-journey{height:1120svh}.product-journey .assembly-layout{inset:12px 8px 22px}}
 @media(prefers-reduced-motion:reduce){.journey-transfer-cup{will-change:auto}}
 @media print{.product-journey{height:200vh}.journey-pin{position:relative;overflow:visible}.product-journey .shelf-hook{height:100vh}.product-journey .assembly-intro{top:100vh;height:100vh;opacity:1}.journey-transfer-cup{display:none}}
-
-.product-journey .flowing-water{animation-direction:reverse}
