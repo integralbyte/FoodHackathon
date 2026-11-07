@@ -13,14 +13,14 @@
  const nodes=Object.fromEntries(Array.from(root.querySelectorAll('[id]'),e=>[e.id,e]));
  const n=id=>nodes[id];
  const chapters=[
-  {kicker:'01 / Start with the grain',title:'Two grains.\nOne new ritual.',description:'Sorghum and millet, reimagined as a familiar cup of noodles. A little convenience for grains with more to give.',status:'55 : 45 sorghum-to-millet ratio within the grain fraction · proposed'},
+  {kicker:'01 / Start with the grain',title:'Two grains.\nOne new ritual.',description:'Meet Sorami. Sorghum and millet, reimagined as a familiar cup of noodles. A little convenience for grains with more to give.',status:'55 : 45 sorghum-to-millet ratio within the grain fraction · proposed'},
   {kicker:'02 / Rethink the shape',title:'Give good grains\na new shape.',description:'Our starting point: a thin, pre-cooked noodle strand. A shorter path for water, in a form people already know.',status:'Proposed process · pre-cook, shape, and dry without frying'},
   {kicker:'03 / Build the cup',title:'A new home\nfor ancient grains.',description:'The noodle block settles into a familiar cup. A simple format for a desk, a dorm, or wherever a kettle is close.',status:'Cup and noodle geometry are design assumptions'},
   {kicker:'04 / Bring it together',title:'Add a little\ncolour.',description:'Vegetables and seasoning bring the cup together. The recipe, texture, and flavour are still ours to develop.',status:'Illustrative toppings · final formulation to be tested'},
   {kicker:'05 / Just add the ritual',title:'Add hot water.\nKeep the heat.',description:'Pour, cover, and let the cup do its work. Heat retention is one of the design choices we can measure next.',status:'Kettle-only preparation is a design goal, not a tested result'},
-  {kicker:'06 / The cup, reimagined',title:'A familiar ritual.\nReimagined.',description:'Sorghum + millet. A kettle-only cup. A five-minute target, with the engineering questions ready to test.',status:'Concept visualization · formulation and preparation time untested'}
+  {kicker:'06 / The cup, reimagined',title:'A familiar ritual.\nReimagined.',description:'Sorami. Sorghum + millet. A kettle-only cup. A five-minute target, with the engineering questions ready to test.',status:'Concept visualization · formulation and preparation time untested'}
  ];
- const captions=['Sorghum × millet','From grain to strand','Every layer has a purpose','A little colour. A lot of character.','The kettle moment','Meet your next everyday ritual'];
+ const captions=['Sorghum × millet','From grain to strand','Every layer has a purpose','A little colour. A lot of character.','The kettle moment','Meet Sorami. Your next everyday ritual.'];
  const callouts=[['','',''],['THE NOODLE BLOCK','Drawn strand by strand.',''],['LAYER BY LAYER','Paper. Sleeve. Foil.',''],['A COLOURFUL FINISH','Vegetables + seasoning.',''],['POUR. COVER. PAUSE.','Kettle-only is the design goal.',''],['SMALL GRAINS. BIG IDEAS.','A new cup concept.','']];
  const particles=[],dust=[],strands=[],loose=[],toppings=[],seasoning=[],ripples=[],splashes=[],steam=[],bubbles=[];
  for(let i=0;i<64;i++){
@@ -215,7 +215,7 @@
   const bounce=Math.sin(close*Math.PI*2)*Math.sin(close*Math.PI)*7;
   transform(n('cup-lid'),`translate(${mix(-36,0,close)-lidShift*116} ${mix(-220,22,close)+hover+bounce}) rotate(${mix(-13,0,close)+Math.sin(time*.65)*.8*(1-close)*idle} 450 446)`);opacity(n('cup-lid'),lidShow);
   const pulse=smooth(5.45,5.7,s);transform(n('seal-ring'),`translate(450 472) scale(${1+pulse*.13}) translate(-450 -472)`);opacity(n('seal-ring'),Math.sin(pulse*Math.PI)*.45);
-  transform(n('lid-glint'),`translate(${(time%9)/9*620} 0)`);transform(n('cup-glint'),`translate(${(time%9)/9*620} 0)`);opacity(n('cup-glint'),.35+close*.65);
+  transform(n('lid-glint'),`translate(${(time%9)/9*620} 0)`);transform(n('cup-glint'),`translate(${(time%9)/9*620} 0)`);opacity(n('cup-glint'),.16+close*.24);
   opacity(n('assembly-shadow'),mix(.035,.2,cup));transform(n('assembly-shadow'),`translate(0 ${mix(-230,0,cup)})`);
   opacity(n('detail-callout'),smooth(1.82,2.13,s)*(1-smooth(2.6,2.82,s))*.75+(smooth(5.48,5.7,s)*.75));
  }
