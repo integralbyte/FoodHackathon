@@ -115,7 +115,7 @@
   // Reframe the grain clouds, full assembly, and finished cup around the center.
   const wide=smooth(1.3,2.08,s),hero=smooth(3.95,4.4,s);
   const camera=[mix(mix(130,70,wide),195,hero),mix(mix(180,60,wide),398,hero),mix(mix(640,760,wide),510,hero),mix(mix(470,880,wide),535,hero)];
-  const space=smooth(0,.4,facts),endFrame=window.innerWidth>760?[-20,140,940,550]:camera;
+  const space=smooth(0,.4,facts),endFrame=window.innerWidth>760||window.innerWidth>window.innerHeight?[-20,140,940,550]:camera;
   root.style.setProperty('--grain-facts',String(space));
   n('assembly-art').setAttribute('viewBox',camera.map((v,i)=>mix(v,endFrame[i],space).toFixed(2)).join(' '));
   viewX+=(pointerX-viewX)*.06;viewY+=(pointerY-viewY)*.06;
@@ -197,11 +197,11 @@
  function applyReducedMotion(){stopTour();staticMode=motionPreference.matches;root.classList.toggle('is-static',staticMode&&!flow);display=flow?measuredProgress():staticMode?1:measuredProgress();if(flow)paint(display,0);else request()}
  motionPreference.addEventListener('change',applyReducedMotion);
  if(flow){
-  let lastFlowPaint=-1,lastFlowReduced=null,lastFlowFacts=-1,lastFlowWidth=0;
+  let lastFlowPaint=-1,lastFlowReduced=null,lastFlowFacts=-1,lastFlowWidth=0,lastFlowHeight=0;
   flow.onFrame(state=>{
    const raw=1-state.reverse;display=staticMode?positions[Math.round(raw*(positions.length-1))]:raw;
-   if(display===lastFlowPaint&&staticMode===lastFlowReduced&&state.facts===lastFlowFacts&&window.innerWidth===lastFlowWidth)return;
-   lastFlowPaint=display;lastFlowReduced=staticMode;lastFlowFacts=state.facts;lastFlowWidth=window.innerWidth;
+   if(display===lastFlowPaint&&staticMode===lastFlowReduced&&state.facts===lastFlowFacts&&window.innerWidth===lastFlowWidth&&window.innerHeight===lastFlowHeight)return;
+   lastFlowPaint=display;lastFlowReduced=staticMode;lastFlowFacts=state.facts;lastFlowWidth=window.innerWidth;lastFlowHeight=window.innerHeight;
    paint(display,state.reverse*26,state.facts);
   });
  }else{

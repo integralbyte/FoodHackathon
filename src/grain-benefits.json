@@ -9,6 +9,12 @@
     "nutritionSource": "https://www.ars.usda.gov/ARSUserFiles/80400535/Data/SR/SR28/reports/sr28fg20.pdf#page=386",
     "nutritionRecord": "USDA SR28 (2015), NDB 20067, Sorghum grain",
     "fibreNote": "USDA's fibre footnote specifies white sorghum. Values vary by variety and processing.",
+    "glycaemicFinding": {
+      "heading": "Lower-GI potential",
+      "basis": "Pasta study · Sorami untested",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/25092385/",
+      "note": "A human study found lower GI for specific sorghum foods, including pasta, than their wheat/rice controls. This supports development potential, not a fixed GI for raw sorghum or a measured GI for Sorami."
+    },
     "grainSource": "https://www.fao.org/millets-2023/about/",
     "agronomySource": "https://sorghum.ucdavis.edu/"
   },
