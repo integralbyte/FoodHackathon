@@ -43,7 +43,7 @@
     `At least ${rules.proteinMin} grams protein per cup. ${counts[1]} remain.`,
     `Also under ${rules.sodiumUnder} milligrams sodium per cup. ${counts[2]} remain.`,
     `Also at least ${rules.fibreMin} grams fibre. ${counts[3]} remain.`,
-    'Also not deep-fried. The four final competitor cross-outs assume an unverified frying process; they are labeled Assumed fried.',
+    'Also not deep-fried. The final four competitor cups are crossed out in this selection.',
     'I want the healthiest noodles! Sorami is the concept we are building. Its nutrition and non-fried process are team targets. The final competitor exclusions are assumptions, not confirmed process facts.'
    ][beat];
   }

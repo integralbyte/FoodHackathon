@@ -9,7 +9,3 @@ export function firstFailure(p, rules, {includeAssumptions=false}={}) {
  if (includeAssumptions && p.nonfried == null && p.demoAssumedDeepFried === true) return 4;
  return 0;
 }
-
-export function exclusionLabel(p, stage) {
- return ['', `${p.protein}g protein`, `${p.sodium.toLocaleString('en-US')}mg sodium`, `${p.fibre}g fibre`, p.nonfried === false ? 'Deep-fried' : 'Assumed fried'][stage];
-}

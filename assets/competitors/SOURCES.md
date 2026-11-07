@@ -4,7 +4,7 @@ Checked 7 November 2026. Nutrition is per complete cup, including seasoning. The
 
 Sequence: ≥10g protein → <900mg sodium → ≥6g fibre → not deep-fried. Illustrated counts: 21 → 11 → 8 → 5 → 1. Confirmed-data counts: 21 → 11 → 8 → 5 → 5.
 
-**The four final cross-outs are assumptions, not verified process claims.** Soba and immi have unknown frying methods. Their original process fields stay null. The demo labels these cross-outs directly on the four cups. The data rules retain all five survivors when assumptions are disabled; the simplified presentation has no comparison dialog or mode switch.
+**The four final cross-outs are assumptions, not verified process claims.** Soba and immi have unknown frying methods. Their original process fields stay null. The simplified presentation uses red crosses without overlay labels; this source file retains process provenance. The data rules retain all five survivors when assumptions are disabled; the simplified presentation has no comparison dialog or mode switch.
 
 | Product | Dry package | Protein | Sodium | Fibre | Illustrated first exclusion |
 |---|---:|---:|---:|---:|---|
