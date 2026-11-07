@@ -34,7 +34,7 @@ Reduced motion presents each chapter in its completed state. Play is an explicit
 
 - `src/story.html`, `src/style.css`, `src/story.js`: original cup assembly.
 - `src/film.html`, `src/film.css`, `src/film.js`: full-screen opening, theme treatment, and motion-aware playback.
-- `assets/sorami-opening.mp4`, `assets/sorami-opening-poster.jpg`: optimized silent H.264 copy of the supplied film and its first-scene poster. The source video remains unchanged. Both assets are embedded by the build so direct-file viewing still works offline.
+- `assets/sorami-opening.mp4`, `assets/sorami-opening-poster.jpg`: optimized silent H.264 copy of the supplied film and its first-scene poster. A soft, feathered blur obscures the bottom-right watermark only on frame 0 and from frame 71 (about 2.96 seconds) to the end. Frames 1–70, including the Sorami logo’s entrance and exit fades, bypass the filter. This adjusts the initially requested 0.1s / 2.8s boundaries to protect the logo. The source video remains unchanged. Both assets are embedded by the build so direct-file viewing still works offline.
 - `src/pitch.html`, `src/pitch.css`, `src/pitch.js`: deck scenes, visuals, interactions, sources, and choreography.
 - `src/page.html`: page metadata and wrapper.
 - `scripts/build.mjs`: embeds the logo and all source files into `index.html`.
