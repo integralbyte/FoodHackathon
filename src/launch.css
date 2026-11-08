@@ -5,9 +5,14 @@
 .launch-cost-heading .pitch-eyebrow{margin-bottom:20px}
 .launch-cost-heading h2{font:400 clamp(42px,4.5vw,72px)/1.04 Georgia,serif;letter-spacing:-.04em;margin:0;color:var(--tone-ink)}
 .launch-cost-heading h2 em{color:var(--tone-accent)}
-.launch-cost-total{text-align:right;flex-shrink:0}
-.launch-cost-total>strong{display:block;font:400 clamp(86px,9vw,138px)/.9 Georgia,serif;letter-spacing:-.07em;color:var(--tone-accent);white-space:nowrap}
+.launch-unit-totals{display:flex;align-items:baseline;gap:clamp(24px,3vw,48px);flex-shrink:0}
+.launch-cost-total{text-align:right}
+.launch-cost-total>strong{display:block;font:400 clamp(76px,7.8vw,118px)/.9 Georgia,serif;letter-spacing:-.07em;color:var(--tone-accent);white-space:nowrap}
 .launch-cost-total>span{display:block;margin-top:13px;font:12px/1.3 var(--font);color:var(--tone-muted)}
+.launch-profit-total{border-left:1px solid #94613d50;padding-left:clamp(24px,3vw,48px);text-align:left}
+.launch-profit-total>strong{display:block;font:400 clamp(62px,6.3vw,96px)/.9 Georgia,serif;letter-spacing:-.065em;white-space:nowrap;color:#526344}
+.launch-profit-total>span{display:block;margin-top:13px;font:14px/1.3 var(--font);color:var(--tone-ink)}
+.launch-profit-total>small{display:block;margin-top:9px;font:11px/1.4 var(--font);color:var(--tone-muted)}
 .launch-cost-chart{margin:0;width:100%}
 .launch-cost-bar{display:flex;height:clamp(64px,6vw,88px);overflow:hidden;border-radius:3px;isolation:isolate}
 .launch-cost-segment{display:block;min-width:0;flex-grow:0;flex-shrink:1;background:var(--cost-color);transform-origin:left;box-shadow:inset -2px 0 #f4dfb845}
@@ -18,9 +23,12 @@
 .launch-cost-labels>li{text-align:center;min-width:0;transform-origin:center}
 .launch-cost-labels span{display:block;font:15px/1.3 var(--font);color:var(--tone-muted)}
 .launch-cost-labels strong{display:block;margin-top:12px;font:400 clamp(30px,3vw,46px)/1 Georgia,serif;color:var(--tone-ink);letter-spacing:-.035em;white-space:nowrap}
+@media(max-width:1000px){.launch-cost-heading{display:block}.launch-unit-totals{margin-top:28px;justify-content:space-between}.launch-cost-total{text-align:left}.launch-profit-total{border:0;padding-left:0;text-align:right}}
 @media(max-width:900px){.launch-cost-heading{margin-bottom:40px}.launch-cost-labels span{font-size:13px;min-height:2.6em}.launch-cost-labels{gap:10px}}
 @media(max-width:620px){
  .launch-cost-heading{display:block;margin-bottom:32px}.launch-cost-heading .pitch-eyebrow{font-size:8px;margin-bottom:17px}.launch-cost-heading h2{font-size:39px}.launch-cost-total{text-align:left;margin-top:26px;display:flex;align-items:baseline;gap:16px}.launch-cost-total>strong{font-size:86px}.launch-cost-total>span{font-size:11px;margin:0}.launch-cost-bar{height:52px}.launch-cost-connectors{display:none}.launch-cost-labels{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 20px;padding-top:29px}.launch-cost-labels>li{text-align:left;padding-left:14px;position:relative}.launch-cost-labels>li:before{content:'';position:absolute;top:3px;left:0;width:5px;height:12px;background:var(--cost-color)}.launch-cost-labels span{font-size:12px;min-height:1.3em}.launch-cost-labels strong{font-size:30px;margin-top:7px}
 }
 @media(max-height:660px) and (min-width:621px){.launch-cost-heading h2{font-size:43px}.launch-cost-heading{margin-bottom:32px}.launch-cost-total>strong{font-size:88px}.launch-cost-bar{height:60px}.launch-cost-connectors{height:52px}.launch-cost-labels{padding-top:13px}.launch-cost-labels strong{font-size:32px;margin-top:9px}}
 @media(max-width:620px) and (max-height:720px){.launch-cost-heading{margin-bottom:24px}.launch-cost-heading h2{font-size:33px}.launch-cost-total{margin-top:20px}.launch-cost-total>strong{font-size:70px}.launch-cost-bar{height:42px}.launch-cost-labels{gap:19px 20px;padding-top:23px}.launch-cost-labels strong{font-size:27px}}
+@media(max-width:620px){.launch-unit-totals{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:baseline;gap:24px;margin-top:26px}.launch-cost-total{display:block;margin:0;text-align:left}.launch-cost-total>strong{font-size:clamp(50px,16vw,70px)}.launch-cost-total>span{margin-top:12px}.launch-profit-total{text-align:left}.launch-profit-total>strong{font-size:clamp(45px,14vw,62px)}.launch-profit-total>span{font-size:12px;margin-top:12px}.launch-profit-total>small{font-size:10px;margin-top:7px;max-width:150px}}
+@media(max-width:620px) and (max-height:720px){.launch-unit-totals{margin-top:20px}.launch-cost-heading{margin-bottom:24px}}

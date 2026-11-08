@@ -17,7 +17,7 @@ export async function buildResearch(root){
   return {name:costNames[i],value,share,mid,index:i};
  });
  const launchReplacements={
-  '__PILOT_COST__':cash(model.pilot.cost),'__LAUNCH_CASH__':`$${(model.launchCash/1000).toFixed(1)}`,
+  '__PILOT_COST__':cash(model.pilot.cost),'__PILOT_PROFIT__':cash(model.pilot.gross),'__SELLING_PRICE__':cash(model.price),'__LAUNCH_CASH__':`$${(model.launchCash/1000).toFixed(1)}`,
   '<!--__COST_SEGMENTS__-->':costParts.map(c=>`<i class="launch-cost-segment is-cost-${c.index}" data-cost-segment="${c.index}" style="flex-basis:${c.share*100}%"></i>`).join(''),
   '<!--__COST_CONNECTORS__-->':costParts.map(c=>`<path class="is-cost-${c.index}" data-cost-connector="${c.index}" pathLength="1" d="M${c.mid*1000} 0V18L${(c.index+.5)*200} 58V76"/>`).join(''),
   '<!--__COST_LABELS__-->':costParts.map(c=>`<li class="is-cost-${c.index}" data-cost-label="${c.index}"><span>${escape(c.name)}</span><strong>${cash(c.value)}</strong></li>`).join(''),
