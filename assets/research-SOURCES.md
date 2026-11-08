@@ -1,45 +1,61 @@
-# Research chapter: sources and limits
+# Proposed manufacturing flow: basis and limits
 
-Checked 7 November 2026. This chapter replaces the deck's original opening cover. Its four scroll steps illustrate a proposed formulation and process; they do not show tests on Sorami food. The main scene shows one takeaway at a time. Tables, sliders, source links and fuller explanations are available through a contextual Details dialog; result captions distinguish team targets from published experiments.
+Updated 7 November 2026 from the user's supplied **Proposed Industrial Manufacturing Process Flow**. All operating windows, product specifications and acceptance criteria below are team-proposed trial targets, not validated production results. The five scenes keep one large takeaway on screen; detailed settings are available through Details. `src/research.json` is the build's source of truth.
 
-## The blend
+## Form the strand
 
-The draft dry-noodle recipe is 46.75% sorghum flour, 38.25% millet flour and 15% tapioca starch: an 85% grain base with a 55:45 sorghum-to-millet split. This comes from the team's previous illustrative formulation/cost scenario, not a validated published recipe. Seasoning is separate and the final matrix still needs texture and processing trials.
+Receive and inspect sorghum flour, **foxtail** millet flour, tapioca starches, hydrocolloids, seasoning ingredients, TVP and dehydrated vegetables for quality, safety and supplier specifications; route them to their respective lines. No exact blend percentages are given in the revised proposal, so the earlier 46.75/38.25/15 example is removed from this chapter. The deck's separate 85% combined-grain target is retained as a prior team goal, not an exact recipe.
 
-The grain nutrition table uses [USDA SR28, cereal-grain records](https://www.ars.usda.gov/ARSUserFiles/80400535/Data/SR/SR28/reports/sr28fg20.pdf), per 100g raw grain:
+Proposed noodle-line settings:
 
-| Nutrient | Sorghum, NDB 20067, PDF page 386 | Proso millet, NDB 20031, PDF page 130 |
-| --- | ---: | ---: |
-| Energy | 329 kcal | 378 kcal |
-| Protein | 10.62g | 11.02g |
-| Carbohydrate | 72.09g | 72.85g |
-| Fat | 3.46g | 4.22g |
-| Fibre | 6.7g | 8.5g |
-| Magnesium | 165mg | 114mg |
-| Phosphorus | 289mg | 285mg |
+- Flour sieving at ≤150–200µm, with a target D50 of 60–100µm.
+- Dry blending for 5–10 minutes.
+- Water addition of 45% relative to dry ingredient mass; trial range 40–50%. This is not 45% final dough moisture on a wet basis.
+- Hydration/mixing for 10–15 minutes.
+- Steam preconditioning at 95–100°C for 12–18 minutes.
+- Extrusion into approximately 1.0mm strands, with a 0.9–1.2mm trial range.
 
-The fibre footnote specifies white sorghum. Millet is *Panicum miliaceum* (proso), not every millet species. Milling and processing can change composition. These are raw-grain references, not analyses of the proposed flours or finished noodle cup.
+The stated objectives are gluten-free noodle integrity, a cohesive starch structure, a shelf-stable instant noodle and five-minute boiling-water rehydration. The ingredient/nutrition views are optional. The whole-cup protein (11g), fibre (6.5g) and sodium (400mg) figures remain existing team targets, not a computed Nutrition Facts label for this formulation.
 
-The 11g protein, 6.5g fibre and 400mg sodium figures are the team's whole-cup targets. They are shown separately from the raw-grain table and are not calculated from the draft noodle mix; reaching the protein target may require formulation changes or additional cup ingredients. The page does not imply that the draft mix already achieves these goals.
+## Set the starch
 
-## The drying
+After steaming and extrusion, cool to 4°C and hold for 24 hours in covered food-grade trays. The intended mechanism is reassociation and recrystallisation of gelatinised starch, particularly amylose, to encourage retrograded resistant starch (RS3).
 
-[Yoora and Songsermpong, 2022, fermented rice noodles](https://academic.oup.com/ijfst/article/57/9/6090/7807444) describes microwave-vacuum drying, flash evaporation and porous noodles with two-minute hot-water rehydration. Its rice formulation included guar gum and KCl. The findings support exploring the process, not transferring its measured rehydration time to Sorami.
+The chain/bond animation is conceptual. No RS3 amount, retained percentage, GI value or health outcome is assigned to the product. RS3 formation and retention after drying and consumer preparation must be measured.
 
-The chamber, pressure needle, pore growth and escaping vapour are mechanism illustrations. The slider is explicitly animation progress, not measured moisture percentage, vacuum pressure, drying duration or energy use. No process setpoint or commercial throughput is invented.
+## Dry without frying
 
-## The strand
+The proposed route is hybrid, combining hot air with a microwave-vacuum stage:
 
-[Roppongi et al., *Water Sorption Kinetics of Wheat Noodle with Different Diameters*, 2014](https://www.jstage.jst.go.jp/article/fstr/20/2/20_241/_article) tested 0.80, 1.50, 2.25 and 3.00mm wheat noodles at 100°C; water-sorption curves aligned when time was scaled by diameter squared. This supports the shorter-distance mechanism for thinner noodles. It is not a calibrated transport model for sorghum–millet noodles.
+1. **Pre-dry:** 60–70°C hot air to 18–22% moisture, wet basis.
+2. **Microwave-vacuum:** 10–30kPa **absolute** pressure, controlled microwave power and approximately 45–70°C target **product** temperature, intended to encourage internal evaporation and pores.
+3. **Finish dry:** 45–55°C hot air to 9–11% moisture, wet basis, and aw ≤0.60.
+4. **Cool before packing:** near ambient, ≤25°C, under RH ≤50%.
 
-The 0.8–1.6mm control changes the illustration's geometry. The **60-second rehydration figure is a development target**, not a simulation output or a measured cooking time. The cross-section and water paths are illustrative, and no diffusion coefficient is assigned to Sorami.
+The drying slider animates the sequence; it is not a moisture, time, power, pressure or rehydration calculation. These are proposed setpoints and targets, not a validated shelf-life specification.
 
-[A 2023 primary rice-noodle study](https://pubmed.ncbi.nlm.nih.gov/37573750/) found that pore size and accessibility influence rehydration; larger peripheral pores can delay water reaching the centre. The demo therefore explains connected paths and shorter distances, without claiming that larger or more numerous pores always improve performance.
+Related primary papers remain background evidence, not sources validating these exact Sorami settings: [microwave-vacuum rice-noodle drying](https://academic.oup.com/ijfst/article/57/9/6090/7807444), [diameter-dependent wheat-noodle water sorption](https://www.jstage.jst.go.jp/article/fstr/20/2/20_241/_article), and [pore accessibility in rice noodles](https://pubmed.ncbi.nlm.nih.gov/37573750/).
 
-## The broth
+## Assemble the cup
 
-- **Salt, about 30%:** [Wise et al., 2019](https://pmc.ncbi.nlm.nih.gov/articles/PMC6542971/) found approximately 30% lower human-rated bitterness from NaCl in model chicken broths containing L-tryptophan. The experiment used 128mM added NaCl; that is an experimental condition, not a Sorami dosing recommendation. The effect is not assigned to MSG, KCl or an actual Sorami cup.
-- **MSG:** included as an umami formulation direction. No separate numerical bitterness reduction is assigned to it. Its concentration and contribution to the cup's sodium target still require recipe development.
-- **Yeast extract, at least 40%:** [Belloir et al., 2024](https://pubmed.ncbi.nlm.nih.gov/38945612/), [primary article](https://www.sciencedirect.com/science/article/pii/S0963996924006665), reports at least 40% inhibition in 7 of 19 tested bitter receptors with AMP-rich yeast extract in cell assays. The paper describes a 90µg/mL screening treatment. This is receptor activation, not a human-perceived bitterness reduction.
+Three manufacturing streams converge:
 
-The taste visual changes its large figure and endpoint label with the selected ingredient. The response bar is removed; the diagram is qualitative. The MSG view shows “Umami” without a numerical bitterness claim. The 30% and ≥40% effects are not added together and do not establish taste acceptance, a dosing recipe or a combined suppression percentage for Sorami. The full study context is available in Details.
+- **Noodles:** 55g dried block.
+- **Seasoning:** receive/inspect, sieve to ≤250µm, dry-blend 5–10 minutes, portion and seal in 10g sachets. Spicy Garlic and Chicken & Mushroom use different seasonings.
+- **Toppings:** receive/inspect TVP, dehydrated mushrooms, carrots, cabbage and spring onions, then weigh/blend/portion/seal in 13g sachets. Both flavours share the noodle block and toppings.
+
+The total is **55 + 10 + 13 = 78g**. The animation changes the seasoning packet when a flavour is selected; it does not invent flavour-specific ingredient percentages. The vector cup is a process illustration, not a photograph of validated packaging.
+
+Use high-moisture-barrier packaging. Labels are to include Nutrition Facts, ingredient declaration, allergen information, preparation instructions, lot/batch code and expiry/best-before date. Finished-product inspection covers moisture, aw, seals, net weight and label/allergen accuracy. Finished storage targets are ≤25°C and RH ≤60%, before distribution to retail and food-service outlets.
+
+The optional seasoning research is retained separately: [NaCl model-broth sensory study](https://pmc.ncbi.nlm.nih.gov/articles/PMC6542971/) (~30% lower human-rated bitterness) and [AMP-rich yeast-extract cell assay](https://pubmed.ncbi.nlm.nih.gov/38945612/) (≥40% inhibition in 7 of 19 tested receptors). These are different endpoints and cannot be added or transferred to the proposed seasoning. MSG has no invented percentage.
+
+## Prepare in five minutes
+
+Add the seasoning and toppings, approximately 300mL freshly boiled water at 95–100°C, cover for five minutes, then stir. Five minutes replaces the earlier one-minute target throughout the active pitch.
+
+Proposed acceptance targets are complete rehydration while maintaining texture/structure, rehydration loss <8%, broken noodle mass <5%, final moisture 9–11% wet basis and aw ≤0.60, with potentially retained RS3. These are not passed tests. The cup/clock animation is illustrative and contains no pouring/filling effect or cooking-time prediction.
+
+## Foxtail reference correction
+
+Proso-millet values are not relabelled as foxtail. The Research nutrition table now shows whole-cup team targets. The grain-ending foxtail benefits are qualitative and link to separate primary references: [IJMR Table III, unpolished foxtail grain](https://ijmr.org.in/assessment-of-quality-of-minor-millets-available-in-the-south-indian-market-glycaemic-index-of-cooked-unpolished-little-foxtail-millet/) for the whole-grain fibre reference, and [Japan MEXT record 01002, raw milled foxtail grain](https://fooddb.mext.go.jp/details/details.pl?ITEM_NO=1_01002_7) for magnesium and phosphorus. These different processing states are not combined into a purported flour analysis. Finished-product nutrition still requires validation.

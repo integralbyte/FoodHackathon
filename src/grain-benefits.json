@@ -3,8 +3,16 @@
     "id": "sorghum",
     "name": "Sorghum",
     "fibre": 6.7,
-    "nutrition": {"energyKcal":329,"protein":10.62,"carbohydrate":72.09,"fat":3.46},
-    "minerals": {"magnesium": 165, "phosphorus": 289},
+    "nutrition": {
+      "energyKcal": 329,
+      "protein": 10.62,
+      "carbohydrate": 72.09,
+      "fat": 3.46
+    },
+    "minerals": {
+      "magnesium": 165,
+      "phosphorus": 289
+    },
     "mineralBasis": "Per 100g raw grain",
     "basis": "Per 100g raw white sorghum",
     "nutritionSource": "https://www.ars.usda.gov/ARSUserFiles/80400535/Data/SR/SR28/reports/sr28fg20.pdf#page=386",
@@ -15,16 +23,16 @@
   },
   {
     "id": "millet",
-    "name": "Millet",
-    "fibre": 8.5,
-    "nutrition": {"energyKcal":378,"protein":11.02,"carbohydrate":72.85,"fat":4.22},
-    "minerals": {"magnesium": 114, "phosphorus": 285},
-    "mineralBasis": "Per 100g raw proso millet",
-    "basis": "Per 100g raw proso millet",
-    "nutritionSource": "https://www.ars.usda.gov/ARSUserFiles/80400535/Data/SR/SR28/reports/sr28fg20.pdf#page=130",
-    "nutritionRecord": "USDA SR28 (2015), NDB 20031, Millet, raw (Panicum miliaceum)",
-    "fibreNote": "This is the proso millet entry, not a value for every millet species or a cooked noodle cup.",
+    "name": "Foxtail millet",
+    "fibre": null,
+    "minerals": null,
+    "mineralBasis": "Raw milled foxtail grain reference; not a tested flour composition",
+    "basis": "Unpolished foxtail grain reference; not a tested flour composition",
+    "nutritionSource": "https://fooddb.mext.go.jp/details/details.pl?ITEM_NO=1_01002_7",
+    "nutritionRecord": "Japan MEXT record 01002, Setaria italica, raw milled grain; qualitative mineral reference only",
+    "fibreNote": "IJMR Table III reports dietary fibre in a studied unpolished foxtail grain sample. Mineral reference is a different, milled-grain record. Neither is assigned as the composition of the proposed flour.",
     "grainSource": "https://www.fao.org/millets-2023/about/",
-    "agronomySource": "https://www.fao.org/europe/news/detail/millet--the--forgotten-crop--is-making-a-comeback/en"
+    "agronomySource": "https://www.fao.org/europe/news/detail/millet--the--forgotten-crop--is-making-a-comeback/en",
+    "fibreSource": "https://ijmr.org.in/assessment-of-quality-of-minor-millets-available-in-the-south-indian-market-glycaemic-index-of-cooked-unpolished-little-foxtail-millet/"
   }
 ]

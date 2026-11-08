@@ -1,36 +1,172 @@
 {
-  "recipe": [
+  "title": "Proposed industrial manufacturing process",
+  "status": "Team-proposed process and trial targets; not validated manufacturing or product results.",
+  "steps": [
     {
-      "name": "Sorghum flour",
-      "percent": 46.75,
-      "tone": "sorghum"
+      "id": "form",
+      "title": "Form the strand"
     },
     {
-      "name": "Millet flour",
-      "percent": 38.25,
-      "tone": "millet"
+      "id": "chill",
+      "title": "Set the starch"
     },
     {
-      "name": "Tapioca starch",
-      "percent": 15,
-      "tone": "starch"
+      "id": "dry",
+      "title": "Dry without frying"
+    },
+    {
+      "id": "assemble",
+      "title": "Assemble the cup"
+    },
+    {
+      "id": "prepare",
+      "title": "Prepare in five minutes"
     }
   ],
-  "recipeBasis": "Illustrative dry noodle mix from the team's earlier formulation model. Seasoning is separate; the final recipe still needs testing.",
+  "ingredients": [
+    {
+      "name": "Sorghum flour",
+      "role": "Grain base"
+    },
+    {
+      "name": "Foxtail millet flour",
+      "role": "Grain base"
+    },
+    {
+      "name": "Tapioca starches",
+      "role": "Starch structure"
+    },
+    {
+      "name": "Hydrocolloids",
+      "role": "Dough cohesion"
+    },
+    {
+      "name": "Mushroom-umami seasoning",
+      "role": "Separate seasoning line"
+    },
+    {
+      "name": "Textured soy protein (TVP)",
+      "role": "Separate toppings line"
+    },
+    {
+      "name": "Dehydrated vegetables",
+      "role": "Separate toppings line"
+    }
+  ],
   "cupTargets": {
     "protein": 11,
     "fibre": 6.5,
     "sodium": 400
   },
-  "dryingSource": "https://academic.oup.com/ijfst/article/57/9/6090/7807444",
-  "strandSource": "https://www.jstage.jst.go.jp/article/fstr/20/2/20_241/_article",
+  "process": {
+    "sieveCutMicron": [
+      150,
+      200
+    ],
+    "medianParticleMicron": [
+      60,
+      100
+    ],
+    "dryBlendMinutes": [
+      5,
+      10
+    ],
+    "waterPercentDryMass": 45,
+    "waterTrialPercentDryMass": [
+      40,
+      50
+    ],
+    "hydrationMixMinutes": [
+      10,
+      15
+    ],
+    "steamC": [
+      95,
+      100
+    ],
+    "steamMinutes": [
+      12,
+      18
+    ],
+    "strandMm": 1.0,
+    "strandTrialMm": [
+      0.9,
+      1.2
+    ],
+    "chillC": 4,
+    "chillHours": 24,
+    "preDryAirC": [
+      60,
+      70
+    ],
+    "preDryMoistureWetPercent": [
+      18,
+      22
+    ],
+    "vacuumAbsoluteKPa": [
+      10,
+      30
+    ],
+    "microwaveProductC": [
+      45,
+      70
+    ],
+    "finishDryAirC": [
+      45,
+      55
+    ],
+    "finalMoistureWetPercent": [
+      9,
+      11
+    ],
+    "finalWaterActivityMax": 0.6,
+    "packCoolingMaxC": 25,
+    "packCoolingRHMax": 50,
+    "seasoningSieveMicronMax": 250,
+    "seasoningBlendMinutes": [
+      5,
+      10
+    ],
+    "storageMaxC": 25,
+    "storageRHMax": 60,
+    "preparationWaterMl": 300,
+    "preparationWaterC": [
+      95,
+      100
+    ],
+    "preparationMinutes": 5,
+    "rehydrationLossPercentMax": 8,
+    "brokenNoodleMassPercentMax": 5
+  },
+  "pack": {
+    "noodlesGrams": 55,
+    "seasoningGrams": 10,
+    "toppingsGrams": 13
+  },
+  "flavours": [
+    "Spicy Garlic",
+    "Chicken & Mushroom"
+  ],
+  "toppings": [
+    "Textured soy protein (TVP)",
+    "Dehydrated mushrooms",
+    "Carrots",
+    "Cabbage",
+    "Spring onions"
+  ],
+  "objectives": [
+    "Maintain gluten-free noodle integrity",
+    "Develop a cohesive starch structure",
+    "Produce a shelf-stable instant noodle",
+    "Target complete rehydration in five minutes with boiling water"
+  ],
   "taste": [
     {
       "id": "salt",
       "number": "~30",
       "suffix": "%",
       "endpoint": "less bitterness",
-      "context": "Salt \u00b7 model-broth taste study",
+      "context": "Salt · model-broth taste study",
       "detail": "Salt reduced bitterness in model chicken broths containing L-tryptophan.",
       "basis": "Published broth result; not a Sorami taste test.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6542971/",
@@ -41,7 +177,7 @@
       "number": "Umami",
       "suffix": "",
       "endpoint": "build the savoury base",
-      "context": "MSG \u00b7 formulation direction",
+      "context": "MSG · formulation direction",
       "detail": "Use MSG to build savoury depth alongside the grain and broth. Its dose belongs in recipe trials.",
       "basis": "No separate bitterness-reduction percentage is assigned to MSG.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6542971/",
@@ -49,10 +185,10 @@
     },
     {
       "id": "yeast",
-      "number": "\u226540",
+      "number": "≥40",
       "suffix": "%",
       "endpoint": "lower receptor activity",
-      "context": "Yeast extract \u00b7 cell study",
+      "context": "Yeast extract · cell study",
       "detail": "At least 40% inhibition in 7 of 19 tested bitter receptors. This measures cells, not perceived taste.",
       "basis": "Published receptor result; not a Sorami taste test.",
       "source": "https://pubmed.ncbi.nlm.nih.gov/38945612/",

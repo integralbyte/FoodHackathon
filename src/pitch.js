@@ -12,7 +12,7 @@
  const attr=(e,k,v)=>e.setAttribute(k,v);
  const cash=n=>`${n<0?'−':''}$${Math.abs(n).toFixed(2)}`;
  const comma=n=>Math.round(n).toLocaleString('en-US');
- const research=scenes[0].researchScene,weights=scenes.map((_,i)=>i===0?3.2:1),starts=[];
+ const research=scenes[0].researchScene,weights=scenes.map((_,i)=>i===0?research.timelineWeight:1),starts=[];
  let totalWeight=0;weights.forEach(w=>{starts.push(totalWeight);totalWeight+=w});
  function toTimeline(value){const i=Math.min(count-1,Math.floor(clamp(value,0,count)));return starts[i]+clamp(value-i)*weights[i]}
  function fromTimeline(value){const v=clamp(value,0,totalWeight),i=weights.findIndex((w,i)=>v<starts[i]+w);return i<0?count:i+(v-starts[i])/weights[i]}
@@ -83,9 +83,9 @@
  }
  // Local interaction state remains independent of the scroll animation.
  const productCopy=[
-  ['THE FORMULATION TARGET','Sorghum + millet, at the center.','85 of these 100 grains represent the proposed sorghum–millet share of the dry formulation. The remaining 15% is other ingredients.'],
-  ['THE PROCESS CONCEPT','Steam first. Explore vacuum drying.','Pre-steaming and microwave-vacuum drying are the proposed non-fried route. Process settings, texture and hot-water rehydration still need prototype trials.'],
-  ['THE STUDENT RITUAL','A kettle. A cup. That’s it.','Designed for hot-water preparation without a stove or pot. The research route explores a 60-second rehydration target; this has not been measured for Sorami.']
+  ['THE FORMULATION TARGET','Sorghum + foxtail millet, at the center.','85 of these 100 grains represent the proposed sorghum–foxtail-millet share of the dry formulation. The remaining 15% is other ingredients.'],
+  ['THE PROCESS CONCEPT','Steam, extrude, chill, dry.','Steam-assisted extrusion, a 24-hour cold hold and hybrid hot-air/microwave-vacuum/hot-air drying form the proposed non-fried route. Settings still need trials.'],
+  ['THE STUDENT RITUAL','A kettle. A cup. That’s it.','Add the seasoning and toppings, approximately 300mL freshly boiled water, then cover for five minutes and stir. This is a preparation target, not a measured Sorami result.']
  ];
  $$('[data-product]').forEach(button=>button.addEventListener('click',()=>{productChoice=+button.dataset.product;productTime=performance.now();$$('[data-product]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));const copy=productCopy[productChoice];$('product-kicker').textContent=copy[0];$('product-headline').textContent=copy[1];$('product-description').textContent=copy[2];$$('.product-visual>svg')[0].setAttribute('aria-label',['One hundred grains arrange into the proposed 85 percent grain formulation','Grains form rows beneath drawn steam paths, illustrating the proposed non-fried process','Grains form a bowl beneath a water droplet, illustrating hot-water preparation'][productChoice]);request()}));
  $('deadline-time').addEventListener('input',e=>{const minute=47+Number(e.target.value);$('deadline-label').textContent=`11:${minute} PM`;$('deadline-remaining').textContent=minute===59?'Deadline reached':`${59-minute} minute${59-minute===1?'':'s'} left`;request()});
@@ -125,7 +125,7 @@
   $$('.pitch-draw',scene).forEach((e,i)=>e.style.strokeDashoffset=1-phase(q,.08+i*.02,.68));
  }
  function paint(q,now){
-  const scene=scenes[active];if(!scene)return;common(scene,reduced?1:active===0?clamp(q*4):q);root.style.setProperty('--scene-progress',q);
+  const scene=scenes[active];if(!scene)return;common(scene,reduced?1:active===0?clamp(q*research.steps):q);root.style.setProperty('--scene-progress',q);
   if(active===0){
    research.paint(q,now,reduced);
   }else if(active===1){
@@ -194,9 +194,9 @@
  }
  function request(){if(!frame&&visible&&!document.hidden)frame=requestAnimationFrame(tick)}
  function scroll(value){const top=root.getBoundingClientRect().top+window.scrollY;window.scrollTo({top:top+toTimeline(value)/totalWeight*(root.offsetHeight-window.innerHeight),behavior:'instant'})}
- function go(index){stop();forcedEntry=reduced?-1:index;entryStart=performance.now();visible=true;$$('.pitch-scenes')[0].scrollTop=0;scroll(index+(index===0?.2:.79));request()}
+ function go(index){stop();forcedEntry=reduced?-1:index;entryStart=performance.now();visible=true;$$('.pitch-scenes')[0].scrollTop=0;scroll(index+(index===0?.8/research.steps:.79));request()}
  root.addEventListener('sorami-research-update',request);
- root.addEventListener('sorami-research-seek',e=>{stop();forcedEntry=-1;$$('.pitch-scenes')[0].scrollTop=0;scroll((e.detail.step+.8)/4);request()});
+ root.addEventListener('sorami-research-seek',e=>{stop();forcedEntry=-1;$$('.pitch-scenes')[0].scrollTop=0;scroll((e.detail.step+.8)/research.steps);request()});
  $$('.pitch-skip,.assembly-to-pitch',document).forEach(a=>a.addEventListener('click',e=>{e.preventDefault();go(0)}));
  function stop(){playing=false;$('pitch-play').setAttribute('aria-pressed','false');$('pitch-play').textContent='▶ Play story'}
  $('pitch-prev').addEventListener('click',()=>go(Math.max(0,active-1)));$('pitch-next').addEventListener('click',()=>go(Math.min(count-1,active+1)));
