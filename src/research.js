@@ -9,6 +9,7 @@
  const attr=(e,k,v)=>e.setAttribute(k,String(v));
  const svg=(tag,attrs,parent)=>{const e=document.createElementNS(NS,tag);Object.entries(attrs).forEach(([k,v])=>attr(e,k,v));parent.appendChild(e);return e};
  const panels=all('[data-research-panel]'),nav=all('[data-research-step]'),detailPanels=all('[data-research-details]'),dialog=$('research-details');
+ /*__LAUNCH_RUNTIME__*/
  let active=-1;
  // Keep the photographic camera outside the text scroller so overview frames
  // can use the whole screen without enlarging or moving the close-up copy.
@@ -58,7 +59,7 @@
   }
   const bounds=root.querySelector('.research-workbench').getBoundingClientRect(),stage=pin.getBoundingClientRect(),width=stage.width,height=stage.height;
   const contentFrame={x:bounds.left-stage.left,y:bounds.top-stage.top,width:bounds.width,height:bounds.height};
-  const camera=sampleResearchCamera(q,width,height,reduced,window.innerWidth<=620,contentFrame),viewport=cameraLayer;
+  const camera=sampleResearchCamera(Math.min(1,u/7),width,height,reduced,window.innerWidth<=620,contentFrame),viewport=cameraLayer;
   viewport.hidden=!camera.visible;
   viewport.style.clipPath=`inset(${camera.clip.top}px ${Math.max(0,width-camera.clip.right)}px ${Math.max(0,height-camera.clip.bottom)}px ${camera.clip.left}px)`;
   $('research-kit-image').style.transform=`translate3d(${camera.x}px,${camera.y}px,0) scale(${camera.scale})`;
@@ -66,10 +67,11 @@
   label.hidden=camera.labelBlend<=0;label.style.opacity=camera.labelBlend;
   label.style.transform=`translate3d(${camera.x+region.x*camera.scale}px,${camera.y+region.y*camera.scale}px,0) scale(${camera.scale})`;
   root.dataset.researchCamera=camera.from===camera.to?camera.to:`${camera.from}-to-${camera.to}`;
-  const delay=index===0||index===6?.015:index===5?.52:.35;
-  const t=reduced?1:phase(local,delay,index===5?.86:.75),panel=panels[index],copy=panel.querySelector('.research-data');
-  const depart=reduced||index===6?1:1-phase(local,.86,.99),reveal=t*depart;
-  if(copy){copy.style.clipPath=`inset(0 ${(1-reveal)*100}% 0 0)`;copy.style.transform=`translateX(${(1-t)*16}px)`;copy.inert=reveal<.24}
+  const delay=index===0||index>=6?.015:index===5?.52:.35;
+  const t=reduced?1:phase(local,delay,index===5?.86:.75),panel=panels[index];
+  const depart=reduced||index===panels.length-1?1:1-phase(local,.86,.99),reveal=t*depart;
+  panel.querySelectorAll('.research-data').forEach(copy=>{copy.style.clipPath=`inset(0 ${(1-reveal)*100}% 0 0)`;copy.style.transform=`translateX(${(1-t)*16}px)`;copy.inert=reveal<.24});
+  if(index>=7)launchScenes.paint(index,reveal,reduced);
   if(index===0){panel.style.clipPath=`inset(0 0 ${(1-depart)*100}% 0)`}
   if(index===0){
    all('[data-flow-node]').forEach(e=>{const n=+e.dataset.flowNode,p=phase(t,n*.035,.34+n*.035);e.style.clipPath=`inset(0 ${(1-p)*100}% 0 0)`;e.style.transform=`translateY(${(1-p)*13}px)`});
@@ -91,7 +93,7 @@
    thinShadow.style.strokeWidth=String(24*width);thinLight.style.strokeWidth=String(15*width);
    panel.querySelector('.research-measure-line').style.strokeDashoffset=1-phase(t,.35,.9);
   }else if(index===6){
-   panel.querySelector('.research-art').style.clipPath=`inset(0 ${(1-t)*100}% 0 0)`;
+   panel.querySelector('.research-art').style.clipPath=`inset(0 ${(1-reveal)*100}% 0 0)`;
    const wet=+$('research-pore-progress').value/100*phase(t,.2,.95);
    scaleAt($('research-normal-section'),159,192,phase(t,.03,.55));scaleAt($('research-porous-section'),480,192,phase(t,.08,.6));
    holes.forEach(({e,i,r})=>{const p=phase(t,.13+i*.006,.75);attr(e,'rx',r*p*1.4);attr(e,'ry',r*p)});
@@ -100,5 +102,5 @@
    panel.querySelector('.research-water-arrow').style.strokeDashoffset=1-phase(t,.2,.7);
   }
  }
- root.researchScene={steps:panels.length,timelineWeight:panels.length*.8,stopAt:step=>researchTourStops[step]/panels.length,paint,needsFrame(){return false}};
+ root.researchScene={steps:panels.length,timelineWeight:panels.length*.8,stopAt:step=>(researchTourStops[step]??step+.8)/panels.length,paint,needsFrame(){return false}};
 })();

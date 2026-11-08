@@ -12,6 +12,7 @@
  const attr=(e,k,v)=>e.setAttribute(k,v);
  const cash=n=>`${n<0?'−':''}$${Math.abs(n).toFixed(2)}`;
  const comma=n=>Math.round(n).toLocaleString('en-US');
+ const costModel=/*__COST_MODEL__*/;
  const research=scenes[0].researchScene,weights=scenes.map((_,i)=>i===0?research.timelineWeight:1),starts=[];
  let totalWeight=0;weights.forEach(w=>{starts.push(totalWeight);totalWeight+=w});
  function toTimeline(value){const i=Math.min(count-1,Math.floor(clamp(value,0,count)));return starts[i]+clamp(value-i)*weights[i]}
@@ -100,13 +101,13 @@
  const marketCopy=['Grain-based noodles already exist. Convenience is where Sorami aims to compete.','The deck uses $6.50 as a premium benchmark; it is not a live price survey.','A familiar format. A more purposeful ingredient.'];
  $$('[data-market]').forEach(button=>button.addEventListener('click',()=>{$$('[data-market]').forEach(b=>{b.setAttribute('aria-pressed',String(b===button));b.classList.toggle('is-selected',b===button)});$('market-insight').textContent=marketCopy[+button.dataset.market]}));
  function economics(){
-  const price=+$('cup-price').value,cost=+$('cup-cost').value,pantry=$('pantry-toggle').checked?cost/20:0,remaining=price-1.2-cost-pantry;
+  const price=+$('cup-price').value,cost=+$('cup-cost').value,pantry=$('pantry-toggle').checked?cost/20:0,net=price*(1-costModel.retailerMargin)*(1-costModel.distributorMargin)*(1-costModel.tradePromotions),remaining=net-cost-pantry;
   $('cup-price-label').textContent=$('money-price').textContent=cash(price);$('cup-cost-label').textContent=$('money-cost').textContent=cash(cost);$('money-margin').textContent=cash(remaining);
-  $('margin-caption').textContent=pantry?'LEFT AFTER PANTRY ALLOCATION':'LEFT PER CUP';$('margin-note').textContent=pantry?`${cash(pantry)} allocated per sale. Before overhead and distribution.`:'Before overhead, distribution, and any pantry contribution.';
+  $('money-channel').textContent=cash(price-net);$('margin-caption').textContent=pantry?'LEFT AFTER PANTRY ALLOCATION':'GROSS PROFIT PER CUP';$('margin-note').textContent=pantry?`${cash(pantry)} allocated per sale. Before overhead, tax and pantry delivery.`:'Before overhead, tax and pantry support.';
   $$('.money-result')[0].classList.toggle('is-negative',remaining<0);request();
  }
  ['cup-price','cup-cost','pantry-toggle'].forEach(id=>$(id).addEventListener('input',economics));
- $('economics-reset').addEventListener('click',()=>{$('cup-price').value='3.99';$('cup-cost').value='1.60';$('pantry-toggle').checked=false;economics()});
+ $('economics-reset').addEventListener('click',()=>{$('cup-price').value=String(costModel.price);$('cup-cost').value=String(costModel.scale.cost.toFixed(2));$('pantry-toggle').checked=false;economics()});
  $('pantry-deliver').addEventListener('click',()=>{deliveryTime=performance.now();deliveries++;$('pantry-result').textContent=`${deliveries}`;$('pantry-message').textContent=`illustrative pantry cup${deliveries===1?'':'s'} funded by ${deliveries*20} sales at the deck’s assumptions`;$('pantry-deliver').querySelector('span').textContent='Demonstrate another 20 + 1';request()});
  $('cups-sold').addEventListener('input',e=>{cupsValue=+e.target.value;$('cups-sold-label').textContent=`${comma(cupsValue)} cups`;$('grain-tonnes').textContent=(cupsValue*47/1e6).toFixed(1);request()});
  const routeCopy=['Start where students already grab a late-night snack.','Extend the same just-water ritual to vending locations.','Explore campus dining as the next distribution channel.'];

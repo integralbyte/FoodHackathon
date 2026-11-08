@@ -1,0 +1,52 @@
+{
+  "source": "Sorami_Cost_Model_v9.xlsx",
+  "flavour": "Spicy Garlic",
+  "price": 3.49,
+  "cardFee": 0.03,
+  "retailerMargin": 0.30,
+  "distributorMargin": 0.13,
+  "tradePromotions": 0.18,
+  "donationPerSale": 0.05,
+  "startupBudget": 30400,
+  "prelaunchMarketing": 1500,
+  "pilot": {
+    "cupsPerRun": 50000,
+    "annualCups": 50000,
+    "spicyGarlicCostSharedRun": 1.91211241333333,
+    "extraFlavourChangeover": 750,
+    "extraFlavourTests": 4,
+    "costPerTest": 60,
+    "ingredients": 0.57682908,
+    "packaging": 0.485833333333333,
+    "processing": 0.5,
+    "setupAndTestsSharedRun": 0.0906,
+    "freightAndStorage": 0.25885
+  },
+  "scale": {
+    "cupsPerRun": 100000,
+    "annualCups": 1000000,
+    "spicyGarlicCostSharedRun": 0.776680768205128,
+    "extraFlavourChangeover": 500,
+    "extraFlavourTests": 4,
+    "costPerTest": 50,
+    "ingredients": 0.22320064,
+    "packaging": 0.181,
+    "processing": 0.237,
+    "setupAndTestsSharedRun": 0.031,
+    "freightAndStorage": 0.104480128205128
+  },
+  "pilotSales": {
+    "singleCups": [1200, 1500, 1700],
+    "onlineCups": [240, 480, 720],
+    "introCups": [500, 300, 200],
+    "samples": [300, 100, 100],
+    "onlinePricePerCup": 2.9158,
+    "introPrice": 2.49,
+    "monthlyMarketing": [2500, 2000, 2000]
+  },
+  "steps": [
+    {"id":"costs","title":"Spicy Garlic costs","details":"costs"},
+    {"id":"launch","title":"The campus launch","details":"launch"},
+    {"id":"sustainability","title":"Packaging & community","details":"sustainability"}
+  ]
+}

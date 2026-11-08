@@ -11,6 +11,7 @@
     "test:shelf": "node scripts/check-shelf.mjs",
     "test:journey": "node scripts/check-journey.mjs",
     "test:research": "node --test scripts/check-research-camera.mjs",
+    "test:costs": "node --test scripts/check-cost-model.mjs",
     "test:opening": "node --test scripts/check-opening-stats.mjs"
   },
   "engines": {
