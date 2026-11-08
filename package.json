@@ -10,7 +10,8 @@
     "test:scroll": "node scripts/check-scroll.mjs",
     "test:shelf": "node scripts/check-shelf.mjs",
     "test:journey": "node scripts/check-journey.mjs",
-    "test:research": "node --test scripts/check-research-camera.mjs"
+    "test:research": "node --test scripts/check-research-camera.mjs",
+    "test:opening": "node --test scripts/check-opening-stats.mjs"
   },
   "engines": {
     "node": ">=18"

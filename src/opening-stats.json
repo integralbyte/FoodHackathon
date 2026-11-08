@@ -1,0 +1,40 @@
+{
+  "background": "assets/sorami-opening-shelf.png",
+  "wholeGrains": {
+    "value": 72,
+    "source": "https://wholegrainscouncil.org/sites/default/files/atoms/files/WGC-Survey-2025_0825.pdf",
+    "basis": "Oldways Whole Grains Council, 2025 Whole Grain Consumer Insights Survey; 1,500 U.S. adults surveyed May 29–June 6, 2025."
+  },
+  "lessSodium": {
+    "value": 61,
+    "basis": "Figure supplied in the pitch brief."
+  },
+  "moreProtein": {
+    "value": 52,
+    "basis": "Figure supplied in the pitch brief."
+  },
+  "nutritionFocused": {
+    "value": 4,
+    "basis": "U.S. nutrition-focused cup share supplied in the pitch brief."
+  },
+  "market": {
+    "value": 3.9,
+    "unit": "USD billion",
+    "growthPercent": 40,
+    "year": 2030,
+    "basis": "U.S. instant-noodle market size and growth estimate supplied in the pitch brief."
+  },
+  "sodiumSample": {
+    "ids": [
+      "nissin",
+      "nissin-shrimp",
+      "nissin-spicy-jalapeno-chicken",
+      "nongshim",
+      "nongshim-46",
+      "buldak",
+      "buldak-original-cup",
+      "buldak-cheese-cup"
+    ],
+    "basis": "Unweighted arithmetic mean of whole-cup label sodium for eight selected conventional U.S. cups. Includes each product’s seasoning; not a sales-weighted or nationally representative average. Values are taken from the sourced shelf comparison."
+  }
+}
