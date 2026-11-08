@@ -186,6 +186,8 @@
   root.classList.toggle('is-research',index===0);
   let local=clamp(value-index);if(reduced&&index!==0)local=1;else if(forcedEntry===index){local=Math.min(local,(now-entryStart)/1600);if(now-entryStart>=1600)forcedEntry=-1}
   paint(local,now);
+  const showFilm=index===0&&scenes[0].dataset.researchStep==='9';
+  root.classList.toggle('is-impact',showFilm);$('sorami-film')?.filmScene?.setActive(showFilm);
  }
  function tick(now){frame=0;if(document.hidden||!visible)return;
   if(playing){progress=Math.min(count-.01,fromTimeline(playFrom+(now-playStart)/7600));scroll(progress);if(progress>=count-.01)stop()}

@@ -47,6 +47,6 @@
   "steps": [
     {"id":"costs","title":"Spicy Garlic costs","details":"costs"},
     {"id":"launch","title":"The campus launch","details":"launch"},
-    {"id":"sustainability","title":"Packaging & community","details":"sustainability"}
+    {"id":"impact","title":"Farmers & food banks","details":"sustainability"}
   ]
 }

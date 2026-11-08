@@ -12,10 +12,14 @@ function createLaunchScenes(root){
    logo.style.opacity=String(p);logo.style.transform=reduced?'none':`translateY(${(1-p)*10}px) scale(${.98+p*.02})`;
    all('[data-launch-phase]').forEach((e,i)=>{const p=ease((t-i*.16)/.6);reveal(e,p,0,28);e.style.setProperty('--route-progress',p)});
   }else if(index===9){
-   by('launch-pp-cup').style.transform=`translateY(${(1-ease(t/.7))*32}px)`;
-   by('launch-pp-lid').style.transform=`translateY(${(1-ease((t-.1)/.7))*-55}px)`;
-   all('[data-pack-line]').forEach(e=>e.style.strokeDashoffset=String(1-ease((t-.2)/.65)));
-   all('[data-community-cup]').forEach((e,i)=>{const p=ease((t-i*.016)/.5);e.style.transform=`translateY(${(1-p)*25}px) scaleY(${p})`;e.style.opacity=String(p)});
+   by('sorami-film').style.setProperty('--film-reveal',reduced?1:ease(t/.6));
+   all('[data-impact-panel]').forEach((e,i)=>{
+    const p=reduced?1:ease((t-i*.13)/.75);
+    e.style.clipPath=`inset(${(1-p)*100}% 0 0 0)`;
+    e.style.transform=reduced?'none':`translateX(${(1-p)*(i?32:-32)}px) scale(${.97+p*.03})`;
+   });
+   const amount=by('impact-grain-total');amount.textContent=(Number(amount.dataset.impactTarget)*(reduced?1:ease((t-.12)/.7))).toFixed(1);
+   const ratio=root.querySelector('.impact-donation-number');ratio.style.transform=reduced?'none':`perspective(900px) rotateX(${(1-ease((t-.18)/.65))*-28}deg)`;
   }
  }};
 }
