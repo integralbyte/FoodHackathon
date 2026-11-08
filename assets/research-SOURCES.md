@@ -58,7 +58,7 @@ Proposed acceptance targets are complete rehydration while maintaining texture/s
 
 ## Foxtail reference correction
 
-Proso-millet values are not relabelled as foxtail. The Research nutrition table now shows whole-cup team targets. The grain-ending foxtail benefits are qualitative and link to separate primary references: [IJMR Table III, unpolished foxtail grain](https://ijmr.org.in/assessment-of-quality-of-minor-millets-available-in-the-south-indian-market-glycaemic-index-of-cooked-unpolished-little-foxtail-millet/) for the whole-grain fibre reference, and [Japan MEXT record 01002, raw milled foxtail grain](https://fooddb.mext.go.jp/details/details.pl?ITEM_NO=1_01002_7) for magnesium and phosphorus. These different processing states are not combined into a purported flour analysis. Finished-product nutrition still requires validation.
+Proso-millet values are not relabelled as foxtail. The Research nutrition table now shows whole-cup team targets. The grain-ending foxtail fibre callout uses the measured 8.1g per 100g uncooked, unpolished grain reference; its mineral callout remains qualitative. They link to separate primary references: [IJMR Table III, unpolished foxtail grain](https://ijmr.org.in/assessment-of-quality-of-minor-millets-available-in-the-south-indian-market-glycaemic-index-of-cooked-unpolished-little-foxtail-millet/) for the 8.1 ± 0.2g per 100g whole-grain fibre reference, and [Japan MEXT record 01002, raw milled foxtail grain](https://fooddb.mext.go.jp/details/details.pl?ITEM_NO=1_01002_7) for magnesium and phosphorus. These different processing states are not combined into a purported flour analysis. Finished-product nutrition still requires validation.
 
 ## Visible innovation sequence
 

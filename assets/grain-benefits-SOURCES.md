@@ -8,10 +8,10 @@ Updated 7 November 2026. Grain-ending callouts describe ingredient references, s
 
 ## Foxtail millet
 
-The displayed foxtail benefits use qualitative wording, avoiding a fabricated profile for the proposed flour:
+The fibre callout now uses a measured foxtail reference in the same numerical layout as sorghum:
 
-- **Fibre-rich whole grain:** [Malavika et al., IJMR, Table III](https://ijmr.org.in/assessment-of-quality-of-minor-millets-available-in-the-south-indian-market-glycaemic-index-of-cooked-unpolished-little-foxtail-millet/) reports total dietary fibre in a studied uncooked, unpolished foxtail sample (*Setaria italica*). This is a whole-grain reference, not a specification for the flour in the proposal.
-- **Magnesium + phosphorus:** [Japan MEXT food-composition record 01002](https://fooddb.mext.go.jp/details/details.pl?ITEM_NO=1_01002_7) covers raw milled/polished foxtail millet. It is a separate mineral reference and is not combined numerically with the unpolished-grain study.
+- **8.1g fibre per 100g:** [Malavika et al., IJMR 152(4), 2020, Table III](https://ijmr.org.in/assessment-of-quality-of-minor-millets-available-in-the-south-indian-market-glycaemic-index-of-cooked-unpolished-little-foxtail-millet/) reports **8.1 ± 0.2g total dietary fibre per 100g uncooked, unpolished foxtail grain** (*Setaria italica*; n=3). The main callout shows 8.1g, with the full denominator and sample context retained in its accessible label, data record and source link. This is an ingredient-study reference, not the measured fibre content of Sorami flour or a finished cup.
+- **Magnesium + phosphorus:** [Japan MEXT food-composition record 01002](https://fooddb.mext.go.jp/details/details.pl?ITEM_NO=1_01002_7) covers raw milled/polished foxtail millet. Its mineral callout remains qualitative. These mineral and fibre sources describe different processing states and are kept separate.
 
 The prior proso values (8.5g fibre, 114mg magnesium, 285mg phosphorus) and raw proso nutrient table are not used for foxtail. The whole-cup 6.5g fibre target remains a team goal.
 
