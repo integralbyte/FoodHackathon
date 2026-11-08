@@ -12,6 +12,10 @@
  const attr=(e,k,v)=>e.setAttribute(k,v);
  const cash=n=>`${n<0?'−':''}$${Math.abs(n).toFixed(2)}`;
  const comma=n=>Math.round(n).toLocaleString('en-US');
+ const research=scenes[0].researchScene,weights=scenes.map((_,i)=>i===0?3.2:1),starts=[];
+ let totalWeight=0;weights.forEach(w=>{starts.push(totalWeight);totalWeight+=w});
+ function toTimeline(value){const i=Math.min(count-1,Math.floor(clamp(value,0,count)));return starts[i]+clamp(value-i)*weights[i]}
+ function fromTimeline(value){const v=clamp(value,0,totalWeight),i=weights.findIndex((w,i)=>v<starts[i]+w);return i<0?count:i+(v-starts[i])/weights[i]}
  const motion=matchMedia('(prefers-reduced-motion: reduce)');
  let reduced=motion.matches,active=-1,progress=0,frame=0,visible=false,lastPaint=0,playing=false,playStart=0,playFrom=0;
  let forcedEntry=-1,entryStart=0,productChoice=0,productTime=-1,tasteChoice=0,tasteTime=-1,waterTime=-1,deliveryTime=-1,deliveries=0,growerChoice=0;
@@ -31,17 +35,10 @@
  document.addEventListener('click',e=>{if(!e.target.closest('#pitch-chapters,#pitch-chapters-toggle'))toggleChapters(false)});
 
  // Every illustration is built locally from SVG/HTML. No external renderer or assets.
- const coverOrbit=[],closingOrbit=[],cupSlices=[];
- $$('[data-orbit]').forEach(group=>{
-  const closing=group.dataset.orbit==='closing',items=closing?closingOrbit:coverOrbit;
-  for(let i=0;i<40;i++){const a=i/40*Math.PI*2;const e=svg('use',{href:'#pitch-seed',x:-7,y:-10,width:14,height:20,fill:'currentColor',color:i%3?'#e9b23c':'#ff8130'},group);items.push({e,a,r:closing?166:238,cx:300,cy:closing?190:300})}
+ const closingOrbit=[];
+ $$('[data-orbit="closing"]').forEach(group=>{
+  for(let i=0;i<40;i++){const a=i/40*Math.PI*2;const e=svg('use',{href:'#pitch-seed',x:-7,y:-10,width:14,height:20,fill:'currentColor',color:i%3?'#e9b23c':'#ff8130'},group);closingOrbit.push({e,a,r:166,cx:300,cy:190})}
  });
- const cupGroup=$$('.cover-cup-pieces')[0];
- for(let i=0;i<12;i++){
-  const clip=svg('clipPath',{id:`cover-cup-strip-${i}`},cupGroup);svg('rect',{x:135+i*28,y:92,width:28.4,height:420},clip);
-  const g=svg('g',{'clip-path':`url(#cover-cup-strip-${i})`},cupGroup);svg('use',{href:'#pitch-cup',x:135,y:92,width:330,height:420},g);cupSlices.push(g);
- }
- const completeCoverCup=svg('use',{href:'#pitch-cup',x:135,y:92,width:330,height:420},cupGroup);
  const formulaGrains=[];
  for(let i=0;i<100;i++){
   const ring=i<60?0:1,index=ring?i-60:i,total=ring?40:60,a=index/total*Math.PI*2-Math.PI/2,r=ring?174:224;
@@ -87,8 +84,8 @@
  // Local interaction state remains independent of the scroll animation.
  const productCopy=[
   ['THE FORMULATION TARGET','Sorghum + millet, at the center.','85 of these 100 grains represent the proposed sorghum–millet share of the dry formulation. The remaining 15% is other ingredients.'],
-  ['THE PROCESS CONCEPT','Steam first. Air-dry next.','Pre-steaming and air-drying are the proposed route to a non-fried noodle. Texture, rehydration, and process settings still need prototype testing.'],
-  ['THE STUDENT RITUAL','A kettle. A cup. That’s it.','Designed for hot-water preparation without a stove or pot. Five minutes is the development target, not a measured cook-time result.']
+  ['THE PROCESS CONCEPT','Steam first. Explore vacuum drying.','Pre-steaming and microwave-vacuum drying are the proposed non-fried route. Process settings, texture and hot-water rehydration still need prototype trials.'],
+  ['THE STUDENT RITUAL','A kettle. A cup. That’s it.','Designed for hot-water preparation without a stove or pot. The research route explores a 60-second rehydration target; this has not been measured for Sorami.']
  ];
  $$('[data-product]').forEach(button=>button.addEventListener('click',()=>{productChoice=+button.dataset.product;productTime=performance.now();$$('[data-product]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));const copy=productCopy[productChoice];$('product-kicker').textContent=copy[0];$('product-headline').textContent=copy[1];$('product-description').textContent=copy[2];$$('.product-visual>svg')[0].setAttribute('aria-label',['One hundred grains arrange into the proposed 85 percent grain formulation','Grains form rows beneath drawn steam paths, illustrating the proposed non-fried process','Grains form a bowl beneath a water droplet, illustrating hot-water preparation'][productChoice]);request()}));
  $('deadline-time').addEventListener('input',e=>{const minute=47+Number(e.target.value);$('deadline-label').textContent=`11:${minute} PM`;$('deadline-remaining').textContent=minute===59?'Deadline reached':`${59-minute} minute${59-minute===1?'':'s'} left`;request()});
@@ -128,11 +125,9 @@
   $$('.pitch-draw',scene).forEach((e,i)=>e.style.strokeDashoffset=1-phase(q,.08+i*.02,.68));
  }
  function paint(q,now){
-  const scene=scenes[active];if(!scene)return;common(scene,q);root.style.setProperty('--scene-progress',q);
+  const scene=scenes[active];if(!scene)return;common(scene,reduced?1:active===0?clamp(q*4):q);root.style.setProperty('--scene-progress',q);
   if(active===0){
-   orbit(coverOrbit,q,now);cupSlices.forEach((e,i)=>{const t=phase(q,.05+i*.02,.47+i*.018);attr(e,'transform',`translate(${Math.sin(i*2.3)*(1-t)*150} ${(1-t)*(i%2?-450:450)})`);e.style.visibility=q>=.72?'hidden':'visible'});completeCoverCup.style.visibility=q>=.72?'visible':'hidden';
-   transform($$('.cover-halo')[0],`scale(${phase(q,0,.55)})`);$$('.cover-halo')[0].style.transformOrigin='300px 300px';
-   const t=phase(q,.3,.66);transform($$('.pitch-stamp')[0],`rotate(${lerp(-19,-3,t)}deg) scale(${t*(1+Math.sin(t*Math.PI)*.14)})`);
+   research.paint(q,now,reduced);
   }else if(active===1){
    const t=phase(q,.06,.56);transform($$('.laptop-screen')[0],`rotateX(${(1-t)*-88}deg)`);transform($$('.laptop-base')[0],`scaleX(${phase(q,0,.3)})`);
    transform($$('.desk-cup')[0],`translate(${(1-phase(q,.2,.65))*180}px,${(1-phase(q,.2,.65))*-160}px) rotate(${8+(1-t)*80}deg) scale(${phase(q,.1,.5)})`);
@@ -184,26 +179,29 @@
    orbit(closingOrbit,q,now);const t=phase(q,.08,.6);transform($$('.closing-cup')[0],`translateY(${(1-t)*-160}px) rotate(${(1-t)*20}deg) scale(${.6+t*.4})`);$$('.closing-cup')[0].style.transformOrigin='300px 340px';
   }
  }
- function measured(){const rect=root.getBoundingClientRect(),distance=root.offsetHeight-window.innerHeight;return clamp(distance>0?-rect.top/distance:0)*count}
+ function measured(){const rect=root.getBoundingClientRect(),distance=root.offsetHeight-window.innerHeight;return fromTimeline(clamp(distance>0?-rect.top/distance:0)*totalWeight)}
  function sceneAt(value,now){const index=Math.min(count-1,Math.floor(value));if(index!==active){active=index;root.dataset.tone=scenes[index].dataset.tone;$('pitch-folio').textContent=String(index+1).padStart(2,'0');if(forcedEntry!==index)forcedEntry=-1;scenes.forEach((s,i)=>{s.hidden=i!==index;s.inert=i!==index});chapterButtons.forEach((b,i)=>{if(i===index)b.setAttribute('aria-current','step');else b.removeAttribute('aria-current')});$('pitch-count').textContent=`${String(index+1).padStart(2,'0')} / ${count}`;$('pitch-current-title').textContent=scenes[index].dataset.chapter;$('pitch-prev').disabled=index===0;$('pitch-next').disabled=index===count-1;}
-  let local=clamp(value-index);if(reduced)local=1;else if(forcedEntry===index){local=Math.min(local,(now-entryStart)/1600);if(now-entryStart>=1600)forcedEntry=-1}
+  root.classList.toggle('is-research',index===0);
+  let local=clamp(value-index);if(reduced&&index!==0)local=1;else if(forcedEntry===index){local=Math.min(local,(now-entryStart)/1600);if(now-entryStart>=1600)forcedEntry=-1}
   paint(local,now);
  }
  function tick(now){frame=0;if(document.hidden||!visible)return;
-  if(playing){progress=Math.min(count-.01,playFrom+(now-playStart)/7600);scroll(progress);if(progress>=count-.01)stop()}
+  if(playing){progress=Math.min(count-.01,fromTimeline(playFrom+(now-playStart)/7600));scroll(progress);if(progress>=count-.01)stop()}
   else progress=measured();
   if(now-lastPaint>25||Math.abs(progress-lastFrame)>.002){lastPaint=now;lastFrame=progress;sceneAt(progress,now);root.style.setProperty('--deck-progress',progress/count);if(document.activeElement!==$('pitch-progress'))$('pitch-progress').value=Math.min(1099,Math.round(progress*100));}
-  const running=playing||forcedEntry>=0||waterTime>=0||deliveryTime>=0||(!reduced&&(active===9||now-productTime<1000||now-tasteTime<800));
+  const running=playing||forcedEntry>=0||waterTime>=0||deliveryTime>=0||(!reduced&&(active===9||active===0&&research.needsFrame(now)||now-productTime<1000||now-tasteTime<800));
   if(running)frame=requestAnimationFrame(tick);
  }
  function request(){if(!frame&&visible&&!document.hidden)frame=requestAnimationFrame(tick)}
- function scroll(value){const top=root.getBoundingClientRect().top+window.scrollY;window.scrollTo({top:top+value/count*(root.offsetHeight-window.innerHeight),behavior:'instant'})}
- function go(index){stop();forcedEntry=reduced?-1:index;entryStart=performance.now();visible=true;scroll(index+.79);request()}
+ function scroll(value){const top=root.getBoundingClientRect().top+window.scrollY;window.scrollTo({top:top+toTimeline(value)/totalWeight*(root.offsetHeight-window.innerHeight),behavior:'instant'})}
+ function go(index){stop();forcedEntry=reduced?-1:index;entryStart=performance.now();visible=true;$$('.pitch-scenes')[0].scrollTop=0;scroll(index+(index===0?.2:.79));request()}
+ root.addEventListener('sorami-research-update',request);
+ root.addEventListener('sorami-research-seek',e=>{stop();forcedEntry=-1;$$('.pitch-scenes')[0].scrollTop=0;scroll((e.detail.step+.8)/4);request()});
  $$('.pitch-skip,.assembly-to-pitch',document).forEach(a=>a.addEventListener('click',e=>{e.preventDefault();go(0)}));
  function stop(){playing=false;$('pitch-play').setAttribute('aria-pressed','false');$('pitch-play').textContent='▶ Play story'}
  $('pitch-prev').addEventListener('click',()=>go(Math.max(0,active-1)));$('pitch-next').addEventListener('click',()=>go(Math.min(count-1,active+1)));
  $('pitch-progress').addEventListener('input',e=>{stop();forcedEntry=-1;scroll(+e.target.value/100);request()});
- $('pitch-play').addEventListener('click',()=>{if(playing){stop();return}reduced=false;forcedEntry=-1;playFrom=measured();if(playFrom>=count-.2)playFrom=0;playStart=performance.now();playing=true;$('pitch-play').setAttribute('aria-pressed','true');$('pitch-play').textContent='Ⅱ Pause story';request()});
+ $('pitch-play').addEventListener('click',()=>{if(playing){stop();return}reduced=false;forcedEntry=-1;playFrom=toTimeline(measured());if(playFrom>=totalWeight-.2)playFrom=0;playStart=performance.now();playing=true;$('pitch-play').setAttribute('aria-pressed','true');$('pitch-play').textContent='Ⅱ Pause story';request()});
  $('pitch-restart').addEventListener('click',()=>{stop();$('assembly-replay').click()});
  // Inputs and chapter menus pause the guided flow, so exploration never fights scrolling.
  root.addEventListener('pointerdown',e=>{if(e.target.closest('input,button,a')&&e.target.id!=='pitch-play')stop()});

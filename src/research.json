@@ -1,0 +1,16 @@
+{
+  "recipe": [
+    {"name":"Sorghum flour","percent":46.75,"tone":"sorghum"},
+    {"name":"Millet flour","percent":38.25,"tone":"millet"},
+    {"name":"Tapioca starch","percent":15,"tone":"starch"}
+  ],
+  "recipeBasis":"Illustrative dry noodle mix from the team's earlier formulation model. Seasoning is separate; the final recipe still needs testing.",
+  "cupTargets":{"protein":11,"fibre":6.5,"sodium":400},
+  "dryingSource":"https://academic.oup.com/ijfst/article/57/9/6090/7807444",
+  "strandSource":"https://www.jstage.jst.go.jp/article/fstr/20/2/20_241/_article",
+  "taste":[
+    {"id":"salt","number":"~30","suffix":"%","endpoint":"less rated bitterness","context":"NaCl · human sensory study","detail":"Salt reduced bitterness in model chicken broths containing L-tryptophan.","basis":"Published broth result; not a Sorami taste test.","source":"https://pmc.ncbi.nlm.nih.gov/articles/PMC6542971/","remaining":0.7},
+    {"id":"msg","number":"Umami","suffix":"","endpoint":"build the savoury base","context":"MSG · formulation direction","detail":"Use MSG to build savoury depth alongside the grain and broth. Its dose belongs in recipe trials.","basis":"No separate bitterness-reduction percentage is assigned to MSG.","source":"https://pmc.ncbi.nlm.nih.gov/articles/PMC6542971/","remaining":null},
+    {"id":"yeast","number":"≥40","suffix":"%","endpoint":"lower receptor activity","context":"AMP-rich yeast extract · cell assay","detail":"At least 40% inhibition in 7 of 19 tested bitter receptors. This measures cells, not perceived taste.","basis":"Published receptor result; not a Sorami taste test.","source":"https://pubmed.ncbi.nlm.nih.gov/38945612/","remaining":0.6}
+  ]
+}

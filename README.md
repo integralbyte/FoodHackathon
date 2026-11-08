@@ -27,9 +27,9 @@ Continue scrolling down and the assembly runs **backward**: the sealed cup opens
 
 The supplied 8.5-second concept film now comes **after the reverse animation**, followed by the pitch deck. It retains the warm treatment, muted loop, poster and play/pause control. It pauses offscreen or when the page is hidden and respects reduced-motion opt-in. Its forward link now continues into the pitch.
 
-The deck follows in its original order, rebuilt as objects and interactions rather than slide screenshots:
+The deck keeps eleven chapters, with an expanded Research opening in place of the original cover. Each chapter uses objects and interactions rather than slide screenshots:
 
-1. **The idea:** a cup assembles from alternating vertical strips while grains settle into an orbit.
+1. **Research:** four scroll steps cover the draft blend, ingredient and USDA nutrition tables, microwave-vacuum drying, thin porous strands and bitterness control. Grains pack into a mix, the drying chamber draws as pores open and vapour exits, a strand traces into a magnified cross-section, and the broth visual changes with salt, MSG or yeast extract. Tabs can jump to any research step; drying and diameter controls change the mechanism illustrations. The published ~30% sensory result and ≥40% receptor result are kept separate, MSG has no invented percentage, and the 60-second rehydration figure is clearly a development target. [Research source notes](assets/research-SOURCES.md) document the basis of every figure.
 2. **The student:** a laptop unfolds, the desk assembles, and a time slider explores the late-night deadline.
 3. **The product:** 100 grains pack into an 85% formulation diagram, then rearrange for the steam and hot-water concepts.
 4. **The structure:** noodle cross-sections grow, channels draw through the porous strand, and a scrubber or replay traces water paths.
@@ -43,7 +43,7 @@ The deck follows in its original order, rebuilt as objects and interactions rath
 
 The chapter palette follows the story: burgundy for the product reveal and close, cocoa for the late-night student and business scenes, toasted wheat for the product and market, and olive for access and growers. Controls, source panels, diagrams, and labels share the current palette. The background texture is a local SVG noise tile, so the theme adds no network dependency.
 
-The pitch supports scrolling, chapter navigation, a progress scrubber, left/right arrows, and guided playback. Wheel, touch, or interacting with a control pauses playback. Space toggles playback when no interactive control has focus. The chapter menu jumps directly to any part. The **Sources & assumptions** dialog explains the numbers and their limits.
+The pitch supports scrolling, chapter navigation, a progress scrubber, left/right arrows, and guided playback. Research receives 3.2 times a normal chapter’s scroll distance and playback duration so its four steps have room to develop; later chapters retain their previous physical scroll length. Wheel, touch, or interacting with a control pauses playback. Space toggles playback when no interactive control has focus. The chapter menu jumps directly to any part. The **Sources & assumptions** dialog explains the numbers and their limits.
 
 Reduced motion presents each chapter in its completed state. Play is an explicit opt-in to animation. Inactive chapters are hidden and inert, inputs are labeled, and only the on-screen scene runs. Short screens can scroll a chapter internally.
 
@@ -58,7 +58,8 @@ Reduced motion presents each chapter in its completed state. Play is an explicit
 - `src/story.html`, `src/style.css`, `src/story.js`: procedural cup assembly, driven in reverse by the joined journey; standalone forward playback remains supported.
 - `src/film.html`, `src/film.css`, `src/film.js`: full-screen opening, theme treatment, and motion-aware playback.
 - `assets/sorami-opening.mp4`, `assets/sorami-opening-poster.jpg`: optimized silent H.264 copy of the supplied film and its first-scene poster. The opening uses the replacement clip supplied as `copy_C90F67D0-9C83-4B85-9295-8A3D744B1F67.MOV`, optimized to 1080p H.264 at 30 fps. A soft, feathered blur obscures the bottom-right watermark from 6.000 seconds through the end; all earlier frames bypass the blur. The logo stays outside the filtered region. The source video remains unchanged. Both assets are embedded by the build so direct-file viewing still works offline.
-- `src/pitch.html`, `src/pitch.css`, `src/pitch.js`: deck scenes, visuals, interactions, sources, and choreography.
+- `src/pitch.html`, `src/pitch.css`, `src/pitch.js`: deck scenes, weighted chapter timeline, visuals, interactions, sources, and choreography.
+- `src/research.html`, `src/research.css`, `src/research.js`, `src/research.json`: the four-step Research opening; `scripts/build-research.mjs` generates recipe and nutrient tables from source data. The grain-benefit data also supplies the raw-grain nutrient records, without adding protein stats to the grain-ending callouts.
 - `src/pitch-theme.css`: chapter palettes, paper grain, typography, material treatments, and responsive controls. Chapter `data-tone` attributes select the palette.
 - `assets/sorami-package-reference.png`: the unchanged supplied `01-front.png` reference. SVG silhouettes separate its body and foil lid for animation, preserving the original print, cream color, burgundy-and-gold trim, and tall proportions. The same cup artwork is reused throughout the pitch.
 - `src/page.html`: page metadata and wrapper.
@@ -68,7 +69,7 @@ Run `npm run build` after editing. Commit the regenerated `index.html` alongside
 
 ## Evidence and assumptions
 
-The animation illustrates a proposed product. It does not predict cooking time or prove manufacturability, nutrition, taste, or commercial performance. The reference packaging includes Umami Chicken, 78g net weight, 11g protein, 400mg sodium, and gluten-free wording as supplied visual concept art; the team additionally supplies a 6.5g fibre target; these label claims are not validated by the animation. The pitch calculations still use their original 47g grain assumption, independently of that mockup. The five-minute ritual, 85% formulation, and non-fried process remain development targets.
+The animation illustrates a proposed product. It does not predict cooking time or prove manufacturability, nutrition, taste, or commercial performance. The reference packaging includes Umami Chicken, 78g net weight, 11g protein, 400mg sodium, and gluten-free wording as supplied visual concept art; the team additionally supplies a 6.5g fibre target; these label claims are not validated by the animation. The pitch calculations still use their original 47g grain assumption, independently of that mockup. The 60-second rehydration research target, 85% grain formulation and non-fried microwave-vacuum route remain development targets.
 
 Published sources are linked in the page:
 
@@ -85,4 +86,4 @@ Default economics are $3.99 price − $1.20 store share − $1.60 production cos
 
 Run `npm run test:journey` for the shared cup handoff, phase order, restored progress and reduced-motion checks. Run `npm run test:scroll` for the standalone assembly regression checks covering first entry, restored scroll positions, and reverse scrolling. The observer test reproduces the zero-area boundary notification that previously left the first downward pass frozen.
 
-The build and JavaScript syntax checks pass. The joined journey passes synthetic DOM checks at 1440×900, 390×844, 320×568 and 700×400: shelf elimination, matched handoff endpoints, complete cup at entry, reverse lid/topping/cup/noodle stages and absence of water layers, labeled grains, eight sourced benefit callouts, upward rebuilding, restored scroll positions and reduced-motion progression. The existing film and eleven pitch chapters also pass their DOM and interaction checks. Local browser use remains disabled in Work settings, so no fresh browser visual check or screenshot was possible for this transition.
+The build and JavaScript syntax checks pass. The joined journey passes synthetic DOM checks at 1440×900, 390×844, 320×568 and 700×400: shelf elimination, matched handoff endpoints, complete cup at entry, reverse lid/topping/cup/noodle stages and absence of water layers, labeled grains, eight sourced benefit callouts, upward rebuilding, restored scroll positions and reduced-motion progression. The film and eleven pitch chapters also pass their DOM and interaction checks, including all four research steps, ingredient/nutrition views, drying and thickness controls, distinct bitterness endpoints, weighted and reverse scrolling, and reduced-motion navigation. Local browser use remains disabled in Work settings, so no fresh browser visual check or screenshot was possible for this transition.
