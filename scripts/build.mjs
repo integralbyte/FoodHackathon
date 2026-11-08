@@ -26,12 +26,13 @@ const benefits=await buildGrainBenefits(root);
 const research=await buildResearch(root);
 const openingStats=await buildOpeningStats(root);
 const launchStyle=await read('src/launch.css');
+const navigationScript=await read('src/navigation.js');
 const fillFormulation=s=>s.replaceAll('__GRAIN_SHARE__',String(research.formulation.grainPercent)).replaceAll('__OTHER_SHARE__',String(research.formulation.otherPercent)).replaceAll('__GRAIN_GRAMS__',String(research.formulation.grainGrams)).replaceAll('__GRAIN_TONNES__',(research.formulation.grainGrams/10).toFixed(1));
 const deck=fillFormulation(pitch.replace('<!--__RESEARCH_CHAPTER__-->',()=>research.html).replace('<!--__IMPACT_FILM__-->',()=>impactFilm));
 const economicScript=fillFormulation(pitchScript.replace('/*__COST_MODEL__*/',()=>JSON.stringify(research.model)).replace('/*__FORMULATION__*/',()=>JSON.stringify(research.formulation)));
 const joined=journey.replace('<!--__JOURNEY_SHELF__-->',()=>shelf.html).replace('<!--__JOURNEY_ASSEMBLY__-->',()=>artwork).replace('<!--__GRAIN_BENEFITS__-->',()=>benefits);
 const html = page.replace('/*__STYLE__*/', () => style+'\n'+pitchStyle+'\n'+pitchTheme+'\n'+filmStyle+'\n'+hookStyle+'\n'+journeyStyle+'\n'+benefitStyle+'\n'+researchStyle+'\n'+launchStyle+'\n'+openingStats.css)
   .replace('<!--__STORY__-->', () => openingStats.html+'\n<script>'+openingStats.script+'</script>\n'+joined+'\n'+deck)
-  .replace('/*__SCRIPT__*/', () => journeyScript+'\n'+script+'\n'+research.script+'\n'+economicScript+'\n'+filmScript+'\n'+shelf.script+'\n'+benefitScript+'\n'+openingStats.transitionScript);
+  .replace('/*__SCRIPT__*/', () => journeyScript+'\n'+script+'\n'+research.script+'\n'+economicScript+'\n'+filmScript+'\n'+shelf.script+'\n'+benefitScript+'\n'+openingStats.transitionScript+'\n'+navigationScript);
 await writeFile(new URL('index.html', root), html);
 console.log('Built Sorami index.html — count-up opening, joined shelf and reverse cup animation, film, and 11 pitch chapters, offline.');

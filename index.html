@@ -1091,6 +1091,7 @@ button:focus-visible{outline:3px solid #ad450c;outline-offset:4px}
  let staticMode=motionPreference.matches,visible=true;
  const chapterAt=s=>s<.76?0:s<1.77?1:s<2.72?2:s<3.82?3:4;
  const positions=[0,1.61/4.4,2.48/4.4,3.15/4.4,1];
+ root.assemblyScene={stops:positions};
  function setChapter(index){
   if(index===current)return;
   current=index;n('assembly-announcement').textContent=chapters[index];
@@ -1180,7 +1181,8 @@ button:focus-visible{outline:3px solid #ad450c;outline-offset:4px}
  // default threshold, entering farther does not trigger a second callback.
  // Accept that first intersection so the initial downward scroll can render.
  new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible){lastClock=0;request()}else stopTour()}).observe(root);
- document.addEventListener('keydown',e=>{if(flow&&(!flow.sample().active||flow.sample().progress<flow.phases.transferEnd))return;if(!visible||root.getBoundingClientRect().bottom<window.innerHeight*.6||['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)||(e.key===' '&&document.activeElement===n('assembly-play')))return;if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();stopTour();enableMotion();scrollToProgress(positions[Math.min(positions.length-1,Math.max(0,current+(e.key==='ArrowRight'?(flow?-1:1):(flow?1:-1))))])}else if(['PageDown','PageUp','Home','End','ArrowDown','ArrowUp','Escape',' '].includes(e.key))stopTour()});
+ document.addEventListener('keydown',e=>{if(flow)return;if(!visible||root.getBoundingClientRect().bottom<window.innerHeight*.6||['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)||(e.key===' '&&document.activeElement===n('assembly-play')))return;if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();stopTour();enableMotion();scrollToProgress(positions[Math.min(positions.length-1,Math.max(0,current+(e.key==='ArrowRight'?1:-1)))])}else if(['PageDown','PageUp','Home','End','ArrowDown','ArrowUp','Escape',' '].includes(e.key))stopTour()});
+ document.addEventListener('sorami-navigation-start',stopTour);
  function applyReducedMotion(){stopTour();staticMode=motionPreference.matches;root.classList.toggle('is-static',staticMode&&!flow);display=flow?measuredProgress():staticMode?1:measuredProgress();if(flow)paint(display,0);else request()}
  motionPreference.addEventListener('change',applyReducedMotion);
  if(flow){
@@ -1593,17 +1595,12 @@ const launchScenes=createLaunchScenes(root);
   if(running)frame=requestAnimationFrame(tick);
  }
  function request(){if(!frame&&visible&&!document.hidden)frame=requestAnimationFrame(tick)}
- function scroll(value,behavior='instant'){const top=root.getBoundingClientRect().top+window.scrollY;window.scrollTo({top:top+toTimeline(value)/totalWeight*(root.offsetHeight-window.innerHeight),behavior})}
+ function targetTop(value){return root.getBoundingClientRect().top+window.scrollY+toTimeline(value)/totalWeight*(root.offsetHeight-window.innerHeight)}
+ function scroll(value,behavior='instant'){window.scrollTo({top:targetTop(value),behavior})}
  function go(index){stop();forcedEntry=reduced?-1:index;entryStart=performance.now();visible=true;$$('.pitch-scenes')[0].scrollTop=0;scroll(index+(index===0?research.stopAt(0):.79));request()}
  function seekResearch(step,behavior='instant'){stop();forcedEntry=-1;$$('.pitch-scenes')[0].scrollTop=0;scroll(research.stopAt(step),behavior);request()}
- function advance(direction){
-  if(active===0){
-   const step=Number(scenes[0].dataset.researchStep)||0,next=step+direction;
-   if(next>=0&&next<research.steps)seekResearch(next,reduced?'instant':'smooth');
-   else if(next>=research.steps)go(1);
-  }else if(active===1&&direction<0)seekResearch(research.steps-1,reduced?'instant':'smooth');
-  else if(active>=0&&active+direction>=0&&active+direction<count)go(active+direction);
- }
+ root.pitchScene={targetTop,research,count};
+ document.addEventListener('sorami-navigation-start',()=>{stop();forcedEntry=-1;$$('.pitch-scenes')[0].scrollTop=0});
  root.addEventListener('sorami-research-update',request);
  root.addEventListener('sorami-research-seek',e=>seekResearch(e.detail.step));
  $$('.pitch-skip,.assembly-to-pitch',document).forEach(a=>a.addEventListener('click',e=>{e.preventDefault();go(0)}));
@@ -1622,8 +1619,6 @@ const launchScenes=createLaunchScenes(root);
  document.addEventListener('keydown',e=>{
   if(!visible||root.getBoundingClientRect().top>window.innerHeight*.3||$('pitch-evidence-dialog').open||$('research-details').open)return;
   if(e.key==='Escape'){stop();toggleChapters(false);return}
-  if(e.defaultPrevented||e.altKey||e.ctrlKey||e.metaKey||document.activeElement.closest('input,select,textarea,[contenteditable]:not([contenteditable="false"])'))return;
-  if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();toggleChapters(false);advance(e.key==='ArrowRight'?1:-1)}
  });
  const dialog=$('pitch-evidence-dialog');$('pitch-evidence').addEventListener('click',()=>{stop();dialog.showModal()});$('evidence-close').addEventListener('click',()=>dialog.close());dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close()}});
  motion.addEventListener('change',()=>{reduced=motion.matches;forcedEntry=-1;stop();request()});
@@ -1677,6 +1672,7 @@ const launchScenes=createLaunchScenes(root);
  const first=root.querySelector('.hook-request-first'),filterTitle=root.querySelector('.hook-request-filter'),final=root.querySelector('.hook-request-final'),filters=root.querySelector('.hook-filters'),chips=[...root.querySelectorAll('.hook-filter')];
  const {catalog,rules,counts}={"catalog":[{"id":"nissin","brand":"Nissin","name":"Cup Noodles Chicken","size":64,"sodium":1160,"protein":6,"fibre":2,"nonfried":null,"checked":"2026-11-07","source":"https://www.nissinfoods.com/product/cup-noodles/cup-noodles-chicken/","market":"U.S.","glutenFree":null,"firstFailure":1,"verifiedFirstFailure":1},{"id":"nomi-chicken","brand":"NOMI","name":"Golden Chicken Cup","size":62,"sodium":700,"protein":32,"fibre":5,"nonfried":true,"glutenFree":false,"checked":"2026-11-07","market":"U.S.","source":"https://nomiramen.com/products/golden-chicken","processSource":"https://nomiramen.com/pages/our-standard","illustration":true,"illustrationColor":"#b48a3e","availability":"Pre-order","note":"Manufacturer lists this flavour as a pre-order, shipping December 2026. Nutrition is the manufacturer’s published whole-cup panel. Air-dried; contains wheat and soy. The shelf uses a schematic SVG cup illustration, not a packaging photograph.","firstFailure":3,"verifiedFirstFailure":3},{"id":"immi-chicken","brand":"immi","name":"Creamy “Chicken” Cup","size":59,"sodium":890,"protein":18,"fibre":10,"nonfried":null,"glutenFree":false,"checked":"2026-11-07","market":"U.S.","source":"https://shop.immieats.com/products/creamy-chicken-cup-ramen","labelSource":"https://cdn.shopify.com/s/files/1/0097/2013/5731/files/CC_Label_With_Heading_Cup.jpg?v=1709404371","note":"Uses the cup-specific 59g manufacturer label: 18g protein, 10g fibre and 890mg sodium. Ingredients explicitly contain wheat gluten. Packet nutrition figures are not substituted. Frying process remains unverified. The illustrated final cross-out is explicitly an assumption.","demoAssumedDeepFried":true,"assumptionNote":"Illustrated scenario only: this exact cup is assumed deep-fried for the last elimination. Its frying method has not been verified. Unknown is not a confirmed failure; use Confirmed data to retain this cup.","firstFailure":4,"verifiedFirstFailure":0},{"id":"nissin-protein-chicken","brand":"Nissin","name":"Protein Rich & Savory Chicken","size":72,"sodium":1480,"protein":16,"fibre":2,"nonfried":null,"glutenFree":false,"checked":"2026-11-07","market":"U.S.","source":"https://www.nissinfoods.com/product/cup-noodles-protein/cup-noodles-protein-rich-savory-chicken/","firstFailure":2,"verifiedFirstFailure":2},{"id":"buldak-original-cup","brand":"Buldak","name":"Original Cup","size":70,"sodium":630,"protein":6,"fibre":2,"nonfried":null,"checked":"2026-11-07","source":"https://samyangamerica.com/buldak/original-cup","labelSource":"https://samyangamerica.com/images/nt/Buldak-Original-Cup.jpg","market":"U.S.","glutenFree":null,"firstFailure":1,"verifiedFirstFailure":1},{"id":"nomi-curry","brand":"NOMI","name":"Tokyo Curry Cup","size":66,"sodium":660,"protein":32,"fibre":4,"nonfried":true,"glutenFree":false,"checked":"2026-11-07","market":"U.S.","source":"https://nomiramen.com/products/tokyo-curry","processSource":"https://nomiramen.com/pages/our-standard","illustration":true,"illustrationColor":"#b35d34","availability":"Pre-order","note":"Manufacturer lists this flavour as a pre-order, shipping December 2026. Nutrition is the manufacturer’s published whole-cup panel. Air-dried; contains wheat and soy. The shelf uses a schematic SVG cup illustration, not a packaging photograph.","firstFailure":3,"verifiedFirstFailure":3},{"id":"nongshim-46","brand":"Nongshim","name":"Shin Black Cup","size":101,"sodium":1480,"protein":10,"fibre":3,"nonfried":null,"checked":"2026-11-07","source":"https://nongshimusa.com/product-detail?pid=46","market":"U.S.","glutenFree":null,"firstFailure":2,"verifiedFirstFailure":2},{"id":"nongshim","brand":"Nongshim","name":"Shin Original Cup","size":75,"sodium":1200,"protein":5,"fibre":3,"nonfried":null,"checked":"2026-11-07","source":"https://nongshimusa.com/product-detail?pid=45","market":"U.S.","glutenFree":null,"firstFailure":1,"verifiedFirstFailure":1},{"id":"soba-classic","brand":"Nissin","name":"Soba Protein Classic","size":92,"sodium":880,"protein":18,"fibre":15,"nonfried":null,"glutenFree":false,"checked":"2026-11-07","market":"UK","source":"https://www.nissin-foods.eu/uk/products/nissin-soba-cup-protein-classic","labelSource":"https://www.sainsburys.co.uk/groceries/product/nissin-soba-protein-classic-instant-wok-style-noodles-pot-92g","labelPublisher":"Sainsbury’s UK","preparedWeight":210,"saltGrams":2.2,"note":"UK wok-style instant noodle pot. Uses the full 210g prepared serving on the retailer label, not its 100g column. Sodium is calculated from 2.2g salt ÷ 2.5 × 1,000 = 880mg. Manufacturer confirms gluten-containing cereals. Drying method is unverified. The illustrated final cross-out is explicitly an assumption.","demoAssumedDeepFried":true,"assumptionNote":"Illustrated scenario only: this exact cup is assumed deep-fried for the last elimination. Its frying method has not been verified. Unknown is not a confirmed failure; use Confirmed data to retain this cup.","firstFailure":4,"verifiedFirstFailure":0},{"id":"buldak","brand":"Buldak","name":"Carbonara Cup","size":80,"sodium":880,"protein":5,"fibre":1,"nonfried":null,"checked":"2026-11-07","source":"https://samyangamerica.com/buldak/carbonara-cup","labelSource":"https://samyangamerica.com/images/nt/Buldak-Carbonara-Cup.jpg","market":"U.S.","glutenFree":null,"firstFailure":1,"verifiedFirstFailure":1},{"id":"sorami","brand":"Sorami","name":"Sorghum + millet concept","size":78,"sodium":400,"protein":11,"fibre":6.5,"nonfried":true,"checked":"2026-11-07","source":null,"note":"Team-supplied, unvalidated nutrition and process targets. Not a manufactured-product label.","market":"U.S.","glutenFree":true,"firstFailure":0,"verifiedFirstFailure":0},{"id":"miyoka-chicken","brand":"Miyoka","name":"Chicken Protein Ramen Cup","size":77.5,"sodium":1220,"protein":25,"fibre":2,"nonfried":null,"checked":"2026-11-07","source":"https://www.miyoka.us/products/25g-of-protein-chicken-flavored-ramen","note":"Current chicken-specific text label: 77.5g, 1,220mg sodium. Older product-page images may show earlier formulations; no spicy-cup figures are used. Shelf artwork adds a fitted SVG lid over the open serving-photo rim; this is an illustrative lid, not a manufacturer label reproduction.","market":"U.S.","glutenFree":null,"shelfLid":true,"firstFailure":2,"verifiedFirstFailure":2},{"id":"soba-chilli","brand":"Nissin","name":"Soba Protein Chilli","size":93,"sodium":760,"protein":18,"fibre":15,"nonfried":null,"glutenFree":false,"checked":"2026-11-07","market":"UK","source":"https://www.nissin-foods.eu/uk/products/nissin-soba-cup-protein-chilli","labelSource":"https://www.sainsburys.co.uk/groceries/product/nissin-soba-protein-chilli-instant-wok-style-noodles-pot-93g","labelPublisher":"Sainsbury’s UK","preparedWeight":220,"saltGrams":1.9,"note":"UK wok-style instant noodle pot. Uses the full 220g prepared serving on the retailer label, not its 100g column. Sodium is calculated from 1.9g salt ÷ 2.5 × 1,000 = 760mg. Manufacturer confirms gluten-containing cereals. Drying method is unverified. The illustrated final cross-out is explicitly an assumption.","demoAssumedDeepFried":true,"assumptionNote":"Illustrated scenario only: this exact cup is assumed deep-fried for the last elimination. Its frying method has not been verified. Unknown is not a confirmed failure; use Confirmed data to retain this cup.","firstFailure":4,"verifiedFirstFailure":0},{"id":"buldak-cheese-cup","brand":"Buldak","name":"Cheese Cup","size":70,"sodium":750,"protein":7,"fibre":2,"nonfried":null,"checked":"2026-11-07","source":"https://samyangamerica.com/buldak/cheese-cup","labelSource":"https://samyangamerica.com/images/nt/Buldak-Cheese-Cup.jpg","market":"U.S.","glutenFree":null,"firstFailure":1,"verifiedFirstFailure":1},{"id":"buldak-quattro-cheese-big-bowl","brand":"Buldak","name":"Quattro Cheese Big Bowl","size":110,"sodium":1320,"protein":9,"fibre":1,"nonfried":null,"checked":"2026-11-07","source":"https://samyangamerica.com/buldak/quattro-cheese-big-bowl","labelSource":"https://samyangamerica.com/images/nt/Buldak-Quattro-Cheese-Big-Bowl.jpg","market":"U.S.","glutenFree":null,"firstFailure":1,"verifiedFirstFailure":1},{"id":"nissin-shrimp","brand":"Nissin","name":"Cup Noodles Shrimp","size":64,"sodium":1050,"protein":7,"fibre":1,"nonfried":null,"checked":"2026-11-07","source":"https://www.nissinfoods.com/product/cup-noodles/cup-noodles-shrimp/","market":"U.S.","glutenFree":null,"firstFailure":1,"verifiedFirstFailure":1},{"id":"nomi-beef","brand":"NOMI","name":"Umami Beef Cup","size":62,"sodium":630,"protein":32,"fibre":5,"nonfried":true,"glutenFree":false,"checked":"2026-11-07","market":"U.S.","source":"https://nomiramen.com/products/savory-umami-beef","processSource":"https://nomiramen.com/pages/our-standard","illustration":true,"illustrationColor":"#77433b","availability":"First Batch available","note":"The First Batch Umami Beef is listed in stock. Nutrition is the manufacturer’s published whole-cup panel. Air-dried; contains wheat and soy. The shelf uses a schematic SVG cup illustration, not a packaging photograph.","firstFailure":3,"verifiedFirstFailure":3},{"id":"buldak-habanero-lime-big-bowl","brand":"Buldak","name":"Habanero Lime Big Bowl","size":110,"sodium":1390,"protein":9,"fibre":4,"nonfried":null,"checked":"2026-11-07","source":"https://samyangamerica.com/buldak/habanero-lime-big-bowl","labelSource":"https://samyangamerica.com/images/nt/Buldak-Habanero-Lime-Big-Bowl.jpg","market":"U.S.","glutenFree":null,"firstFailure":1,"verifiedFirstFailure":1},{"id":"immi-pork","brand":"immi","name":"Roasted “Pork” Tonkotsu Cup","size":59,"sodium":890,"protein":18,"fibre":10,"nonfried":null,"glutenFree":false,"checked":"2026-11-07","market":"U.S.","source":"https://shop.immieats.com/products/roasted-pork-tonkotsu-cup-ramen","labelSource":"https://cdn.shopify.com/s/files/1/0097/2013/5731/files/RPT_Label_With_Heading_Cup.jpg?v=1709404371","note":"Uses the cup-specific 59g manufacturer label: 18g protein, 10g fibre and 890mg sodium. Ingredients explicitly contain wheat gluten. Packet nutrition figures are not substituted. Frying process remains unverified. The illustrated final cross-out is explicitly an assumption.","demoAssumedDeepFried":true,"assumptionNote":"Illustrated scenario only: this exact cup is assumed deep-fried for the last elimination. Its frying method has not been verified. Unknown is not a confirmed failure; use Confirmed data to retain this cup.","firstFailure":4,"verifiedFirstFailure":0},{"id":"nissin-spicy-jalapeno-chicken","brand":"Nissin","name":"Spicy Jalapeño Chicken","size":64,"sodium":1200,"protein":7,"fibre":2,"nonfried":null,"checked":"2026-11-07","source":"https://www.nissinfoods.com/product/cup-noodles/cup-noodles-spicy-jalapeno-chicken/","market":"U.S.","glutenFree":null,"firstFailure":1,"verifiedFirstFailure":1},{"id":"buldak-cream-carbonara","brand":"Buldak","name":"Cream Carbonara Big Bowl","size":120,"sodium":1230,"protein":9,"fibre":2,"nonfried":null,"checked":"2026-11-07","labelSource":"https://samyangamerica.com/images/nt/Buldak-creamcarbonara-Big-Bowl.jpg","source":"https://samyangamerica.com/buldak/creamcarbonara-big-bowl","market":"U.S.","glutenFree":null,"firstFailure":1,"verifiedFirstFailure":1}],"rules":{"proteinMin":10,"sodiumUnder":900,"fibreMin":6,"finalFilter":"nonfried","illustratedAssumptions":true},"counts":[21,11,8,5,1],"verifiedCounts":[21,11,8,5,5]};
  const points=[0,.28,.46,.63,.80,.98],starts=[0,.14,.33,.50,.67];
+ root.shelfScene={stops:points};
  const stages=catalog.map(n=>n.firstFailure),products=[...root.querySelectorAll('.hook-product')];
  const mobileSlots=[[0,0],[0,1],[0,2],[0,3],[0,4],[0,5],[1,0],[1,1],[1,4],[1,5],[2,0],[2,1],[2,4],[2,5],[3,0],[3,1],[3,2],[3,3],[3,4],[3,5]];
  products.filter(el=>el.dataset.product!=='sorami').forEach((el,i)=>{el.style.setProperty('--mobile-row',mobileSlots[i][0]);el.style.setProperty('--mobile-column',mobileSlots[i][1])});
@@ -1725,12 +1721,12 @@ const launchScenes=createLaunchScenes(root);
  window.addEventListener('scroll',request,{passive:true});window.addEventListener('resize',request,{passive:true});window.addEventListener('pageshow',request);
  document.addEventListener('visibilitychange',request);
  document.addEventListener('keydown',e=>{
+  if(flow)return; // The joined story uses one shared keyboard timeline.
   const r=root.getBoundingClientRect();
-  if(flow&&flow.sample().progress>=flow.phases.shelfEnd)return;
   if(!visible||r.top>0||r.bottom<window.innerHeight*.5||['INPUT','SELECT','TEXTAREA','BUTTON','A'].includes(document.activeElement.tagName))return;
   if(e.key==='ArrowRight'||e.key==='ArrowLeft'){
    e.preventDefault();const index=clamp(beat+(e.key==='ArrowRight'?1:-1),0,points.length-1);
-   if(flow)flow.seek(points[index]*flow.phases.shelfEnd);else window.scrollTo({top:r.top+window.scrollY+points[index]*Math.max(1,root.offsetHeight-window.innerHeight),behavior:'instant'});request();
+   window.scrollTo({top:r.top+window.scrollY+points[index]*Math.max(1,root.offsetHeight-window.innerHeight),behavior:'instant'});request();
   }
  });
  new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;if(visible)request()}).observe(root);
@@ -1792,6 +1788,88 @@ function sampleOpeningHandoff(scrolled,contentHeight,viewportHeight,reduced=fals
  for(const event of ['scroll','resize','pageshow'])window.addEventListener(event,request,{passive:true});
  document.addEventListener('visibilitychange',request);motion.addEventListener('change',request);
  request();
+})();
+
+// One keyboard path through the opening, shelves, cup, grains and pitch.
+// Move the actual scroll playhead over time so every renderer paints its
+// intermediate frames. Native smooth scrolling has no dependable duration.
+(() => {
+ 'use strict';
+ const by=id=>document.getElementById(id),journey=by('product-journey'),flow=journey?.soramiFlow;
+ const shelf=by('noodle-shelf')?.shelfScene,assembly=by('cup-story')?.assemblyScene,pitch=by('pitch-story')?.pitchScene;
+ if(!flow||!shelf||!assembly||!pitch)return;
+ const motion=matchMedia('(prefers-reduced-motion: reduce)'),stops=[];
+ const journeyTop=p=>window.scrollY+journey.getBoundingClientRect().top+p*(journey.offsetHeight-window.innerHeight);
+ const add=(id,top,duration,kind='timeline')=>stops.push({id,top,duration,kind});
+ add('opening',()=>0,0,'page');
+ shelf.stops.forEach((p,i)=>add(`shelf-${i}`,()=>journeyTop(p*flow.phases.shelfEnd),i===0?2800:i===5?3200:2800,i===0?'page':'timeline'));
+ add('cup-finished',()=>journeyTop(flow.phases.transferEnd),3600);
+ assembly.stops.slice(0,-1).reverse().forEach((p,i)=>{
+  const phase=flow.phases.transferEnd+(1-p)*(flow.phases.reverseEnd-flow.phases.transferEnd);
+  add(i===3?'grains':`cup-reverse-${i}`,()=>journeyTop(phase),[3600,4000,4600,6800][i]);
+ });
+ add('grain-facts',()=>journeyTop(flow.phases.factsEnd),3600);
+ const researchDurations=[3200,4000,5600,5600,5600,5800,3600,3200,3200,3400];
+ for(let i=0;i<pitch.research.steps;i++)add(`research-${i}`,()=>pitch.targetTop(pitch.research.stopAt(i)),researchDurations[i]||3600,i===0?'page':'timeline');
+ for(let i=1;i<pitch.count;i++)add(`chapter-${i}`,()=>pitch.targetTop(i+.79),3400);
+
+ let frame=0,job=null,queued=null,expectedY=window.scrollY;
+ const closeMenu=()=>{const menu=by('pitch-chapters');if(menu)menu.hidden=true;by('pitch-chapters-toggle')?.setAttribute('aria-expanded','false')};
+ function cancel(){if(frame)cancelAnimationFrame(frame);frame=0;job=null;queued=null}
+ function write(top){expectedY=top;window.scrollTo({top,behavior:'instant'})}
+ function nextIndex(direction){
+  if(direction>0){const next=stops.findIndex(s=>s.top()>window.scrollY+3);return next<0?stops.length-1:next}
+  for(let i=stops.length-1;i>=0;i--)if(stops[i].top()<window.scrollY-3)return i;
+  return 0;
+ }
+ function begin(index){
+  const from=window.scrollY,to=stops[index].top(),direction=Math.sign(to-from);
+  if(Math.abs(to-from)<1){write(to);return}
+  const origin=Math.max(0,Math.min(stops.length-1,index-direction)),edge=stops[Math.max(index,origin)];
+  const fullDistance=Math.max(1,Math.abs(to-stops[origin].top()));
+  const duration=Math.max(350,edge.duration*Math.min(1,Math.abs(to-from)/fullDistance));
+  closeMenu();document.dispatchEvent(new CustomEvent('sorami-navigation-start'));
+  if(motion.matches){write(to);return}
+  // Camera and strand paths already ease their own movement. A linear
+  // playhead avoids accelerating twice through the interesting middle.
+  job={index,from,to,direction,duration,start:performance.now(),page:edge.kind==='page'};
+  expectedY=from;frame=requestAnimationFrame(tick);
+ }
+ function tick(now){
+  frame=0;if(!job)return;
+  if(job.hold){if(now-job.start<300){frame=requestAnimationFrame(tick);return}const index=job.index;job=null;begin(index);return}
+  const current=job,t=Math.max(0,Math.min(1,(now-current.start)/current.duration)),p=current.page?t*t*(3-2*t):t;
+  write(current.from+(current.to-current.from)*p);
+  if(job!==current)return; // A clamped or externally redirected scroll cancels playback.
+  if(t<1){frame=requestAnimationFrame(tick);return}
+  const direction=job.direction;job=null;
+  if(queued!==null){job={hold:true,index:queued,direction,start:now};queued=null;frame=requestAnimationFrame(tick)}
+ }
+ function advance(direction){
+  if(job){
+   if(direction===job.direction){if(!job.hold)queued=Math.max(0,Math.min(stops.length-1,job.index+direction));return}
+   const index=job.hold?nextIndex(direction):Math.max(0,Math.min(stops.length-1,job.index+direction));cancel();begin(index);return;
+  }
+  begin(nextIndex(direction));
+ }
+ window.soramiNavigation={
+  advance,cancel,
+  seek(id){const index=stops.findIndex(s=>s.id===id);if(index<0)return;cancel();begin(index)},
+  get active(){return job!==null},
+  stops
+ };
+ document.addEventListener('keydown',e=>{
+  if(['Escape','Tab','Enter',' '].includes(e.key)){cancel();return}
+  if(!['ArrowRight','ArrowLeft'].includes(e.key)||e.defaultPrevented||e.altKey||e.ctrlKey||e.metaKey||e.shiftKey)return;
+  if(document.querySelector('dialog[open]')||document.activeElement?.closest('input,select,textarea,[contenteditable]:not([contenteditable="false"])')){cancel();return}
+  e.preventDefault();if(!e.repeat)advance(e.key==='ArrowRight'?1:-1);
+ });
+ // Manual input takes control immediately, without a delayed snap back.
+ for(const event of ['wheel','touchstart','pointerdown'])window.addEventListener(event,cancel,{passive:true});
+ window.addEventListener('scroll',()=>{if(job&&Math.abs(window.scrollY-expectedY)>3)cancel()},{passive:true});
+ window.addEventListener('resize',cancel);
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)cancel()});
+ motion.addEventListener('change',()=>{const target=job&&!job.hold?job.to:null;cancel();if(motion.matches&&target!==null)write(target)});
 })();
 </script>
 </body>

@@ -5,6 +5,7 @@
  const first=root.querySelector('.hook-request-first'),filterTitle=root.querySelector('.hook-request-filter'),final=root.querySelector('.hook-request-final'),filters=root.querySelector('.hook-filters'),chips=[...root.querySelectorAll('.hook-filter')];
  const {catalog,rules,counts}=/*__SHELF_DATA__*/{};
  const points=[0,.28,.46,.63,.80,.98],starts=[0,.14,.33,.50,.67];
+ root.shelfScene={stops:points};
  const stages=catalog.map(n=>n.firstFailure),products=[...root.querySelectorAll('.hook-product')];
  const mobileSlots=[[0,0],[0,1],[0,2],[0,3],[0,4],[0,5],[1,0],[1,1],[1,4],[1,5],[2,0],[2,1],[2,4],[2,5],[3,0],[3,1],[3,2],[3,3],[3,4],[3,5]];
  products.filter(el=>el.dataset.product!=='sorami').forEach((el,i)=>{el.style.setProperty('--mobile-row',mobileSlots[i][0]);el.style.setProperty('--mobile-column',mobileSlots[i][1])});
@@ -53,12 +54,12 @@
  window.addEventListener('scroll',request,{passive:true});window.addEventListener('resize',request,{passive:true});window.addEventListener('pageshow',request);
  document.addEventListener('visibilitychange',request);
  document.addEventListener('keydown',e=>{
+  if(flow)return; // The joined story uses one shared keyboard timeline.
   const r=root.getBoundingClientRect();
-  if(flow&&flow.sample().progress>=flow.phases.shelfEnd)return;
   if(!visible||r.top>0||r.bottom<window.innerHeight*.5||['INPUT','SELECT','TEXTAREA','BUTTON','A'].includes(document.activeElement.tagName))return;
   if(e.key==='ArrowRight'||e.key==='ArrowLeft'){
    e.preventDefault();const index=clamp(beat+(e.key==='ArrowRight'?1:-1),0,points.length-1);
-   if(flow)flow.seek(points[index]*flow.phases.shelfEnd);else window.scrollTo({top:r.top+window.scrollY+points[index]*Math.max(1,root.offsetHeight-window.innerHeight),behavior:'instant'});request();
+   window.scrollTo({top:r.top+window.scrollY+points[index]*Math.max(1,root.offsetHeight-window.innerHeight),behavior:'instant'});request();
   }
  });
  new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;if(visible)request()}).observe(root);

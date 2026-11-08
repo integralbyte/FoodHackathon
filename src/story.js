@@ -104,6 +104,7 @@
  let staticMode=motionPreference.matches,visible=true;
  const chapterAt=s=>s<.76?0:s<1.77?1:s<2.72?2:s<3.82?3:4;
  const positions=[0,1.61/4.4,2.48/4.4,3.15/4.4,1];
+ root.assemblyScene={stops:positions};
  function setChapter(index){
   if(index===current)return;
   current=index;n('assembly-announcement').textContent=chapters[index];
@@ -193,7 +194,8 @@
  // default threshold, entering farther does not trigger a second callback.
  // Accept that first intersection so the initial downward scroll can render.
  new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible){lastClock=0;request()}else stopTour()}).observe(root);
- document.addEventListener('keydown',e=>{if(flow&&(!flow.sample().active||flow.sample().progress<flow.phases.transferEnd))return;if(!visible||root.getBoundingClientRect().bottom<window.innerHeight*.6||['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)||(e.key===' '&&document.activeElement===n('assembly-play')))return;if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();stopTour();enableMotion();scrollToProgress(positions[Math.min(positions.length-1,Math.max(0,current+(e.key==='ArrowRight'?(flow?-1:1):(flow?1:-1))))])}else if(['PageDown','PageUp','Home','End','ArrowDown','ArrowUp','Escape',' '].includes(e.key))stopTour()});
+ document.addEventListener('keydown',e=>{if(flow)return;if(!visible||root.getBoundingClientRect().bottom<window.innerHeight*.6||['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)||(e.key===' '&&document.activeElement===n('assembly-play')))return;if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();stopTour();enableMotion();scrollToProgress(positions[Math.min(positions.length-1,Math.max(0,current+(e.key==='ArrowRight'?1:-1)))])}else if(['PageDown','PageUp','Home','End','ArrowDown','ArrowUp','Escape',' '].includes(e.key))stopTour()});
+ document.addEventListener('sorami-navigation-start',stopTour);
  function applyReducedMotion(){stopTour();staticMode=motionPreference.matches;root.classList.toggle('is-static',staticMode&&!flow);display=flow?measuredProgress():staticMode?1:measuredProgress();if(flow)paint(display,0);else request()}
  motionPreference.addEventListener('change',applyReducedMotion);
  if(flow){
