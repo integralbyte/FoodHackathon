@@ -10,6 +10,7 @@ function createLaunchScenes(root){
    // The logo stays outside the text wipes: reveal it whole, never letter by letter.
    const logo=root.querySelector('.launch-cornell-logo'),p=reduced?1:ease((t-.08)/.62);
    logo.style.opacity=String(p);logo.style.transform=reduced?'none':`translateY(${(1-p)*10}px) scale(${.98+p*.02})`;
+   all('[data-launch-flavour]').forEach((e,i)=>{const p=reduced?1:ease((t-.1-i*.1)/.65);e.style.opacity=String(p);e.style.transform=reduced?'none':`translateY(${(1-p)*12}px) scale(${.97+p*.03})`});
    all('[data-launch-phase]').forEach((e,i)=>{const p=ease((t-i*.16)/.6);reveal(e,p,0,28);e.style.setProperty('--route-progress',p)});
   }else if(index===9){
    by('sorami-film').style.setProperty('--film-reveal',reduced?1:ease(t/.6));
