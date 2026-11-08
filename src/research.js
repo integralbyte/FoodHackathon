@@ -21,20 +21,16 @@
  }));
  $('research-thickness').addEventListener('input',()=>{$('research-thickness-label').textContent=`${(+$('research-thickness').value).toFixed(1)} mm`;update()});
  $('research-pore-progress').addEventListener('input',()=>{$('research-pore-label').textContent=`${$('research-pore-progress').value}%`;update()});
- const particles=[],brothNoodles=[],steam=[],umami=[];
+ const particles=[],brothNoodles=[],steam=[];
  for(let i=0;i<21;i++){
   const e=svg('path',{d:'M-5-3 1-6 6-1 4 5-3 4Z',class:'research-salt-crystal'},$('research-taste-particles'));
-  particles.push({e,i,x:137+i*37%337,y:73+i*19%58});
+  particles.push({e,i,x:205+i*37%210,y:35+i*19%48});
  }
  for(let i=0;i<8;i++){
-  let d='';for(let x=127;x<=494;x+=5)d+=`${x===127?'M':'L'}${x} ${227+i*14+Math.sin(x*.057+i)*5}`;
+  let d='';for(let x=177;x<=444;x+=4)d+=`${x===177?'M':'L'}${x} ${144+i*5.5+Math.sin(x*.11+i)*3}`;
   brothNoodles.push(svg('path',{d,class:'research-broth-noodle',pathLength:1},$('research-broth-noodles')));
  }
- for(let i=0;i<3;i++)steam.push(svg('path',{d:`M${236+i*73} 173q-21-29 0-54t0-43`,class:'research-vapour',pathLength:1},$('research-broth-steam')));
- for(let i=0;i<15;i++){
-  const a=i/15*Math.PI*2;
-  umami.push({e:svg('ellipse',{rx:5,ry:3,fill:'#8a2636'},$('research-umami-ring')),a});
- }
+ for(let i=0;i<3;i++)steam.push(svg('path',{d:`M${258+i*53} 126c-15-17 14-25 0-44s-6-26 0-35`,class:'research-vapour',pathLength:1},$('research-broth-steam')));
  const d='M0 27C-58 60 58 86 0 117S-58 175 0 203S58 254 0 282';
  const thick=svg('path',{d,class:'research-thick-reference',pathLength:1},$('research-thick-strand'));
  const thinShadow=svg('path',{d,class:'research-thin-shadow',pathLength:1},$('research-thin-strand'));
@@ -77,15 +73,16 @@
   }else if(index===1){
    const build=t;
    all('[data-bitterness-result]').forEach((e,i)=>{const p=phase(t,.03+i*.09,.65+i*.08);e.style.clipPath=`inset(0 ${(1-p)*100}% 0 0)`;e.style.transform=reduced?'none':`perspective(600px) rotateX(${(1-p)*-65}deg) scale(${1+Math.sin(p*Math.PI)*.055})`});
-   scaleAt($('research-broth-bowl'),310,354,phase(t,.02,.65));
-   panel.querySelector('.research-bowl').style.strokeDashoffset=1-phase(t,.04,.6);scaleAt(panel.querySelector('.research-broth-surface'),310,212,phase(t,.13,.65));
+   const cup=phase(t,.02,.58);
+   $('research-taste-cup').style.clipPath=`inset(${(1-cup)*100}% 0 0 0)`;
+   attr($('research-taste-cup'),'transform',`translate(0 ${(1-cup)*22})`);
+   attr($('research-cup-shadow'),'rx',157*cup);
    particles.forEach(({e,i,x,y})=>{
     const p=phase(build,i*.004,.72+i*.008),ingredient=i%3,isYeast=ingredient===2;
-    attr(e,'transform',`translate(${x} ${y+p*67}) rotate(${i*31+p*80}) scale(${p*(ingredient===1?.55:isYeast?.7:1)})`);
+    attr(e,'transform',`translate(${x} ${y+p*57}) rotate(${i*31+p*80}) scale(${p*(ingredient===1?.55:isYeast?.7:1)})`);
     e.style.fill=ingredient===0?'#fff2d2':isYeast?'#9d7436':'#dcbb65';e.dataset.ingredient=['sea-salt','msg','yeast-extract'][ingredient];
    });
    brothNoodles.forEach((e,i)=>e.style.strokeDashoffset=1-phase(t,.12+i*.025,.78));steam.forEach((e,i)=>e.style.strokeDashoffset=1-phase(t,.25+i*.04,.85));
-   umami.forEach(({e,a},i)=>{const p=phase(build,i*.008,.7);attr(e,'cx',310+Math.cos(a)*215);attr(e,'cy',214+Math.sin(a)*67);attr(e,'transform',`translate(310 214) scale(${p}) translate(-310 -214)`)});
   }else if(index===2){
    const width=+$('research-thickness').value;
    thick.style.strokeDashoffset=thinShadow.style.strokeDashoffset=thinLight.style.strokeDashoffset=1-phase(t,.04,.85);
