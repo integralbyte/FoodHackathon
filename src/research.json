@@ -187,7 +187,7 @@
       "id": "yeast",
       "number": "≥40",
       "suffix": "%",
-      "endpoint": "lower receptor activity",
+      "endpoint": "less response from bitter sensors",
       "context": "Yeast extract · cell study",
       "detail": "At least 40% inhibition in 7 of 19 tested bitter receptors. This measures cells, not perceived taste.",
       "basis": "Published receptor result; not a Sorami taste test.",

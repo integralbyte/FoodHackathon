@@ -8,7 +8,7 @@
  const attr=(e,k,v)=>e.setAttribute(k,String(v));
  const svg=(tag,attrs,parent)=>{const e=document.createElementNS(NS,tag);Object.entries(attrs).forEach(([k,v])=>attr(e,k,v));parent.appendChild(e);return e};
  const panels=all('[data-research-panel]'),nav=all('[data-research-step]'),detailPanels=all('[data-research-details]'),dialog=$('research-details');
- let active=-1,entered=0,taste=0,tasteTime=-10000;
+ let active=-1,entered=0;
  const update=()=>root.dispatchEvent(new CustomEvent('sorami-research-update',{bubbles:true}));
  $('research-details-open').addEventListener('click',()=>{dialog.showModal();$('research-details-close').focus()});
  $('research-details-close').addEventListener('click',()=>dialog.close());
@@ -19,17 +19,6 @@
   const name=data.flavours[+b.dataset.researchFlavour];all('[data-research-flavour]').forEach(e=>e.setAttribute('aria-pressed',String(e===b)));
   $('research-flavour-detail').textContent=`${name} seasoning; both flavours share the 55g noodle block and 13g toppings. Seasoning sachet: 10g.`;
  }));
- function setTaste(index){
-  taste=index;tasteTime=performance.now();const d=data.taste[index];
-  all('[data-research-taste]').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===index)));
-  $('research-taste-result').replaceChildren(document.createTextNode(d.number));
-  if(d.suffix){const small=document.createElement('small');small.textContent=d.suffix;$('research-taste-result').appendChild(small)}
-  $('research-taste-result').classList.toggle('is-word',d.remaining===null);
-  $('research-taste-context').textContent=d.context;$('research-taste-endpoint').textContent=d.endpoint;
-  $('research-taste-detail').textContent=d.detail;$('research-taste-basis').textContent=d.basis;$('research-taste-source').href=d.source;
-  $('research-broth-art').dataset.ingredient=d.id;update();
- }
- all('[data-research-taste]').forEach(b=>b.addEventListener('click',()=>setTaste(+b.dataset.researchTaste)));
  $('research-thickness').addEventListener('input',()=>{$('research-thickness-label').textContent=`${(+$('research-thickness').value).toFixed(1)} mm`;update()});
  $('research-pore-progress').addEventListener('input',()=>{$('research-pore-label').textContent=`${$('research-pore-progress').value}%`;update()});
  const particles=[],brothNoodles=[],steam=[],umami=[];
@@ -85,17 +74,17 @@
    all('.research-flow-branches>svg>path').forEach(e=>e.style.strokeDashoffset=1-phase(t,.53,.85));
    all('.research-branch-arrow').forEach(e=>e.style.transform=`translate(-50%,-50%) rotate(-135deg) scale(${phase(t,.53,.85)})`);
   }else if(index===1){
-   const it=reduced?1:phase((now-tasteTime)/1000,0,.65),build=t*it;
+   const build=t;
+   all('[data-bitterness-result]').forEach((e,i)=>{const p=phase(t,.03+i*.09,.65+i*.08);e.style.clipPath=`inset(0 ${(1-p)*100}% 0 0)`;e.style.transform=reduced?'none':`perspective(600px) rotateX(${(1-p)*-65}deg) scale(${1+Math.sin(p*Math.PI)*.055})`});
    scaleAt($('research-broth-bowl'),310,354,phase(t,.02,.65));
    panel.querySelector('.research-bowl').style.strokeDashoffset=1-phase(t,.04,.6);scaleAt(panel.querySelector('.research-broth-surface'),310,212,phase(t,.13,.65));
    particles.forEach(({e,i,x,y})=>{
-    const p=phase(build,i*.004,.72+i*.008),isYeast=taste===2;
-    attr(e,'transform',`translate(${x} ${y+p*67}) rotate(${i*31+p*80}) scale(${p*(taste===1?.55:isYeast?.7:1)})`);
-    e.style.fill=taste===0?'#fff2d2':isYeast?'#9d7436':'#dcbb65';
+    const p=phase(build,i*.004,.72+i*.008),ingredient=i%3,isYeast=ingredient===2;
+    attr(e,'transform',`translate(${x} ${y+p*67}) rotate(${i*31+p*80}) scale(${p*(ingredient===1?.55:isYeast?.7:1)})`);
+    e.style.fill=ingredient===0?'#fff2d2':isYeast?'#9d7436':'#dcbb65';e.dataset.ingredient=['sea-salt','msg','yeast-extract'][ingredient];
    });
    brothNoodles.forEach((e,i)=>e.style.strokeDashoffset=1-phase(t,.12+i*.025,.78));steam.forEach((e,i)=>e.style.strokeDashoffset=1-phase(t,.25+i*.04,.85));
-   umami.forEach(({e,a},i)=>{const p=taste===1?phase(build,i*.008,.7):0;attr(e,'cx',310+Math.cos(a)*215);attr(e,'cy',214+Math.sin(a)*67);attr(e,'transform',`translate(310 214) scale(${p}) translate(-310 -214)`)});
-   $('research-taste-result').style.transform=`perspective(500px) rotateX(${(1-build)*-65}deg)`;
+   umami.forEach(({e,a},i)=>{const p=phase(build,i*.008,.7);attr(e,'cx',310+Math.cos(a)*215);attr(e,'cy',214+Math.sin(a)*67);attr(e,'transform',`translate(310 214) scale(${p}) translate(-310 -214)`)});
   }else if(index===2){
    const width=+$('research-thickness').value;
    thick.style.strokeDashoffset=thinShadow.style.strokeDashoffset=thinLight.style.strokeDashoffset=1-phase(t,.04,.85);
@@ -110,5 +99,5 @@
    panel.querySelector('.research-water-arrow').style.strokeDashoffset=1-phase(t,.2,.7);
   }
  }
- root.researchScene={steps:panels.length,timelineWeight:panels.length*.8,paint,needsFrame(now){return now-entered<900||now-tasteTime<750}};
+ root.researchScene={steps:panels.length,timelineWeight:panels.length*.8,paint,needsFrame(now){return now-entered<900}};
 })();

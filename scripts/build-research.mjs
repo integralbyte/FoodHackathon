@@ -58,7 +58,8 @@ export async function buildResearch(root){
    ['Finished moisture',`${range(p.finalMoistureWetPercent,'%')} wet basis`],['Water activity',`aw ≤${p.finalWaterActivityMax.toFixed(2)} target`],
    ['Resistant starch','Potential retained RS3; its formation and retention must be measured.']
   ]),
-  '<!--__TASTE_RESEARCH__-->':data.taste.map(t=>`<section class="research-study"><h4>${escape(t.id==='salt'?'Sea salt in the recipe · published salt research':t.id==='yeast'?'Yeast extract · ≥40% lower receptor activity':'MSG · savoury depth')}</h4><p>${escape(t.detail)} ${escape(t.basis)}</p><a class="research-source" href="${escape(t.source)}" target="_blank" rel="noopener">Read the study ↗</a></section>`).join(''),
+  '<!--__TASTE_RESEARCH__-->':data.taste.map(t=>`<section class="research-study"><h4>${escape(t.id==='salt'?'Sea salt in the recipe · published salt research':t.id==='yeast'?'Yeast extract · ≥40% less response from bitter sensors':'MSG · savoury depth')}</h4><p>${escape(t.detail)} ${escape(t.basis)}</p><a class="research-source" href="${escape(t.source)}" target="_blank" rel="noopener">Read the study ↗</a></section>`).join(''),
+  '__SALT_NUMBER__':data.taste.find(t=>t.id==='salt').number,'__YEAST_NUMBER__':data.taste.find(t=>t.id==='yeast').number,
   '__DIAMETER__':p.strandMm.toFixed(1),'__CHILL_HOURS__':p.chillHours,'__CHILL_C__':p.chillC,
   '__TOTAL_GRAMS__':total,'__NOODLE_GRAMS__':pack.noodlesGrams,'__SEASONING_GRAMS__':pack.seasoningGrams,'__TOPPING_GRAMS__':pack.toppingsGrams,
   '__PREP_MINUTES__':p.preparationMinutes,'__WATER_ML__':p.preparationWaterMl
