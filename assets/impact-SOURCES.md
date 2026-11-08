@@ -1,6 +1,6 @@
 # Farmers and food banks
 
-User-requested impact scene immediately after the launch timeline. The original standalone film before Research is removed. Research now follows the reverse cup-to-grain animation directly; after costs and Launch, its final scene uses the film as a full-screen background with two translucent panels matching the opening statistics section.
+User-requested impact scene immediately after the launch timeline, titled “Beyond the cup.” centered above both panels. The original standalone film before Research is removed. Research now follows the reverse cup-to-grain animation directly; after costs and Launch, its final scene uses the film as a full-screen background with two translucent panels matching the opening statistics section.
 
 ## Farmers
 
