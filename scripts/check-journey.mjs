@@ -21,11 +21,13 @@ function setup({initial=0,reduced=false}={}){
  const flush=()=>{const pending=[...frames.values()];frames.clear();pending.forEach(fn=>fn(0))};flush();
  return {root,shelf,assembly,overlay,sourceRect,flow:root.soramiFlow,go(p){root.soramiFlow.seek(p);flush()},flush,events,media,offscreen(){observer([{isIntersecting:false}])},get pending(){return frames.size}};
 }
-test('the shelf, reverse assembly and ingredient facts are separate scroll phases',()=>{
+test('the shelf hands off to the reverse assembly and facts start as soon as grains are formed',()=>{
  const a=setup(),p=a.flow.phases;a.go(p.shelfEnd/2);assert.equal(a.flow.sample().shelf,.5);assert.equal(a.flow.sample().reverse,0);assert.equal(a.flow.sample().facts,0);
  a.go((p.shelfEnd+p.transferEnd)/2);assert.equal(a.flow.sample().shelf,1);assert.equal(a.flow.sample().reverse,0);assert.equal(a.shelf.inert,true);assert.equal(a.assembly.inert,true);
  a.go(p.transferEnd);assert.equal(a.flow.sample().reverse,0);assert.equal(a.assembly.inert,false);assert.equal(a.shelf.style.visibility,'hidden');
- a.go(p.reverseEnd);assert.equal(a.flow.sample().reverse,1);assert.equal(a.flow.sample().facts,0);
+ a.go(p.factsStart);assert.ok(Math.abs((1-a.flow.sample().reverse)*4.4-.3)<1e-9);assert.equal(a.flow.sample().facts,0);
+ a.go(p.factsStart+.001);assert.ok(a.flow.sample().facts>0,'statistics begin without waiting for the end of the reverse phase');
+ a.go(p.reverseEnd);assert.equal(a.flow.sample().reverse,1);assert.ok(a.flow.sample().facts>0);
  a.go(p.factsEnd);assert.equal(a.flow.sample().reverse,1);assert.equal(a.flow.sample().facts,1);
  a.go(p.shelfEnd/2);assert.equal(a.flow.sample().reverse,0);assert.equal(a.flow.sample().facts,0);assert.equal(a.shelf.inert,false);
 });

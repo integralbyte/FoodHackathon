@@ -47,11 +47,22 @@ test('the hero reveal, noodle untangling and nutrition zoom retain their feature
   assert.equal(a.nav.active,true);assert.ok(Math.abs(a.window.scrollY-(start+end)/2)<.01,'a linear scroll playhead lets the artwork apply its own easing');
   a.time(duration/2);assert.equal(a.nav.active,false);assert.ok(Math.abs(a.window.scrollY-end)<.01);
  }
- const slow=new Set(['shelf-5','grains','research-0','research-2']);
+ const slow=new Set(['shelf-5','grains','research-0','research-2','research-3','research-5']);
  for(let i=1;i<a.nav.stops.length;i++){
   const stop=a.nav.stops[i];if(slow.has(stop.id))continue;
   a.place(a.nav.stops[i-1].id);a.nav.seek(stop.id);a.time(1000);
   assert.equal(a.nav.active,false,`${stop.id} should finish quickly`);assert.ok(Math.abs(a.window.scrollY-stop.top())<.01);
+ }
+});
+test('seasoning zoom and the noodle-to-diagram swipe use a slightly longer 1.4-second transition',()=>{
+ const a=setup();
+ for(const [from,to] of [['research-2','research-3'],['research-4','research-5']]){
+  const sampled=to==='research-3'?900:1000;
+  a.place(from);a.key('ArrowRight');a.time(sampled);assert.equal(a.nav.active,true,'the transition no longer ends after 0.9 seconds');
+  const u=(a.window.scrollY-14000)/9600*10,pose=sampleResearchCamera(u/7,1440,900);
+  if(to==='research-3'){assert.equal(pose.to,'seasoning');assert.ok(pose.amount>0&&pose.amount<1)}
+  else assert.ok(pose.handoff>0&&pose.handoff<1,'the noodle photograph is still sweeping away at the one-second frame');
+  a.time(1400-sampled);assert.equal(a.nav.active,false);assert.ok(Math.abs(a.window.scrollY-a.nav.stops.find(s=>s.id===to).top())<.01);
  }
 });
 test('one arrow after healthiest noodles plays the entire cup-to-grain sequence and stops on the stats',()=>{

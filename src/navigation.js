@@ -19,7 +19,8 @@
  });
  add('grain-facts',()=>journeyTop(flow.phases.factsEnd),quick);
  add('research-entry',()=>pitch.targetTop(0),quick,'page',false);
- for(let i=0;i<pitch.research.steps;i++)add(`research-${i}`,()=>pitch.targetTop(pitch.research.stopAt(i)),i===0?2000:i===2?3400:quick);
+ const researchDurations=[2000,quick,3400,1400,quick,1400,quick,quick,quick,quick];
+ for(let i=0;i<pitch.research.steps;i++)add(`research-${i}`,()=>pitch.targetTop(pitch.research.stopAt(i)),researchDurations[i]??quick);
  for(let i=1;i<pitch.count;i++)add(`chapter-${i}`,()=>pitch.targetTop(i+.79),quick);
 
  let frame=0,job=null,expectedY=window.scrollY;
