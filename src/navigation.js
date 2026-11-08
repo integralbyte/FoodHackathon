@@ -9,16 +9,16 @@
  const motion=matchMedia('(prefers-reduced-motion: reduce)'),stops=[];
  const quick=900,queuePause=90;
  const journeyTop=p=>window.scrollY+journey.getBoundingClientRect().top+p*(journey.offsetHeight-window.innerHeight);
- const add=(id,top,duration,kind='timeline')=>stops.push({id,top,duration,kind});
+ const add=(id,top,duration,kind='timeline',pause=true)=>stops.push({id,top,duration,kind,pause});
  add('opening',()=>0,0,'page');
  shelf.stops.forEach((p,i)=>add(`shelf-${i}`,()=>journeyTop(p*flow.phases.shelfEnd),i===5?3200:quick,i===0?'page':'timeline'));
- add('cup-finished',()=>journeyTop(flow.phases.transferEnd),3600);
+ add('cup-finished',()=>journeyTop(flow.phases.transferEnd),700,'timeline',false);
  assembly.stops.slice(0,-1).reverse().forEach((p,i)=>{
   const phase=flow.phases.transferEnd+(1-p)*(flow.phases.reverseEnd-flow.phases.transferEnd);
-  add(i===3?'grains':`cup-reverse-${i}`,()=>journeyTop(phase),i===3?6800:quick);
+  add(i===3?'grains':`cup-reverse-${i}`,()=>journeyTop(phase),i===3?6800:quick,'timeline',false);
  });
  add('grain-facts',()=>journeyTop(flow.phases.factsEnd),quick);
- for(let i=0;i<pitch.research.steps;i++)add(`research-${i}`,()=>pitch.targetTop(pitch.research.stopAt(i)),i===2?5600:quick,i===0?'page':'timeline');
+ for(let i=0;i<pitch.research.steps;i++)add(`research-${i}`,()=>pitch.targetTop(pitch.research.stopAt(i)),i===2?5100:quick,i===0?'page':'timeline');
  for(let i=1;i<pitch.count;i++)add(`chapter-${i}`,()=>pitch.targetTop(i+.79),quick);
 
  let frame=0,job=null,queued=null,expectedY=window.scrollY;
@@ -26,37 +26,51 @@
  function cancel(){if(frame)cancelAnimationFrame(frame);frame=0;job=null;queued=null}
  function write(top){expectedY=top;window.scrollTo({top,behavior:'instant'})}
  function nextIndex(direction){
-  if(direction>0){const next=stops.findIndex(s=>s.top()>window.scrollY+3);return next<0?stops.length-1:next}
-  for(let i=stops.length-1;i>=0;i--)if(stops[i].top()<window.scrollY-3)return i;
+  if(direction>0){const next=stops.findIndex(s=>s.pause&&s.top()>window.scrollY+3);return next<0?stops.length-1:next}
+  for(let i=stops.length-1;i>=0;i--)if(stops[i].pause&&stops[i].top()<window.scrollY-3)return i;
   return 0;
+ }
+ function adjacentIndex(index,direction){
+  for(let i=index+direction;i>=0&&i<stops.length;i+=direction)if(stops[i].pause)return i;
+  return index;
  }
  function begin(index){
   const from=window.scrollY,to=stops[index].top(),direction=Math.sign(to-from);
   if(Math.abs(to-from)<1){write(to);return}
-  const origin=Math.max(0,Math.min(stops.length-1,index-direction)),edge=stops[Math.max(index,origin)];
-  const fullDistance=Math.max(1,Math.abs(to-stops[origin].top()));
-  const duration=Math.max(350,edge.duration*Math.min(1,Math.abs(to-from)/fullDistance));
+  // Internal cup frames remain part of the animation, without requiring
+  // another key press. Each leg keeps its own speed, including untangling.
+  const positions=stops.map(s=>s.top()),legs=[];
+  let at=from,duration=0;
+  for(let i=direction>0?0:stops.length-1;i>=0&&i<stops.length;i+=direction){
+   if(direction*(positions[i]-at)<=.01||direction*(positions[i]-to)>.01)continue;
+   const origin=Math.max(0,Math.min(stops.length-1,i-direction)),edge=stops[Math.max(i,origin)];
+   const fullDistance=Math.max(1,Math.abs(positions[i]-positions[origin]));
+   const length=Math.max(350,edge.duration*Math.min(1,Math.abs(positions[i]-at)/fullDistance));
+   legs.push({from:at,to:positions[i],offset:duration,duration:length,page:edge.kind==='page'});
+   duration+=length;at=positions[i];
+  }
   closeMenu();document.dispatchEvent(new CustomEvent('sorami-navigation-start'));
   if(motion.matches){write(to);return}
   // Camera and strand paths already ease their own movement. A linear
   // playhead avoids accelerating twice through the interesting middle.
-  job={index,from,to,direction,duration,start:performance.now(),page:edge.kind==='page'};
+  job={index,from,to,direction,duration,legs,start:performance.now()};
   expectedY=from;frame=requestAnimationFrame(tick);
  }
  function tick(now){
   frame=0;if(!job)return;
   if(job.hold){if(now-job.start<queuePause){frame=requestAnimationFrame(tick);return}const index=job.index;job=null;begin(index);return}
-  const current=job,t=Math.max(0,Math.min(1,(now-current.start)/current.duration)),p=current.page?t*t*(3-2*t):t;
-  write(current.from+(current.to-current.from)*p);
+  const current=job,elapsed=Math.max(0,now-current.start),leg=current.legs.find(s=>elapsed<s.offset+s.duration)||current.legs.at(-1);
+  const t=Math.min(1,(elapsed-leg.offset)/leg.duration),p=leg.page?t*t*(3-2*t):t;
+  write(leg.from+(leg.to-leg.from)*p);
   if(job!==current)return; // A clamped or externally redirected scroll cancels playback.
-  if(t<1){frame=requestAnimationFrame(tick);return}
+  if(elapsed<current.duration){frame=requestAnimationFrame(tick);return}
   const direction=job.direction;job=null;
   if(queued!==null){job={hold:true,index:queued,direction,start:now};queued=null;frame=requestAnimationFrame(tick)}
  }
  function advance(direction){
   if(job){
-   if(direction===job.direction){if(!job.hold)queued=Math.max(0,Math.min(stops.length-1,job.index+direction));return}
-   const index=job.hold?nextIndex(direction):Math.max(0,Math.min(stops.length-1,job.index+direction));cancel();begin(index);return;
+   if(direction===job.direction){if(!job.hold)queued=adjacentIndex(job.index,direction);return}
+   const index=job.hold?nextIndex(direction):adjacentIndex(job.index,direction);cancel();begin(index);return;
   }
   begin(nextIndex(direction));
  }

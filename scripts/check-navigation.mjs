@@ -28,26 +28,36 @@ function setup({reduced=false}={}){
  return {nav,window,history,place,time,settle,key,emit,document,media,set editing(on){editing=on},set modal(on){modal=on}};
 }
 test('arrow keys traverse every stop from the shelf ending into the cup, grains, research and closing, then back',()=>{
- const a=setup();assert.equal(a.nav.stops.length,33);
- for(const stop of a.nav.stops.slice(1)){a.key('ArrowRight');a.settle();assert.ok(Math.abs(a.window.scrollY-stop.top())<.01,stop.id)}
+ const a=setup(),pauses=a.nav.stops.filter(s=>s.pause);assert.equal(a.nav.stops.length,33);assert.equal(pauses.length,28);
+ for(const stop of pauses.slice(1)){a.key('ArrowRight');a.settle();assert.ok(Math.abs(a.window.scrollY-stop.top())<.01,stop.id)}
  const end=a.window.scrollY;a.key('ArrowRight');a.settle();assert.equal(a.window.scrollY,end);
- for(const stop of a.nav.stops.slice(0,-1).reverse()){a.key('ArrowLeft');a.settle();assert.ok(Math.abs(a.window.scrollY-stop.top())<.01,stop.id)}
+ for(const stop of pauses.slice(0,-1).reverse()){a.key('ArrowLeft');a.settle();assert.ok(Math.abs(a.window.scrollY-stop.top())<.01,stop.id)}
  a.key('ArrowLeft');assert.equal(a.window.scrollY,0);
 });
-test('the hero zoom, noodle untangling and nutrition zoom stay slow while all other arrow transitions finish within a second',()=>{
+test('the hero reveal, noodle untangling and nutrition zoom retain their featured timing while the cup zoom is fast',()=>{
  const a=setup();
- for(const [from,to,duration] of [['shelf-4','shelf-5',3200],['shelf-5','cup-finished',3600],['research-1','research-2',5600],['research-2','research-1',5600],['cup-reverse-2','grains',6800]]){
+ for(const [from,to,duration] of [['shelf-4','shelf-5',3200],['shelf-5','cup-finished',700],['research-1','research-2',5100],['research-2','research-1',5100],['cup-reverse-2','grains',6800]]){
   a.place(from);const start=a.window.scrollY,end=a.nav.stops.find(s=>s.id===to).top();
-  a.key(end>start?'ArrowRight':'ArrowLeft');a.time(duration/2);
+  a.nav.seek(to);a.time(duration/2);
   assert.equal(a.nav.active,true);assert.ok(Math.abs(a.window.scrollY-(start+end)/2)<.01,'a linear scroll playhead lets the artwork apply its own easing');
   a.time(duration/2);assert.equal(a.nav.active,false);assert.ok(Math.abs(a.window.scrollY-end)<.01);
  }
- const slow=new Set(['shelf-5','cup-finished','grains','research-2']);
+ const slow=new Set(['shelf-5','grains','research-2']);
  for(let i=1;i<a.nav.stops.length;i++){
   const stop=a.nav.stops[i];if(slow.has(stop.id))continue;
-  a.place(a.nav.stops[i-1].id);a.key('ArrowRight');a.time(1000);
+  a.place(a.nav.stops[i-1].id);a.nav.seek(stop.id);a.time(1000);
   assert.equal(a.nav.active,false,`${stop.id} should finish quickly`);assert.ok(Math.abs(a.window.scrollY-stop.top())<.01);
  }
+});
+test('one arrow after healthiest noodles plays the entire cup-to-grain sequence and stops on the stats',()=>{
+ const a=setup(),top=id=>a.nav.stops.find(s=>s.id===id).top();a.place('shelf-5');a.key('ArrowRight');
+ a.time(700);assert.ok(Math.abs(a.window.scrollY-top('cup-finished'))<.01,'cup zoom completes in 0.7 seconds');assert.equal(a.nav.active,true);
+ a.time(2700);assert.ok(Math.abs(a.window.scrollY-top('cup-reverse-2'))<.01,'the assembly opens without another key press');
+ a.time(3400);assert.equal(a.nav.active,true);assert.ok(Math.abs(a.window.scrollY-(top('cup-reverse-2')+top('grains'))/2)<.01,'untangling still takes 6.8 seconds');
+ a.time(3400);assert.ok(Math.abs(a.window.scrollY-top('grains'))<.01);assert.equal(a.nav.active,true,'the stats reveal continues automatically');
+ a.time(900);assert.equal(a.nav.active,false);assert.ok(Math.abs(a.window.scrollY-top('grain-facts'))<.01);
+ a.key('ArrowRight');a.settle();assert.ok(Math.abs(a.window.scrollY-top('research-0'))<.01,'the next key enters Research');
+ a.key('ArrowLeft');a.settle();a.key('ArrowLeft');a.settle();assert.ok(Math.abs(a.window.scrollY-top('shelf-5'))<.01,'backward navigation reverses the whole sequence');
 });
 test('a second forward press queues the following animation without skipping the current filter; key repeats do not add stages',()=>{
  const a=setup();a.place('shelf-0');a.key('ArrowRight');a.time(250);a.key('ArrowRight');
@@ -67,5 +77,5 @@ test('open dialogs, form fields and modifier shortcuts retain their keys; reduce
  for(const modifier of ['altKey','ctrlKey','metaKey','shiftKey'])assert.notEqual(a.key('ArrowRight',{[modifier]:true}).defaultPrevented,true);
  for(const key of ['Escape','Tab','Enter',' ']){a.key('ArrowRight');a.time(200);a.key(key);assert.equal(a.nav.active,false)}
  a.key('ArrowRight');a.time(200);a.modal=true;assert.notEqual(a.key('ArrowRight').defaultPrevented,true);assert.equal(a.nav.active,false);
- const b=setup({reduced:true});b.place('shelf-5');b.key('ArrowRight');assert.equal(b.nav.active,false);assert.equal(b.window.scrollY,b.nav.stops.find(s=>s.id==='cup-finished').top());
+ const b=setup({reduced:true});b.place('shelf-5');b.key('ArrowRight');assert.equal(b.nav.active,false);assert.equal(b.window.scrollY,b.nav.stops.find(s=>s.id==='grain-facts').top());
 });
