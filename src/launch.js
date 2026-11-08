@@ -7,6 +7,9 @@ function createLaunchScenes(root){
    all('[data-cost-connector]').forEach((e,i)=>e.style.strokeDashoffset=String(1-(reduced?1:ease((t-.25-i*.04)/.5))));
    all('[data-cost-label]').forEach((e,i)=>reveal(e,reduced?1:ease((t-.35-i*.04)/.45),0,12));
   }else if(index===8){
+   // The logo stays outside the text wipes: reveal it whole, never letter by letter.
+   const logo=root.querySelector('.launch-cornell-logo'),p=reduced?1:ease((t-.08)/.62);
+   logo.style.opacity=String(p);logo.style.transform=reduced?'none':`translateY(${(1-p)*10}px) scale(${.98+p*.02})`;
    all('[data-launch-phase]').forEach((e,i)=>{const p=ease((t-i*.16)/.6);reveal(e,p,0,28);e.style.setProperty('--route-progress',p)});
   }else if(index===9){
    by('launch-pp-cup').style.transform=`translateY(${(1-ease(t/.7))*32}px)`;

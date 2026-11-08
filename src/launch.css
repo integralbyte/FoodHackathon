@@ -32,10 +32,10 @@
 @media(max-width:620px){.launch-unit-totals{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:baseline;gap:24px;margin-top:26px}.launch-cost-total{display:block;margin:0;text-align:left}.launch-cost-total>strong{font-size:clamp(50px,16vw,70px)}.launch-cost-total>span{margin-top:12px}.launch-retail-total{text-align:left}.launch-retail-total>strong{font-size:clamp(45px,14vw,62px)}.launch-retail-total>span{font-size:12px;margin-top:12px}}
 @media(max-width:620px) and (max-height:720px){.launch-unit-totals{margin-top:20px}.launch-cost-heading{margin-bottom:24px}}
 /* Launch focuses on when and where; funding and sales assumptions stay in Details. */
-.launch-plan-heading{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px 48px;align-items:center}
+.launch-plan-heading{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px 48px;align-items:center;clip-path:none;overflow:visible}
 .launch-plan-heading>.pitch-eyebrow{grid-column:1;grid-row:1;margin:0}
 .launch-plan-heading h2{grid-column:1;grid-row:2;margin:0}
-.launch-cornell-logo{display:block;grid-column:2;grid-row:1 / span 2;justify-self:end;width:clamp(180px,18vw,240px);max-width:100%;height:auto;margin:0;object-fit:contain}
+.launch-cornell-logo{display:block;grid-column:2;grid-row:1 / span 2;justify-self:end;width:clamp(180px,18vw,240px);min-width:0;max-width:100%;height:auto;margin:0;object-fit:contain;clip-path:none;transform-origin:center}
 .launch-roadmap h3{font-size:clamp(30px,3.4vw,48px);margin-bottom:0;text-wrap:balance}
 .launch-phase-time{font-size:13px}
 @media(max-width:620px){.launch-roadmap h3{font-size:29px;margin-top:8px}.launch-phase-time{font-size:11px}.launch-roadmap>li{min-height:92px}}
