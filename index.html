@@ -1799,19 +1799,19 @@ function sampleOpeningHandoff(scrolled,contentHeight,viewportHeight,reduced=fals
  const shelf=by('noodle-shelf')?.shelfScene,assembly=by('cup-story')?.assemblyScene,pitch=by('pitch-story')?.pitchScene;
  if(!flow||!shelf||!assembly||!pitch)return;
  const motion=matchMedia('(prefers-reduced-motion: reduce)'),stops=[];
+ const quick=900,queuePause=90;
  const journeyTop=p=>window.scrollY+journey.getBoundingClientRect().top+p*(journey.offsetHeight-window.innerHeight);
  const add=(id,top,duration,kind='timeline')=>stops.push({id,top,duration,kind});
  add('opening',()=>0,0,'page');
- shelf.stops.forEach((p,i)=>add(`shelf-${i}`,()=>journeyTop(p*flow.phases.shelfEnd),i===0?2800:i===5?3200:2800,i===0?'page':'timeline'));
+ shelf.stops.forEach((p,i)=>add(`shelf-${i}`,()=>journeyTop(p*flow.phases.shelfEnd),i===5?3200:quick,i===0?'page':'timeline'));
  add('cup-finished',()=>journeyTop(flow.phases.transferEnd),3600);
  assembly.stops.slice(0,-1).reverse().forEach((p,i)=>{
   const phase=flow.phases.transferEnd+(1-p)*(flow.phases.reverseEnd-flow.phases.transferEnd);
-  add(i===3?'grains':`cup-reverse-${i}`,()=>journeyTop(phase),[3600,4000,4600,6800][i]);
+  add(i===3?'grains':`cup-reverse-${i}`,()=>journeyTop(phase),i===3?6800:quick);
  });
- add('grain-facts',()=>journeyTop(flow.phases.factsEnd),3600);
- const researchDurations=[3200,4000,5600,5600,5600,5800,3600,3200,3200,3400];
- for(let i=0;i<pitch.research.steps;i++)add(`research-${i}`,()=>pitch.targetTop(pitch.research.stopAt(i)),researchDurations[i]||3600,i===0?'page':'timeline');
- for(let i=1;i<pitch.count;i++)add(`chapter-${i}`,()=>pitch.targetTop(i+.79),3400);
+ add('grain-facts',()=>journeyTop(flow.phases.factsEnd),quick);
+ for(let i=0;i<pitch.research.steps;i++)add(`research-${i}`,()=>pitch.targetTop(pitch.research.stopAt(i)),i===2?5600:quick,i===0?'page':'timeline');
+ for(let i=1;i<pitch.count;i++)add(`chapter-${i}`,()=>pitch.targetTop(i+.79),quick);
 
  let frame=0,job=null,queued=null,expectedY=window.scrollY;
  const closeMenu=()=>{const menu=by('pitch-chapters');if(menu)menu.hidden=true;by('pitch-chapters-toggle')?.setAttribute('aria-expanded','false')};
@@ -1837,7 +1837,7 @@ function sampleOpeningHandoff(scrolled,contentHeight,viewportHeight,reduced=fals
  }
  function tick(now){
   frame=0;if(!job)return;
-  if(job.hold){if(now-job.start<300){frame=requestAnimationFrame(tick);return}const index=job.index;job=null;begin(index);return}
+  if(job.hold){if(now-job.start<queuePause){frame=requestAnimationFrame(tick);return}const index=job.index;job=null;begin(index);return}
   const current=job,t=Math.max(0,Math.min(1,(now-current.start)/current.duration)),p=current.page?t*t*(3-2*t):t;
   write(current.from+(current.to-current.from)*p);
   if(job!==current)return; // A clamped or externally redirected scroll cancels playback.
