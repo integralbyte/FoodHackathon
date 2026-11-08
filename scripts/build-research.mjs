@@ -7,12 +7,20 @@ export async function buildResearch(root){
  const read=p=>readFile(new URL(p,root),'utf8');
  const [template,script,raw,camera,kit,nutritionLabel]=await Promise.all([read('src/research.html'),read('src/research.js'),read('src/research.json'),read('src/research-camera.mjs'),readFile(new URL('assets/sorami-spicy-garlic-kit.png',root)),read('assets/sorami-nutrition-facts.svg')]);
  const data=JSON.parse(raw),p=data.process,pack=data.pack,total=pack.noodlesGrams+pack.seasoningGrams+pack.toppingsGrams;
- const [launchTemplate,launchScript,modelSource,launchRaw]=await Promise.all([read('src/launch.html'),read('src/launch.js'),read('src/cost-model.mjs'),read('src/launch.json')]);
+ const [launchTemplate,launchScript,launchRaw]=await Promise.all([read('src/launch.html'),read('src/launch.js'),read('src/launch.json')]);
  const model=calculateLaunchModel(JSON.parse(launchRaw)),cash=v=>`$${v.toFixed(2)}`;
  data.steps.push(...model.steps);
+ const costNames=['Ingredients','Packaging','Production','Setup & testing','Delivery'];
+ let costOffset=0;
+ const costParts=model.pilot.breakdown.map(([,value],i)=>{
+  const share=value/model.pilot.cost,mid=costOffset+share/2;costOffset+=share;
+  return {name:costNames[i],value,share,mid,index:i};
+ });
  const launchReplacements={
-  '__PILOT_COST__':cash(model.pilot.cost),'__LIST_PRICE__':cash(model.price),'__LAUNCH_CASH__':`$${(model.launchCash/1000).toFixed(1)}`,
-  '<!--__COST_BREAKDOWN__-->':model.pilot.breakdown.map(([name],i)=>`<div class="launch-cost-part" data-cost-part="${i}"><span>${escape(name)}</span><strong></strong><i aria-hidden="true"></i></div>`).join(''),
+  '__PILOT_COST__':cash(model.pilot.cost),'__LAUNCH_CASH__':`$${(model.launchCash/1000).toFixed(1)}`,
+  '<!--__COST_SEGMENTS__-->':costParts.map(c=>`<i class="launch-cost-segment is-cost-${c.index}" data-cost-segment="${c.index}" style="flex-basis:${c.share*100}%"></i>`).join(''),
+  '<!--__COST_CONNECTORS__-->':costParts.map(c=>`<path class="is-cost-${c.index}" data-cost-connector="${c.index}" pathLength="1" d="M${c.mid*1000} 0V18L${(c.index+.5)*200} 58V76"/>`).join(''),
+  '<!--__COST_LABELS__-->':costParts.map(c=>`<li class="is-cost-${c.index}" data-cost-label="${c.index}"><span>${escape(c.name)}</span><strong>${cash(c.value)}</strong></li>`).join(''),
   '<!--__COMMUNITY_CUPS__-->':Array.from({length:22},(_,i)=>`<i class="launch-mini-cup${i===21?' is-pantry':i===20?' is-spacer':''}"${i===20?'':` data-community-cup="${i}"`} aria-hidden="true"></i>`).join('')
  };
  let launchHTML=launchTemplate;for(const [key,value] of Object.entries(launchReplacements))launchHTML=launchHTML.replaceAll(key,value);
@@ -91,5 +99,5 @@ export async function buildResearch(root){
  };
  replacements['<!--__PORE_DRY_SETTINGS__-->']=replacements['<!--__DRY_SETTINGS__-->'];
  let html=template;for(const [key,value] of Object.entries(replacements))html=html.replaceAll(key,String(value));
- return {html,model,script:script.replace('/*__RESEARCH_DATA__*/',()=>JSON.stringify(data)).replace('/*__RESEARCH_CAMERA__*/',()=>camera.replace(/^export /gm,'')).replace('/*__LAUNCH_RUNTIME__*/',()=>modelSource.replace(/^export /gm,'')+'\n'+launchScript+'\nconst launchScenes=createLaunchScenes(root,calculateLaunchModel('+launchRaw+'));')};
+ return {html,model,script:script.replace('/*__RESEARCH_DATA__*/',()=>JSON.stringify(data)).replace('/*__RESEARCH_CAMERA__*/',()=>camera.replace(/^export /gm,'')).replace('/*__LAUNCH_RUNTIME__*/',()=>launchScript+'\nconst launchScenes=createLaunchScenes(root);')};
 }
