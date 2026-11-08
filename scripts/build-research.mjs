@@ -6,22 +6,25 @@ export async function buildResearch(root){
  const read=p=>readFile(new URL(p,root),'utf8');
  const [template,script,raw,camera,kit,nutritionLabel]=await Promise.all([read('src/research.html'),read('src/research.js'),read('src/research.json'),read('src/research-camera.mjs'),readFile(new URL('assets/sorami-spicy-garlic-kit.png',root)),read('assets/sorami-nutrition-facts.svg')]);
  const data=JSON.parse(raw),p=data.process,pack=data.pack,total=pack.noodlesGrams+pack.seasoningGrams+pack.toppingsGrams;
+ const hazardBadges=codes=>`<span class="research-hazard-badges" role="img" aria-label="${escape(codes.map(code=>data.hazardKey.find(h=>h.code===code).label).join(', '))} hazards"><span aria-hidden="true">${codes.map(code=>{const h=data.hazardKey.find(h=>h.code===code);return `<i class="research-hazard is-${h.class}" title="${h.label}">${code}</i>`}).join('')}</span></span>`;
+ const boxContents=step=>`${step.control?`<span class="research-flow-control" aria-label="Proposed control ${step.control}"><span>Control </span>${step.control}</span>`:''}${hazardBadges(step.hazards)}<span class="research-flow-label">${escape(step.label).replace('Microwave-vacuum','Microwave-<wbr>vacuum')}</span>${step.note?`<small class="research-flow-note">${escape(step.note)}</small>`:''}`;
  const chart=columns=>{
   const count=data.flow.length,rowCount=Math.ceil(count/columns),positions=data.flow.map((_,i)=>{const row=Math.floor(i/columns),slot=i%columns;return {row,col:row%2?columns-1-slot:slot}});
   const nodes=data.flow.map((step,i)=>{
    const a=positions[i],b=positions[i+1],direction=b?(b.row>a.row?'down':b.col>a.col?'right':'left'):null;
    const link=direction?`<i class="research-flow-link is-${direction}" data-flow-link="${i}" data-flow-direction="${direction}" data-flow-from="${step.id}" data-flow-to="${data.flow[i+1].id}" aria-hidden="true"></i>`:'';
-   return `<li class="research-flow-cell" style="grid-row:${a.row+1};grid-column:${a.col+1}"><div class="research-flow-node${step.id==='vacuum'?' is-innovation':''}" data-flow-node="${i}"><span>${escape(step.label).replace('Microwave-vacuum','Microwave-<wbr>vacuum')}</span></div>${link}</li>`;
+   return `<li class="research-flow-cell" style="grid-row:${a.row+1};grid-column:${a.col+1}"><div class="research-flow-node${step.control?' is-control':''}${step.note?' has-note':''}" data-flow-node="${i}">${boxContents(step)}</div>${link}</li>`;
   }).join('');
   const stages=columns===4?['Preparation','Forming & drying','Finishing & packing']:['Preparation','Forming','Drying','Packing'];
-  return `<div class="research-flow-layout research-flow-${columns}" data-flow-layout="${columns}"><div class="research-flow-main" style="--flow-columns:${columns};--flow-rows:${rowCount}"><div class="research-flow-stages" aria-hidden="true">${stages.map(label=>`<span>${escape(label)}</span>`).join('')}</div><ol class="research-flow-grid">${nodes}</ol></div><div class="research-flow-branches"><div class="research-branch-links" aria-hidden="true"><i class="research-branch-bar"></i><i class="research-branch-leg is-first"></i><i class="research-branch-leg is-second"></i><i class="research-branch-up"></i></div><div class="research-flow-node research-flow-branch" data-flow-branch="0">Seasoning</div><div class="research-flow-node research-flow-branch" data-flow-branch="1">Toppings</div></div></div>`;
+  return `<div class="research-flow-layout research-flow-${columns}" data-flow-layout="${columns}"><div class="research-flow-main" style="--flow-columns:${columns};--flow-rows:${rowCount}"><div class="research-flow-stages" aria-hidden="true">${stages.map(label=>`<span>${escape(label)}</span>`).join('')}</div><ol class="research-flow-grid">${nodes}</ol></div><div class="research-flow-branches"><div class="research-branch-links" aria-hidden="true"><i class="research-branch-bar"></i><i class="research-branch-leg is-first"></i><i class="research-branch-leg is-second"></i><i class="research-branch-up"></i></div>${data.flowBranches.map((step,i)=>`<div class="research-flow-node research-flow-branch has-note" data-flow-branch="${i}">${boxContents(step)}</div>`).join('')}</div></div>`;
  };
+ const legend=`<div class="research-flow-key" aria-label="Flowchart legend">${data.hazardKey.map(h=>`<span class="research-flow-key-item"><i class="research-hazard is-${h.class}" aria-hidden="true">${h.code}</i>${h.label}</span>`).join('')}<span class="research-flow-key-item"><i class="research-control-swatch" aria-hidden="true"></i>Proposed control</span></div>`;
  const replacements={
   '__PRODUCT_KIT_IMAGE__':`data:image/png;base64,${kit.toString('base64')}`,
   '__CLEAN_NUTRITION_LABEL__':nutritionLabel,
   '<!--__NOODLE_RECIPE__-->':data.noodleRecipe.map((name,i)=>`<li data-recipe-line="${i}"><span>${escape(name)}</span></li>`).join(''),
   '<!--__PACKAGE_NUTRITION__-->':rows([['Calories',`${data.packageMockup.calories} kcal`],['Protein',`${data.packageMockup.proteinGrams}g`],['Fibre',`${data.packageMockup.fibreGrams}g`],['Sodium',`${data.packageMockup.sodiumMg}mg`]]),
-  '<!--__PROCESS_FLOWCHART__-->':chart(4)+chart(3),
+  '<!--__PROCESS_FLOWCHART__-->':chart(4)+chart(3)+legend,
   '<!--__CONTROL_NOTES__-->':rows(data.controls),
   '<!--__FORM_SETTINGS__-->':rows([
    ['Receive & inspect','Quality, safety and supplier specifications; route ingredients to their respective lines.'],

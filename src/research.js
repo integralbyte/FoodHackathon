@@ -79,6 +79,7 @@
    });
    all('[data-flow-branch]').forEach(e=>{const p=phase(t,.48+(+e.dataset.flowBranch)*.04,.85);e.style.clipPath=`inset(0 ${(1-p)*100}% 0 0)`});
    all('.research-branch-links').forEach(e=>e.style.clipPath=`inset(${(1-phase(t,.53,.85))*100}% 0 0 0)`);
+   all('.research-flow-key').forEach(e=>e.style.clipPath=`inset(0 ${(1-phase(t,.56,.92))*100}% 0 0)`);
   }else if(index===1){
    all('[data-recipe-line]').forEach((e,i)=>{const p=reduced?1:phase(local,.34+i*.025,.63+i*.025);e.style.clipPath=`inset(0 ${(1-p)*100}% 0 0)`;e.style.transform=`translateX(${(1-p)*18}px)`});
   }else if(index===3){

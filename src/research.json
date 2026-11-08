@@ -217,51 +217,104 @@
   "flow": [
     {
       "id": "receive",
-      "label": "Receive & inspect"
+      "label": "Receive & inspect",
+      "hazards": [
+        "B",
+        "C",
+        "P"
+      ],
+      "note": "Supplier checks"
     },
     {
       "id": "blend",
-      "label": "Sieve & blend"
+      "label": "Sieve & blend",
+      "hazards": [
+        "C",
+        "P"
+      ]
     },
     {
       "id": "hydrate",
-      "label": "Hydrate & mix"
+      "label": "Hydrate & mix",
+      "hazards": [
+        "B",
+        "C",
+        "P"
+      ]
     },
     {
       "id": "steam",
-      "label": "Steam"
+      "label": "Steam",
+      "hazards": [
+        "B"
+      ],
+      "note": "Time & temperature",
+      "control": 1
     },
     {
       "id": "extrude",
-      "label": "Extrude"
+      "label": "Extrude",
+      "hazards": [
+        "P"
+      ]
     },
     {
       "id": "chill",
-      "label": "Chill"
+      "label": "Chill",
+      "hazards": [
+        "B"
+      ],
+      "note": "Time & temperature"
     },
     {
       "id": "predry",
-      "label": "Hot-air pre-dry"
+      "label": "Hot-air pre-dry",
+      "hazards": [
+        "B",
+        "P"
+      ]
     },
     {
       "id": "vacuum",
-      "label": "Microwave-vacuum"
+      "label": "Microwave-vacuum",
+      "hazards": [
+        "B",
+        "P"
+      ]
     },
     {
       "id": "finish",
-      "label": "Finish dry"
+      "label": "Finish dry",
+      "hazards": [
+        "B"
+      ],
+      "note": "Moisture & water activity",
+      "control": 2
     },
     {
       "id": "cool",
-      "label": "Cool"
+      "label": "Cool",
+      "hazards": [
+        "B"
+      ]
     },
     {
       "id": "assemble",
-      "label": "Assemble & label"
+      "label": "Assemble & label",
+      "hazards": [
+        "B",
+        "C",
+        "P"
+      ],
+      "note": "Allergen label check",
+      "control": 3
     },
     {
       "id": "store",
-      "label": "Store & distribute"
+      "label": "Store & distribute",
+      "hazards": [
+        "B"
+      ]
     }
   ],
   "controls": [
@@ -312,5 +365,42 @@
     "sodiumMg": 340,
     "servingGrams": 78,
     "status": "Values printed in the supplied package illustration; not laboratory-validated nutrition. Earlier team targets remain separate."
-  }
+  },
+  "hazardKey": [
+    {
+      "code": "B",
+      "label": "Biological",
+      "class": "biological"
+    },
+    {
+      "code": "C",
+      "label": "Chemical",
+      "class": "chemical"
+    },
+    {
+      "code": "P",
+      "label": "Physical",
+      "class": "physical"
+    }
+  ],
+  "flowBranches": [
+    {
+      "label": "Seasoning",
+      "hazards": [
+        "B",
+        "C",
+        "P"
+      ],
+      "note": "Supplier checks"
+    },
+    {
+      "label": "Toppings",
+      "hazards": [
+        "B",
+        "C",
+        "P"
+      ],
+      "note": "Supplier checks"
+    }
+  ]
 }
