@@ -1,5 +1,20 @@
 /* A quiet glass grid over the supplied shelf photograph. */
+.intro-locked,.intro-locked body{overflow:hidden!important;overscroll-behavior:none}
+.sorami-intro{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;background:#f5e5c6;isolation:isolate;clip-path:inset(0);transition:clip-path .85s cubic-bezier(.65,0,.22,1)}
+.sorami-intro:before{content:'';position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 50% 45%,#fff5df00,#cda97130);pointer-events:none}
+.sorami-intro:after{content:'';position:absolute;inset:0;z-index:-1;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath d='M0 0h180v180H0z' filter='url(%23g)' opacity='.12'/%3E%3C/svg%3E");opacity:.65;pointer-events:none}
+.sorami-intro[hidden]{display:none}
+.sorami-intro-logo{display:block;width:min(55vw,500px);border:0;padding:0;background:none;cursor:pointer;transition:transform .3s,opacity .3s;transform-origin:center}
+.sorami-intro-logo svg{display:block;width:100%;height:auto;overflow:visible}
+.sorami-intro-logo:hover{transform:scale(1.035)}
+.sorami-intro-logo:focus-visible{outline:2px solid #a42e3e;outline-offset:18px;border-radius:5px}
+.sorami-intro.is-revealing{clip-path:inset(0 0 100% 0);pointer-events:none}
+.sorami-intro.is-revealing .sorami-intro-logo{transform:translateY(-18px) scale(.96);opacity:0}
+@media(max-width:620px){.sorami-intro-logo{width:min(76vw,400px)}}
+@media(prefers-reduced-motion:reduce){.sorami-intro,.sorami-intro-logo{transition:none}}
+@media print{.sorami-intro{display:none!important}}
 .market-opening{--opening-accent:#ff792e;--opening-pad-y:clamp(22px,4svh,46px);position:relative;isolation:isolate;min-height:100svh;color:#fff5e6}
+.market-opening:focus{outline:none}
 .market-opening-pin{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:center;gap:18px;min-height:100svh;padding:var(--opening-pad-y) clamp(20px,4vw,72px);background:#1a1213}
 .market-opening-runway{display:none}
 .has-opening-handoff body{background:#421823}

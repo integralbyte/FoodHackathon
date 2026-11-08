@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import vm from 'node:vm';
 const source=await readFile(new URL('../src/navigation.js',import.meta.url),'utf8');
-function setup({reduced=false}={}){
+function setup({reduced=false,locked=false}={}){
  let now=0,scrollY=0,id=0,editing=false,modal=false;
  const frames=new Map(),events=new Map(),history=[];
  const on=(name,fn)=>{if(!events.has(name))events.set(name,[]);events.get(name).push(fn)};
@@ -13,10 +13,10 @@ function setup({reduced=false}={}){
  const nodes={
   'product-journey':journey,'noodle-shelf':{shelfScene:{stops:[0,.28,.46,.63,.80,.98]}},
   'cup-story':{assemblyScene:{stops:[0,1.61/4.4,2.48/4.4,3.15/4.4,1]}},
-  'pitch-story':{pitchScene:{research,count:11,targetTop:value=>14000+(value<1?value*8:8+value-1)/18*22000}},
+  'pitch-story':{pitchScene:{research,count:1,targetTop:value=>14000+value*9600}},
   'pitch-chapters':{hidden:false},'pitch-chapters-toggle':{setAttribute(){}}
  };
- const document={hidden:false,getElementById:id=>nodes[id],querySelector:()=>modal?{}:null,activeElement:{closest:()=>editing?{}:null},addEventListener:on,dispatchEvent:e=>emit(e.type,e)};
+ const document={hidden:false,documentElement:{classList:{contains:()=>locked}},getElementById:id=>nodes[id],querySelector:()=>modal?{}:null,activeElement:{closest:()=>editing?{}:null},addEventListener:on,dispatchEvent:e=>emit(e.type,e)};
  const window={innerHeight:1000,get scrollY(){return scrollY},scrollTo({top,behavior}){assert.equal(behavior,'instant');scrollY=top;history.push({now,top});emit('scroll')},addEventListener:on};
  const media={matches:reduced,addEventListener:(_,fn)=>on('motion',fn)};
  vm.runInNewContext(source,{document,window,performance:{now:()=>now},CustomEvent:class{constructor(type){this.type=type}},matchMedia:()=>media,requestAnimationFrame:fn=>{frames.set(++id,fn);return id},cancelAnimationFrame:i=>frames.delete(i)});
@@ -25,14 +25,18 @@ function setup({reduced=false}={}){
  function settle(){for(let i=0;i<1500&&nav.active;i++)time(16);assert.equal(nav.active,false,'navigation completes instead of leaving an endless frame loop')}
  function key(key,more={}){const e={key,repeat:false,preventDefault(){this.defaultPrevented=true},...more};emit('keydown',e);return e}
  function place(id){nav.cancel();scrollY=nav.stops.find(s=>s.id===id).top();emit('scroll')}
- return {nav,window,history,place,time,settle,key,emit,document,media,set editing(on){editing=on},set modal(on){modal=on}};
+ return {nav,window,history,place,time,settle,key,emit,document,media,set editing(on){editing=on},set modal(on){modal=on},set locked(on){locked=on}};
 }
-test('arrow keys traverse every stop from the shelf ending into the cup, grains, research and closing, then back',()=>{
- const a=setup(),pauses=a.nav.stops.filter(s=>s.pause);assert.equal(a.nav.stops.length,33);assert.equal(pauses.length,28);
+test('arrow keys traverse the shelf, cup, grains and research, ending at Beyond the cup, then return',()=>{
+ const a=setup(),pauses=a.nav.stops.filter(s=>s.pause);assert.equal(a.nav.stops.length,23);assert.equal(pauses.length,18);assert.equal(pauses.at(-1).id,'research-9');
  for(const stop of pauses.slice(1)){a.key('ArrowRight');a.settle();assert.ok(Math.abs(a.window.scrollY-stop.top())<.01,stop.id)}
  const end=a.window.scrollY;a.key('ArrowRight');a.settle();assert.equal(a.window.scrollY,end);
  for(const stop of pauses.slice(0,-1).reverse()){a.key('ArrowLeft');a.settle();assert.ok(Math.abs(a.window.scrollY-stop.top())<.01,stop.id)}
  a.key('ArrowLeft');assert.equal(a.window.scrollY,0);
+});
+test('the opening logo gate blocks arrow navigation until it is clicked',()=>{
+ const a=setup({locked:true});a.key('ArrowRight');a.time(3000);assert.equal(a.window.scrollY,0);assert.equal(a.nav.active,false);
+ a.locked=false;a.key('ArrowRight');a.settle();assert.equal(a.window.scrollY,a.nav.stops.find(s=>s.id==='shelf-0').top());
 });
 test('the hero reveal, noodle untangling and nutrition zoom retain their featured timing while the cup zoom is fast',()=>{
  const a=setup();

@@ -26,7 +26,7 @@
  function cancel(){if(frame)cancelAnimationFrame(frame);frame=0;job=null;queued=null}
  function write(top){expectedY=top;window.scrollTo({top,behavior:'instant'})}
  function nextIndex(direction){
-  if(direction>0){const next=stops.findIndex(s=>s.pause&&s.top()>window.scrollY+3);return next<0?stops.length-1:next}
+  if(direction>0)return stops.findIndex(s=>s.pause&&s.top()>window.scrollY+3);
   for(let i=stops.length-1;i>=0;i--)if(stops[i].pause&&stops[i].top()<window.scrollY-3)return i;
   return 0;
  }
@@ -35,6 +35,7 @@
   return index;
  }
  function begin(index){
+  if(index<0)return;
   const from=window.scrollY,to=stops[index].top(),direction=Math.sign(to-from);
   if(Math.abs(to-from)<1){write(to);return}
   // Internal cup frames remain part of the animation, without requiring
@@ -81,6 +82,7 @@
   stops
  };
  document.addEventListener('keydown',e=>{
+  if(document.documentElement?.classList.contains('intro-locked'))return;
   if(['Escape','Tab','Enter',' '].includes(e.key)){cancel();return}
   if(!['ArrowRight','ArrowLeft'].includes(e.key)||e.defaultPrevented||e.altKey||e.ctrlKey||e.metaKey||e.shiftKey)return;
   if(document.querySelector('dialog[open]')||document.activeElement?.closest('input,select,textarea,[contenteditable]:not([contenteditable="false"])')){cancel();return}
@@ -90,6 +92,7 @@
  for(const event of ['wheel','touchstart','pointerdown'])window.addEventListener(event,cancel,{passive:true});
  window.addEventListener('scroll',()=>{if(job&&Math.abs(window.scrollY-expectedY)>3)cancel()},{passive:true});
  window.addEventListener('resize',cancel);
+ document.addEventListener('sorami-navigation-cancel',cancel);
  document.addEventListener('visibilitychange',()=>{if(document.hidden)cancel()});
  motion.addEventListener('change',()=>{const target=job&&!job.hold?job.to:null;cancel();if(motion.matches&&target!==null)write(target)});
 })();

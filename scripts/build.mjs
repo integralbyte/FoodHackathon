@@ -7,7 +7,7 @@ const root = new URL('../', import.meta.url);
 const read = name => readFile(new URL(name, root), 'utf8');
 const [page, style, story, script, logo, pitch, pitchStyle, pitchScript, film, filmStyle, filmScript, filmVideo, filmPoster, packageReference, pitchTheme, hook, hookStyle, hookScript, journey, journeyStyle, journeyScript, benefitStyle, benefitScript, researchStyle] = await Promise.all([
   read('src/page.html'), read('src/style.css'), read('src/story.html'), read('src/story.js'),
-  readFile(new URL('assets/sorami-logo-original.png', root)),
+  readFile(new URL('assets/sorami-logo-transparent.png', root)),
   read('src/pitch.html'), read('src/pitch.css'), read('src/pitch.js'),
   read('src/film.html'), read('src/film.css'), read('src/film.js'),
   readFile(new URL('assets/sorami-opening.mp4', root)),
@@ -35,4 +35,4 @@ const html = page.replace('/*__STYLE__*/', () => style+'\n'+pitchStyle+'\n'+pitc
   .replace('<!--__STORY__-->', () => openingStats.html+'\n<script>'+openingStats.script+'</script>\n'+joined+'\n'+deck)
   .replace('/*__SCRIPT__*/', () => journeyScript+'\n'+script+'\n'+research.script+'\n'+economicScript+'\n'+filmScript+'\n'+shelf.script+'\n'+benefitScript+'\n'+openingStats.transitionScript+'\n'+navigationScript);
 await writeFile(new URL('index.html', root), html);
-console.log('Built Sorami index.html — count-up opening, joined shelf and reverse cup animation, film, and 11 pitch chapters, offline.');
+console.log('Built Sorami index.html — logo reveal, count-up opening, shelf and reverse cup animation, research, launch and Beyond the cup, offline.');

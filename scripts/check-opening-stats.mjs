@@ -4,20 +4,32 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {sampleOpeningHandoff} from '../src/opening-handoff.mjs';
 const script=await readFile(new URL('../src/opening-stats.js',import.meta.url),'utf8');
-function setup({reduced=false,inView=true}={}){
+function setup({reduced=false,inView=true,intro=false}={}){
  const frames=new Map(),events={},motionEvents=[];let next=0,now=0,observer,scrollTarget;
- const element=()=>({dataset:{},style:{setProperty(k,v){this[k]=v}},listeners:{},addEventListener(k,fn){(this.listeners[k]??=[]).push(fn)},fire(k,e={}){for(const fn of this.listeners[k]||[])fn(e)},focus(){}});
+ const element=()=>({dataset:{},style:{setProperty(k,v){this[k]=v}},listeners:{},addEventListener(k,fn){(this.listeners[k]??=[]).push(fn)},removeEventListener(k,fn){this.listeners[k]=(this.listeners[k]||[]).filter(f=>f!==fn)},fire(k,e={}){for(const fn of this.listeners[k]||[])fn(e)},focus(){}});
  const root=element(),values=[72,1044,61,52,4,3.9,40].map((n,i)=>Object.assign(element(),{dataset:{openingCount:String(n),openingDecimals:i===5?'1':'0'}}));
  root.querySelectorAll=()=>values;root.getBoundingClientRect=()=>({top:inView?0:1200,bottom:inView?900:2100});
  const nodes={'market-opening':root};for(const id of ['opening-sources','opening-sources-open','opening-sources-close','opening-explore','product-journey'])nodes[id]=element();
+ const classes=new Set(),timers=[];
+ if(intro){nodes['sorami-intro']=element();nodes['sorami-intro'].classList={add:k=>classes.add(k)};nodes['sorami-intro'].setAttribute=()=>{};nodes['sorami-intro-start']=element()}
  nodes['opening-sources'].showModal=function(){this.open=true};nodes['opening-sources'].close=function(){this.open=false;this.fire('close')};
  nodes['product-journey'].getBoundingClientRect=()=>({top:763});
- const document={hidden:false,getElementById:id=>nodes[id],addEventListener(k,fn){(events[k]??=[]).push(fn)}};
+ const document={hidden:false,querySelectorAll:()=>[root,nodes['product-journey']],documentElement:{classList:{add:k=>classes.add(k),remove:k=>classes.delete(k)}},getElementById:id=>nodes[id],addEventListener(k,fn){(events[k]??=[]).push(fn)},dispatchEvent(){}};
  const media={matches:reduced,addEventListener(k,fn){motionEvents.push(fn)}};
- runInNewContext(script,{document,window:{innerHeight:900,scrollY:137,scrollTo(v){scrollTarget=v}},matchMedia:()=>media,requestAnimationFrame:fn=>{frames.set(++next,fn);return next},cancelAnimationFrame:id=>frames.delete(id),IntersectionObserver:class{constructor(fn){observer=fn}observe(){}}});
- return {root,values,media,nodes,get pending(){return frames.size},get scrollTarget(){return scrollTarget},flush(ms){now=ms;const callbacks=[...frames.values()];frames.clear();callbacks.forEach(fn=>fn(now))},view(on){observer([{isIntersecting:on}])},hide(on){document.hidden=on;for(const fn of events.visibilitychange||[])fn()},reduce(){media.matches=true;motionEvents.forEach(fn=>fn())}};
+ runInNewContext(script,{document,window:{innerHeight:900,scrollY:137,scrollTo(v){scrollTarget=v}},CustomEvent:class{},setTimeout:fn=>timers.push(fn),matchMedia:()=>media,requestAnimationFrame:fn=>{frames.set(++next,fn);return next},cancelAnimationFrame:id=>frames.delete(id),IntersectionObserver:class{constructor(fn){observer=fn}observe(){}}});
+ return {root,values,media,nodes,classes,timers,get pending(){return frames.size},get scrollTarget(){return scrollTarget},flush(ms){now=ms;const callbacks=[...frames.values()];frames.clear();callbacks.forEach(fn=>fn(now))},view(on){observer([{isIntersecting:on}])},hide(on){document.hidden=on;for(const fn of events.visibilitychange||[])fn()},reduce(){media.matches=true;motionEvents.forEach(fn=>fn())}};
 }
 const final=['72','1,044','61','52','4','3.9','40'];
+test('the centered logo holds all counters at zero, then one click reveals the page and starts counting',()=>{
+ const a=setup({intro:true});assert.equal(a.pending,0);assert.equal(a.root.inert,true);assert.ok(a.classes.has('intro-locked'));
+ a.flush(5000);assert.deepEqual(a.values.map(v=>v.textContent),['0','0','0','0','0','0.0','0']);
+ a.nodes['sorami-intro-start'].fire('click');assert.equal(a.root.inert,false);assert.equal(a.nodes['product-journey'].inert,false);assert.equal(a.classes.has('intro-locked'),false);assert.equal(a.scrollTarget.top,0);assert.equal(a.pending,1);
+ a.flush(6000);a.flush(6500);assert.ok(+a.values[0].textContent>0&&+a.values[0].textContent<72);a.flush(9000);assert.deepEqual(a.values.map(v=>v.textContent),final);
+ a.nodes['sorami-intro-start'].fire('click');assert.equal(a.pending,0,'repeated logo clicks do not restart completed counters');a.timers.forEach(fn=>fn());assert.equal(a.nodes['sorami-intro'].hidden,true);
+});
+test('reduced motion also waits for the logo before revealing complete values',()=>{
+ const a=setup({intro:true,reduced:true});assert.equal(a.values[0].textContent,'0');a.nodes['sorami-intro-start'].fire('click');assert.deepEqual(a.values.map(v=>v.textContent),final);assert.equal(a.pending,0);
+});
 test('count-up starts on the first visible frame and finishes at every requested value',()=>{
  const a=setup();assert.equal(a.pending,1);a.flush(0);assert.deepEqual(a.values.map(v=>v.textContent),['0','0','0','0','0','0.0','0']);
  a.flush(800);assert.ok(+a.values[0].textContent>0&&+a.values[0].textContent<72);assert.notEqual(a.values[1].textContent,'1,044');

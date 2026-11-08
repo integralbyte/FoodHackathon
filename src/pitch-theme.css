@@ -17,9 +17,9 @@
 .pitch-stalks{opacity:.65}
 .pitch-folio{position:absolute;left:3.4%;bottom:6%;font:italic 270px/.75 Georgia,'Times New Roman',serif;letter-spacing:-22px;color:var(--tone-ink);opacity:.028;user-select:none}
 .pitch-header{height:88px;gap:24px;border-bottom:1px solid #ffffff06}
-.pitch-wordmark{width:104px;height:60px;padding:3px 6px;border-radius:50%;background:#eed09a;box-shadow:0 2px 0 #b4884e,0 8px 18px #0000000a;transform:rotate(-5deg);flex-shrink:0;transition:transform .25s}
+.pitch-wordmark{width:104px;height:60px;padding:0;background:none;box-shadow:none;transform:rotate(-5deg);flex-shrink:0;transition:transform .25s}
 .pitch-wordmark:hover{transform:rotate(0deg)}
-.pitch-wordmark svg{display:block;width:100%;height:100%;mix-blend-mode:multiply}
+.pitch-wordmark svg{display:block;width:100%;height:100%;overflow:visible}
 .pitch-header-caption{font-size:8px;letter-spacing:2.6px;color:var(--tone-detail);margin-right:auto}
 .pitch-header button{gap:18px;padding:10px 15px;border:1px solid var(--tone-line);border-radius:30px;background:var(--tone-panel);color:var(--tone-ink);font-size:10px}
 .pitch-header #pitch-count{opacity:1;color:var(--tone-muted);font-size:9px}
@@ -142,3 +142,5 @@
 .pitch-chapters #pitch-evidence{margin:8px 0 0;padding:12px;border-top:1px solid var(--tone-line);color:var(--tone-muted);font-size:11px;text-decoration:none}
 @media screen{.pitch-story .pitch-scenes{bottom:30px}}
 @media screen and (max-width:620px){.pitch-story .pitch-scenes{bottom:24px}}
+
+.pitch-header #pitch-chapters-toggle{margin-left:auto}
