@@ -194,9 +194,9 @@
  }
  function request(){if(!frame&&visible&&!document.hidden)frame=requestAnimationFrame(tick)}
  function scroll(value){const top=root.getBoundingClientRect().top+window.scrollY;window.scrollTo({top:top+toTimeline(value)/totalWeight*(root.offsetHeight-window.innerHeight),behavior:'instant'})}
- function go(index){stop();forcedEntry=reduced?-1:index;entryStart=performance.now();visible=true;$$('.pitch-scenes')[0].scrollTop=0;scroll(index+(index===0?.8/research.steps:.79));request()}
+ function go(index){stop();forcedEntry=reduced?-1:index;entryStart=performance.now();visible=true;$$('.pitch-scenes')[0].scrollTop=0;scroll(index+(index===0?research.stopAt(0):.79));request()}
  root.addEventListener('sorami-research-update',request);
- root.addEventListener('sorami-research-seek',e=>{stop();forcedEntry=-1;$$('.pitch-scenes')[0].scrollTop=0;scroll((e.detail.step+.8)/research.steps);request()});
+ root.addEventListener('sorami-research-seek',e=>{stop();forcedEntry=-1;$$('.pitch-scenes')[0].scrollTop=0;scroll(research.stopAt(e.detail.step));request()});
  $$('.pitch-skip,.assembly-to-pitch',document).forEach(a=>a.addEventListener('click',e=>{e.preventDefault();go(0)}));
  function stop(){playing=false;$('pitch-play').setAttribute('aria-pressed','false');$('pitch-play').textContent='▶ Play story'}
  $('pitch-prev').addEventListener('click',()=>go(Math.max(0,active-1)));$('pitch-next').addEventListener('click',()=>go(Math.min(count-1,active+1)));

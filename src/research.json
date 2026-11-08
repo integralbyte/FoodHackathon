@@ -4,19 +4,38 @@
   "steps": [
     {
       "id": "process",
-      "title": "The process"
+      "title": "The process",
+      "details": "process"
+    },
+    {
+      "id": "nutrition",
+      "title": "Nutrition & noodle recipe",
+      "details": "nutrition"
+    },
+    {
+      "id": "kit",
+      "title": "The Sorami product kit",
+      "details": "nutrition"
     },
     {
       "id": "bitterness",
-      "title": "Balance the bitterness"
+      "title": "Balance the bitterness",
+      "details": "bitterness"
+    },
+    {
+      "id": "kit-return",
+      "title": "The Sorami product kit",
+      "details": "nutrition"
     },
     {
       "id": "thin",
-      "title": "Thin strands"
+      "title": "Thin strands",
+      "details": "thin"
     },
     {
       "id": "pores",
-      "title": "Connected pores"
+      "title": "Connected pores",
+      "details": "pores"
     }
   ],
   "ingredients": [
@@ -274,5 +293,24 @@
       "Packaging",
       "Check seals, moisture barrier and package integrity."
     ]
-  ]
+  ],
+  "noodleRecipe": [
+    "Sorghum flour",
+    "Foxtail millet flour",
+    "Pregelatinised tapioca starch",
+    "Tapioca starch",
+    "Xanthan gum",
+    "Sunflower lecithin",
+    "Guar gum"
+  ],
+  "packageMockup": {
+    "file": "assets/sorami-spicy-garlic-kit.png",
+    "flavour": "Spicy Garlic",
+    "calories": 260,
+    "proteinGrams": 11,
+    "fibreGrams": 5.8,
+    "sodiumMg": 340,
+    "servingGrams": 78,
+    "status": "Values printed in the supplied package illustration; not laboratory-validated nutrition. Earlier team targets remain separate."
+  }
 }

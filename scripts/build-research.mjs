@@ -4,7 +4,7 @@ const range=(values,unit='')=>`${values.join('–')}${unit}`;
 const rows=items=>items.map(([label,value])=>`<tr><th scope="row">${escape(label)}</th><td>${escape(value)}</td></tr>`).join('');
 export async function buildResearch(root){
  const read=p=>readFile(new URL(p,root),'utf8');
- const [template,script,raw]=await Promise.all([read('src/research.html'),read('src/research.js'),read('src/research.json')]);
+ const [template,script,raw,camera,kit]=await Promise.all([read('src/research.html'),read('src/research.js'),read('src/research.json'),read('src/research-camera.mjs'),readFile(new URL('assets/sorami-spicy-garlic-kit.png',root))]);
  const data=JSON.parse(raw),p=data.process,pack=data.pack,total=pack.noodlesGrams+pack.seasoningGrams+pack.toppingsGrams;
  const chart=columns=>{
   const count=data.flow.length,rowCount=Math.ceil(count/columns),positions=data.flow.map((_,i)=>{const row=Math.floor(i/columns),slot=i%columns;return {row,col:row%2?columns-1-slot:slot}});
@@ -17,6 +17,9 @@ export async function buildResearch(root){
   return `<div class="research-flow-layout research-flow-${columns}" data-flow-layout="${columns}"><div class="research-flow-main" style="--flow-columns:${columns};--flow-rows:${rowCount}"><div class="research-flow-stages" aria-hidden="true">${stages.map(label=>`<span>${escape(label)}</span>`).join('')}</div><ol class="research-flow-grid">${nodes}</ol></div><div class="research-flow-branches"><div class="research-branch-links" aria-hidden="true"><i class="research-branch-bar"></i><i class="research-branch-leg is-first"></i><i class="research-branch-leg is-second"></i><i class="research-branch-up"></i></div><div class="research-flow-node research-flow-branch" data-flow-branch="0">Seasoning</div><div class="research-flow-node research-flow-branch" data-flow-branch="1">Toppings</div></div></div>`;
  };
  const replacements={
+  '__PRODUCT_KIT_IMAGE__':`data:image/png;base64,${kit.toString('base64')}`,
+  '<!--__NOODLE_RECIPE__-->':data.noodleRecipe.map((name,i)=>`<li data-recipe-line="${i}"><span>${escape(name)}</span></li>`).join(''),
+  '<!--__PACKAGE_NUTRITION__-->':rows([['Calories',`${data.packageMockup.calories} kcal`],['Protein',`${data.packageMockup.proteinGrams}g`],['Fibre',`${data.packageMockup.fibreGrams}g`],['Sodium',`${data.packageMockup.sodiumMg}mg`]]),
   '<!--__PROCESS_FLOWCHART__-->':chart(4)+chart(3),
   '<!--__CONTROL_NOTES__-->':rows(data.controls),
   '<!--__FORM_SETTINGS__-->':rows([
@@ -70,5 +73,5 @@ export async function buildResearch(root){
  };
  replacements['<!--__PORE_DRY_SETTINGS__-->']=replacements['<!--__DRY_SETTINGS__-->'];
  let html=template;for(const [key,value] of Object.entries(replacements))html=html.replaceAll(key,String(value));
- return {html,script:script.replace('/*__RESEARCH_DATA__*/',JSON.stringify(data))};
+ return {html,script:script.replace('/*__RESEARCH_DATA__*/',()=>JSON.stringify(data)).replace('/*__RESEARCH_CAMERA__*/',()=>camera.replace(/^export /gm,''))};
 }

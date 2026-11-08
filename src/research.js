@@ -1,14 +1,15 @@
-/* Proposed process overview, followed by three mechanism illustrations. */
+/* A reversible camera tour: process → label/recipe → kit → seasoning → kit → noodles. */
 (() => {
  'use strict';
  const root=document.querySelector('.research-scene');if(!root)return;
  const data=/*__RESEARCH_DATA__*/;
+ /*__RESEARCH_CAMERA__*/
  const $=id=>document.getElementById(id),all=s=>[...root.querySelectorAll(s)],NS='http://www.w3.org/2000/svg';
  const clamp=x=>Math.min(1,Math.max(0,x)),ease=x=>1-(1-clamp(x))**3,phase=(x,a=0,b=1)=>ease((x-a)/(b-a));
  const attr=(e,k,v)=>e.setAttribute(k,String(v));
  const svg=(tag,attrs,parent)=>{const e=document.createElementNS(NS,tag);Object.entries(attrs).forEach(([k,v])=>attr(e,k,v));parent.appendChild(e);return e};
  const panels=all('[data-research-panel]'),nav=all('[data-research-step]'),detailPanels=all('[data-research-details]'),dialog=$('research-details');
- let active=-1,entered=0;
+ let active=-1;
  const update=()=>root.dispatchEvent(new CustomEvent('sorami-research-update',{bubbles:true}));
  $('research-details-open').addEventListener('click',()=>{dialog.showModal();$('research-details-close').focus()});
  $('research-details-close').addEventListener('click',()=>dialog.close());
@@ -21,16 +22,6 @@
  }));
  $('research-thickness').addEventListener('input',()=>{$('research-thickness-label').textContent=`${(+$('research-thickness').value).toFixed(1)} mm`;update()});
  $('research-pore-progress').addEventListener('input',()=>{$('research-pore-label').textContent=`${$('research-pore-progress').value}%`;update()});
- const particles=[],brothNoodles=[],steam=[];
- for(let i=0;i<21;i++){
-  const e=svg('path',{d:'M-5-3 1-6 6-1 4 5-3 4Z',class:'research-salt-crystal'},$('research-taste-particles'));
-  particles.push({e,i,x:205+i*37%210,y:35+i*19%48});
- }
- for(let i=0;i<8;i++){
-  let d='';for(let x=177;x<=444;x+=4)d+=`${x===177?'M':'L'}${x} ${144+i*5.5+Math.sin(x*.11+i)*3}`;
-  brothNoodles.push(svg('path',{d,class:'research-broth-noodle',pathLength:1},$('research-broth-noodles')));
- }
- for(let i=0;i<3;i++)steam.push(svg('path',{d:`M${258+i*53} 126c-15-17 14-25 0-44s-6-26 0-35`,class:'research-vapour',pathLength:1},$('research-broth-steam')));
  const d='M0 27C-58 60 58 86 0 117S-58 175 0 203S58 254 0 282';
  const thick=svg('path',{d,class:'research-thick-reference',pathLength:1},$('research-thick-strand'));
  const thinShadow=svg('path',{d,class:'research-thin-shadow',pathLength:1},$('research-thin-strand'));
@@ -54,14 +45,24 @@
  ])water.push(svg('path',{d,class:'research-pore-water',pathLength:1},$('research-water-paths')));
  function scaleAt(e,x,y,s){attr(e,'transform',`translate(${x} ${y}) scale(${s}) translate(${-x} ${-y})`)}
  function paint(q,now,reduced){
-  const index=Math.min(panels.length-1,Math.floor(clamp(q)*panels.length)),local=clamp(q*panels.length-index);
+  const u=clamp(q)*panels.length,index=Math.min(panels.length-1,Math.floor(u)),local=clamp(u-index);
   if(index!==active){
-   active=index;entered=now;root.dataset.researchStep=String(index);root.closest('.pitch-scenes').scrollTop=0;
-   panels.forEach((e,i)=>{e.hidden=i!==index;e.inert=i!==index});detailPanels.forEach((e,i)=>e.hidden=i!==index);
-   nav.forEach((e,i)=>e.setAttribute('aria-pressed',String(i===index)));$('research-details-title').textContent=data.steps[index].title;
+   active=index;root.dataset.researchStep=String(index);root.closest('.pitch-scenes').scrollTop=0;
+   panels.forEach((e,i)=>{e.hidden=i!==index;e.inert=i!==index});
+   detailPanels.forEach(e=>e.hidden=e.dataset.researchDetails!==data.steps[index].details);
+   nav.forEach(e=>e.setAttribute('aria-pressed',String(+e.dataset.researchStep===index)));$('research-details-title').textContent=data.steps[index].title;
   }
-  const t=reduced?1:Math.min(phase(local,.015,.75),phase((now-entered)/1000,0,.8)),panel=panels[index],copy=panel.querySelector('.research-data');
-  copy.style.clipPath=`inset(0 ${(1-phase(t,.03,.6))*100}% 0 0)`;copy.style.transform=`translateX(${(1-phase(t,.03,.6))*16}px)`;copy.inert=t<.24;
+  const bounds=root.querySelector('.research-workbench').getBoundingClientRect(),width=bounds.width,height=bounds.height;
+  const camera=sampleResearchCamera(q,width,height,reduced,window.innerWidth<=620),viewport=$('research-kit-viewport');
+  viewport.hidden=!camera.visible;
+  viewport.style.clipPath=`inset(${camera.clip.top}px ${Math.max(0,width-camera.clip.right)}px ${Math.max(0,height-camera.clip.bottom)}px ${camera.clip.left}px)`;
+  $('research-kit-image').style.transform=`translate3d(${camera.x}px,${camera.y}px,0) scale(${camera.scale})`;
+  root.dataset.researchCamera=camera.from===camera.to?camera.to:`${camera.from}-to-${camera.to}`;
+  const delay=index===0||index===6?.015:index===5?.52:.35;
+  const t=reduced?1:phase(local,delay,index===5?.86:.75),panel=panels[index],copy=panel.querySelector('.research-data');
+  const depart=reduced||index===6?1:1-phase(local,.86,.99),reveal=t*depart;
+  if(copy){copy.style.clipPath=`inset(0 ${(1-reveal)*100}% 0 0)`;copy.style.transform=`translateX(${(1-t)*16}px)`;copy.inert=reveal<.24}
+  if(index===0){panel.style.clipPath=`inset(0 0 ${(1-depart)*100}% 0)`}
   if(index===0){
    all('[data-flow-node]').forEach(e=>{const n=+e.dataset.flowNode,p=phase(t,n*.035,.34+n*.035);e.style.clipPath=`inset(0 ${(1-p)*100}% 0 0)`;e.style.transform=`translateY(${(1-p)*13}px)`});
    all('[data-flow-link]').forEach(e=>{
@@ -71,24 +72,17 @@
    all('[data-flow-branch]').forEach(e=>{const p=phase(t,.48+(+e.dataset.flowBranch)*.04,.85);e.style.clipPath=`inset(0 ${(1-p)*100}% 0 0)`});
    all('.research-branch-links').forEach(e=>e.style.clipPath=`inset(${(1-phase(t,.53,.85))*100}% 0 0 0)`);
   }else if(index===1){
-   const build=t;
+   all('[data-recipe-line]').forEach((e,i)=>{const p=reduced?1:phase(local,.34+i*.025,.63+i*.025);e.style.clipPath=`inset(0 ${(1-p)*100}% 0 0)`;e.style.transform=`translateX(${(1-p)*18}px)`});
+  }else if(index===3){
    all('[data-bitterness-result]').forEach((e,i)=>{const p=phase(t,.03+i*.09,.65+i*.08);e.style.clipPath=`inset(0 ${(1-p)*100}% 0 0)`;e.style.transform=reduced?'none':`perspective(600px) rotateX(${(1-p)*-65}deg) scale(${1+Math.sin(p*Math.PI)*.055})`});
-   const cup=phase(t,.02,.58);
-   $('research-taste-cup').style.clipPath=`inset(${(1-cup)*100}% 0 0 0)`;
-   attr($('research-taste-cup'),'transform',`translate(0 ${(1-cup)*22})`);
-   attr($('research-cup-shadow'),'rx',157*cup);
-   particles.forEach(({e,i,x,y})=>{
-    const p=phase(build,i*.004,.72+i*.008),ingredient=i%3,isYeast=ingredient===2;
-    attr(e,'transform',`translate(${x} ${y+p*57}) rotate(${i*31+p*80}) scale(${p*(ingredient===1?.55:isYeast?.7:1)})`);
-    e.style.fill=ingredient===0?'#fff2d2':isYeast?'#9d7436':'#dcbb65';e.dataset.ingredient=['sea-salt','msg','yeast-extract'][ingredient];
-   });
-   brothNoodles.forEach((e,i)=>e.style.strokeDashoffset=1-phase(t,.12+i*.025,.78));steam.forEach((e,i)=>e.style.strokeDashoffset=1-phase(t,.25+i*.04,.85));
-  }else if(index===2){
+  }else if(index===5){
+   panel.querySelector('.research-art').style.clipPath=`inset(0 ${(1-reveal)*100}% 0 0)`;
    const width=+$('research-thickness').value;
    thick.style.strokeDashoffset=thinShadow.style.strokeDashoffset=thinLight.style.strokeDashoffset=1-phase(t,.04,.85);
    thinShadow.style.strokeWidth=String(24*width);thinLight.style.strokeWidth=String(15*width);
    panel.querySelector('.research-measure-line').style.strokeDashoffset=1-phase(t,.35,.9);
-  }else{
+  }else if(index===6){
+   panel.querySelector('.research-art').style.clipPath=`inset(0 ${(1-t)*100}% 0 0)`;
    const wet=+$('research-pore-progress').value/100*phase(t,.2,.95);
    scaleAt($('research-normal-section'),159,192,phase(t,.03,.55));scaleAt($('research-porous-section'),480,192,phase(t,.08,.6));
    holes.forEach(({e,i,r})=>{const p=phase(t,.13+i*.006,.75);attr(e,'rx',r*p*1.4);attr(e,'ry',r*p)});
@@ -97,5 +91,5 @@
    panel.querySelector('.research-water-arrow').style.strokeDashoffset=1-phase(t,.2,.7);
   }
  }
- root.researchScene={steps:panels.length,timelineWeight:panels.length*.8,paint,needsFrame(now){return now-entered<900}};
+ root.researchScene={steps:panels.length,timelineWeight:panels.length*.8,stopAt:step=>researchTourStops[step]/panels.length,paint,needsFrame(){return false}};
 })();
