@@ -136,3 +136,9 @@
 @media(max-height:660px) and (min-width:621px){.pitch-header{height:64px}.pitch-wordmark{width:84px;height:48px}.pitch-scenes{top:76px;bottom:85px}.pitch-controls{bottom:12px;height:56px}.pitch-chapters{top:58px}.pitch-folio{font-size:190px}.product-explainer{min-height:90px}.pitch-scene h1,.pitch-scene h2{font-size:37px}.pitch-tabs{margin:16px 0}}
 @media(prefers-reduced-motion:reduce){.pitch-pin,.pitch-light,.pitch-grain-engraving,.pitch-wordmark,.pitch-controls,.pitch-action,.pitch-tabs button{transition:none}.pitch-grain-engraving{transform:none}}
 @media print{.pitch-pin{background:#dfbf88;color:#3b201a}.pitch-atmosphere{display:none}.pitch-story{--tone-ink:#3b201a;--tone-muted:#5e3b28;--tone-detail:#65402d;--tone-accent:#85142e}.pitch-scenes{inset:auto}.pitch-wordmark{display:none}}
+
+/* Keyboard navigation leaves the entire stage available to the story. */
+.pitch-controls[hidden]{display:none!important}
+.pitch-chapters #pitch-evidence{margin:8px 0 0;padding:12px;border-top:1px solid var(--tone-line);color:var(--tone-muted);font-size:11px;text-decoration:none}
+@media screen{.pitch-story .pitch-scenes{bottom:30px}}
+@media screen and (max-width:620px){.pitch-story .pitch-scenes{bottom:24px}}

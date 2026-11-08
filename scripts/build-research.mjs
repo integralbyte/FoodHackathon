@@ -9,7 +9,7 @@ export async function buildResearch(root){
  const data=JSON.parse(raw),p=data.process,pack=data.pack,total=pack.noodlesGrams+pack.seasoningGrams+pack.toppingsGrams;
  const grainPercent=data.noodleRecipe.slice(0,2).reduce((sum,r)=>sum+r.percent,0);
  const formulation={grainPercent,otherPercent:100-grainPercent,grainGrams:pack.noodlesGrams*grainPercent/100};
- const [launchTemplate,launchScript,launchRaw,cornellLogo,impactTemplate,spicyFront,chickenFront]=await Promise.all([read('src/launch.html'),read('src/launch.js'),read('src/launch.json'),readFile(new URL('assets/cornell-university-seal.png',root)),read('src/impact.html'),readFile(new URL('assets/sorami-spicy-garlic-front.png',root)),readFile(new URL('assets/sorami-package-reference.png',root))]);
+ const [launchTemplate,launchScript,launchRaw,cornellLogo,impactTemplate,spicyFront,chickenFront]=await Promise.all([read('src/launch.html'),read('src/launch.js'),read('src/launch.json'),readFile(new URL('assets/cornell-university-seal.png',root)),read('src/impact.html'),readFile(new URL('assets/sorami-spicy-garlic-cutout.png',root)),readFile(new URL('assets/sorami-umami-chicken-cutout.png',root))]);
  const model=calculateLaunchModel(JSON.parse(launchRaw)),cash=v=>`$${v.toFixed(2)}`;
  data.steps.push(...model.steps);
  const costNames=['Ingredients','Packaging','Production','Setup & testing','Delivery'];

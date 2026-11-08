@@ -32,6 +32,7 @@
   })};wrap(heading);return $$('.word-piece',heading);
  });
  const chapterButtons=scenes.map((s,i)=>{const b=document.createElement('button');b.innerHTML=`<span>${String(i+1).padStart(2,'0')}</span>${s.dataset.chapter}`;b.addEventListener('click',()=>{go(i);toggleChapters(false)});$('pitch-chapters').appendChild(b);return b});
+ $('pitch-chapters').appendChild($('pitch-evidence'));
  function toggleChapters(open){$('pitch-chapters').hidden=!open;$('pitch-chapters-toggle').setAttribute('aria-expanded',String(open))}
  $('pitch-chapters-toggle').addEventListener('click',()=>toggleChapters($('pitch-chapters').hidden));
  document.addEventListener('click',e=>{if(!e.target.closest('#pitch-chapters,#pitch-chapters-toggle'))toggleChapters(false)});
@@ -197,10 +198,19 @@
   if(running)frame=requestAnimationFrame(tick);
  }
  function request(){if(!frame&&visible&&!document.hidden)frame=requestAnimationFrame(tick)}
- function scroll(value){const top=root.getBoundingClientRect().top+window.scrollY;window.scrollTo({top:top+toTimeline(value)/totalWeight*(root.offsetHeight-window.innerHeight),behavior:'instant'})}
+ function scroll(value,behavior='instant'){const top=root.getBoundingClientRect().top+window.scrollY;window.scrollTo({top:top+toTimeline(value)/totalWeight*(root.offsetHeight-window.innerHeight),behavior})}
  function go(index){stop();forcedEntry=reduced?-1:index;entryStart=performance.now();visible=true;$$('.pitch-scenes')[0].scrollTop=0;scroll(index+(index===0?research.stopAt(0):.79));request()}
+ function seekResearch(step,behavior='instant'){stop();forcedEntry=-1;$$('.pitch-scenes')[0].scrollTop=0;scroll(research.stopAt(step),behavior);request()}
+ function advance(direction){
+  if(active===0){
+   const step=Number(scenes[0].dataset.researchStep)||0,next=step+direction;
+   if(next>=0&&next<research.steps)seekResearch(next,reduced?'instant':'smooth');
+   else if(next>=research.steps)go(1);
+  }else if(active===1&&direction<0)seekResearch(research.steps-1,reduced?'instant':'smooth');
+  else if(active>=0&&active+direction>=0&&active+direction<count)go(active+direction);
+ }
  root.addEventListener('sorami-research-update',request);
- root.addEventListener('sorami-research-seek',e=>{stop();forcedEntry=-1;$$('.pitch-scenes')[0].scrollTop=0;scroll(research.stopAt(e.detail.step));request()});
+ root.addEventListener('sorami-research-seek',e=>seekResearch(e.detail.step));
  $$('.pitch-skip,.assembly-to-pitch',document).forEach(a=>a.addEventListener('click',e=>{e.preventDefault();go(0)}));
  function stop(){playing=false;$('pitch-play').setAttribute('aria-pressed','false');$('pitch-play').textContent='▶ Play story'}
  $('pitch-prev').addEventListener('click',()=>go(Math.max(0,active-1)));$('pitch-next').addEventListener('click',()=>go(Math.min(count-1,active+1)));
@@ -214,7 +224,12 @@
  window.addEventListener('wheel',stop,{passive:true});window.addEventListener('touchstart',stop,{passive:true});window.addEventListener('scroll',request,{passive:true});window.addEventListener('resize',request,{passive:true});
  new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;if(visible)request();else stop()}).observe(root);
  document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();else request()});
- document.addEventListener('keydown',e=>{if(!visible||root.getBoundingClientRect().top>window.innerHeight*.3||$('pitch-evidence-dialog').open||$('research-details').open)return;if(e.key==='Escape'){stop();toggleChapters(false)}if(['INPUT','SELECT','TEXTAREA','BUTTON','A'].includes(document.activeElement.tagName))return;if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();go(clamp(active+(e.key==='ArrowRight'?1:-1),0,count-1))}else if(e.key===' '){e.preventDefault();$('pitch-play').click()}});
+ document.addEventListener('keydown',e=>{
+  if(!visible||root.getBoundingClientRect().top>window.innerHeight*.3||$('pitch-evidence-dialog').open||$('research-details').open)return;
+  if(e.key==='Escape'){stop();toggleChapters(false);return}
+  if(e.defaultPrevented||e.altKey||e.ctrlKey||e.metaKey||document.activeElement.closest('input,select,textarea,[contenteditable]:not([contenteditable="false"])'))return;
+  if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();toggleChapters(false);advance(e.key==='ArrowRight'?1:-1)}
+ });
  const dialog=$('pitch-evidence-dialog');$('pitch-evidence').addEventListener('click',()=>{stop();dialog.showModal()});$('evidence-close').addEventListener('click',()=>dialog.close());dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close()}});
  motion.addEventListener('change',()=>{reduced=motion.matches;forcedEntry=-1;stop();request()});
  // Render a useful first frame before the observer fires; no empty stage on load.
