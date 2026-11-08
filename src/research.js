@@ -7,9 +7,13 @@
  const clamp=x=>Math.min(1,Math.max(0,x)),ease=x=>1-(1-clamp(x))**3,phase=(x,a=0,b=1)=>ease((x-a)/(b-a));
  const svg=(tag,attrs,parent)=>{const e=document.createElementNS(NS,tag);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,String(v)));parent.appendChild(e);return e};
  const attr=(e,k,v)=>e.setAttribute(k,String(v));
- const panels=all('[data-research-panel]'),nav=all('[data-research-step]');
+ const panels=all('[data-research-panel]'),nav=all('[data-research-step]'),dialog=$('research-details'),detailPanels=all('[data-research-details]');
  let active=-1,entered=0,tableTime=-10000,tasteTime=-10000,tableMode='ingredients',taste=0;
  const update=()=>root.dispatchEvent(new CustomEvent('sorami-research-update',{bubbles:true}));
+ $('research-details-open').addEventListener('click',()=>{dialog.showModal();$('research-details-close').focus()});
+ $('research-details-close').addEventListener('click',()=>dialog.close());
+ dialog.addEventListener('close',()=>$('research-details-open').focus());
+ dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close()}});
  nav.forEach(button=>button.addEventListener('click',()=>root.dispatchEvent(new CustomEvent('sorami-research-seek',{bubbles:true,detail:{step:+button.dataset.researchStep}}))));
  all('[data-research-table]').forEach(button=>button.addEventListener('click',()=>{
   tableMode=button.dataset.researchTable;tableTime=performance.now();
@@ -20,7 +24,7 @@
  ['research-drying','research-diameter'].forEach(id=>$(id).addEventListener('input',()=>{
   const value=+$(id).value;
   if(id==='research-drying')$('research-drying-label').textContent=`${value}%`;
-  else{$('research-diameter-label').textContent=`${value.toFixed(1)} mm`;$('research-strand-measure').textContent=`${value.toFixed(1)} mm concept diameter`}
+  else $('research-diameter-label').textContent=`${value.toFixed(1)} mm`;
   update();
  }));
  function setTaste(index){
@@ -31,10 +35,7 @@
   $('research-taste-result').classList.toggle('is-word',d.remaining===null);
   $('research-taste-context').textContent=d.context;$('research-taste-endpoint').textContent=d.endpoint;
   $('research-taste-detail').textContent=d.detail;$('research-taste-basis').textContent=d.basis;$('research-taste-source').href=d.source;
-  const msg=d.remaining===null;
-  $('research-signal-caption').textContent=msg?'UMAMI FORMULATION CONCEPT':index===2?'BITTER RECEPTOR ACTIVITY · CELL ASSAY':'HUMAN BITTERNESS RATINGS';
-  $('research-taste-bar-caption').textContent=msg?'SAVOURY DEPTH · NO BITTERNESS PERCENTAGE CLAIMED':index===2?'ILLUSTRATIVE RESPONSE · 7 OF 19 TESTED RECEPTORS':'NORMALIZED STUDY RESPONSE · NOT A SORAMI RESULT';
-  $('research-taste-bar').style.visibility=msg?'hidden':'visible';all('.research-signal-control').forEach(e=>e.style.visibility=msg?'hidden':'visible');update();
+  $('research-taste-receptors').style.visibility=d.remaining===null?'hidden':'visible';update();
  }
  all('[data-research-taste]').forEach(b=>b.addEventListener('click',()=>setTaste(+b.dataset.researchTaste)));
 
@@ -91,7 +92,7 @@
  }
  function paint(q,now,reduced){
   const index=Math.min(3,Math.floor(clamp(q)*4)),local=clamp(q*4-index);
-  if(index!==active){active=index;entered=now;root.dataset.researchStep=String(index);root.closest('.pitch-scenes').scrollTop=0;panels.forEach((p,i)=>{p.hidden=i!==index;p.inert=i!==index});nav.forEach((b,i)=>b.setAttribute('aria-pressed',String(i===index)))}
+  if(index!==active){active=index;entered=now;root.dataset.researchStep=String(index);root.closest('.pitch-scenes').scrollTop=0;panels.forEach((p,i)=>{p.hidden=i!==index;p.inert=i!==index});detailPanels.forEach((p,i)=>{p.hidden=i!==index});$('research-details-title').textContent=['The blend','The drying','The strand','The broth'][index];nav.forEach((b,i)=>b.setAttribute('aria-pressed',String(i===index)))}
   const t=reduced?1:Math.min(phase(local,.015,.75),phase((now-entered)/1000,0,.8));
   const panel=panels[index];drawPaths(panel,t);revealData(panel,t);
   if(index===0){
@@ -115,13 +116,11 @@
    attr($('research-section'),'transform',`translate(444 227) scale(${scale*phase(t,.06,.55)}) translate(-444 -227)`);
    sectionPores.forEach((e,i)=>attr(e,'transform',`translate(444 227) scale(${phase(t,.1+i*.004,.65)}) translate(-444 -227)`));
    waterPaths.forEach((e,i)=>e.style.strokeDashoffset=1-phase(t,.26+i*.025,.92));
-   attr($('research-strand-dimension').firstElementChild,'d',`M${444-104*scale} 354h${208*scale}m${-208*scale}-7v14m${208*scale}-14v14`);
   }else{
    const d=data.taste[taste],it=reduced?1:phase((now-tasteTime)/1000,0,.6),build=t*it,msg=d.remaining===null;
    receptors.forEach(({g,x,i})=>{const p=phase(t,.08+i*.025,.7);attr(g,'transform',`translate(${(1-p)*70} ${(1-p)*90})`);g.querySelectorAll('path').forEach(e=>e.style.strokeDashoffset=1-p)});
    signals.forEach(({e,i})=>{const p=phase(build,i*.006,.7+i*.008);attr(e,'cx',63+(i%5)*46+p*60);attr(e,'cy',138+Math.floor(i/5)*35+Math.sin(i*1.9)*10);attr(e,'transform',`scale(${msg?0:p})`)});
    umami.forEach(({e,a},i)=>{const p=msg?phase(build,i*.012,.6+i*.012):0;attr(e,'transform',`translate(${190+Math.cos(a)*73} ${165+Math.sin(a)*73}) rotate(${a*180/Math.PI}) scale(${p})`)});
-   const response=d.remaining===null?1:1-(1-d.remaining)*phase(build,.15,.8);attr($('research-taste-bar'),'width',510*response);
    $('research-taste-result').style.transform=`perspective(500px) rotateX(${(1-build)*-70}deg) scaleY(${.7+build*.3})`;
   }
  }

@@ -1,6 +1,6 @@
 # Research chapter: sources and limits
 
-Checked 7 November 2026. This chapter replaces the deck's original opening cover. Its four scroll steps illustrate a proposed formulation and process; they do not show tests on Sorami food. The tables and result captions distinguish raw-grain references, team targets and published experiments.
+Checked 7 November 2026. This chapter replaces the deck's original opening cover. Its four scroll steps illustrate a proposed formulation and process; they do not show tests on Sorami food. The main scene shows one takeaway at a time. Tables, sliders, source links and fuller explanations are available through a contextual Details dialog; result captions distinguish team targets from published experiments.
 
 ## The blend
 
@@ -42,4 +42,4 @@ The 0.8–1.6mm control changes the illustration's geometry. The **60-second reh
 - **MSG:** included as an umami formulation direction. No separate numerical bitterness reduction is assigned to it. Its concentration and contribution to the cup's sodium target still require recipe development.
 - **Yeast extract, at least 40%:** [Belloir et al., 2024](https://pubmed.ncbi.nlm.nih.gov/38945612/), [primary article](https://www.sciencedirect.com/science/article/pii/S0963996924006665), reports at least 40% inhibition in 7 of 19 tested bitter receptors with AMP-rich yeast extract in cell assays. The paper describes a 90µg/mL screening treatment. This is receptor activation, not a human-perceived bitterness reduction.
 
-The taste visual changes its endpoint label with the selected ingredient. The bars are normalized illustrations of the separate reported effects; the yeast bar represents an upper bound of 60% remaining activity for the reported receptors, not an average over all 19. The MSG view has no numerical response bar. The 30% and ≥40% effects are not added together and do not establish taste acceptance, a dosing recipe or a combined suppression percentage for Sorami.
+The taste visual changes its large figure and endpoint label with the selected ingredient. The response bar is removed; the diagram is qualitative. The MSG view shows “Umami” without a numerical bitterness claim. The 30% and ≥40% effects are not added together and do not establish taste acceptance, a dosing recipe or a combined suppression percentage for Sorami. The full study context is available in Details.
