@@ -29,6 +29,6 @@ const deck=pitch.replace('<!--__RESEARCH_CHAPTER__-->',()=>research.html);
 const joined=journey.replace('<!--__JOURNEY_SHELF__-->',()=>shelf.html).replace('<!--__JOURNEY_ASSEMBLY__-->',()=>artwork).replace('<!--__GRAIN_BENEFITS__-->',()=>benefits);
 const html = page.replace('/*__STYLE__*/', () => style+'\n'+pitchStyle+'\n'+pitchTheme+'\n'+filmStyle+'\n'+hookStyle+'\n'+journeyStyle+'\n'+benefitStyle+'\n'+researchStyle+'\n'+openingStats.css)
   .replace('<!--__STORY__-->', () => openingStats.html+'\n<script>'+openingStats.script+'</script>\n'+joined+'\n'+opening+'\n'+deck)
-  .replace('/*__SCRIPT__*/', () => journeyScript+'\n'+script+'\n'+research.script+'\n'+pitchScript+'\n'+filmScript+'\n'+shelf.script+'\n'+benefitScript);
+  .replace('/*__SCRIPT__*/', () => journeyScript+'\n'+script+'\n'+research.script+'\n'+pitchScript+'\n'+filmScript+'\n'+shelf.script+'\n'+benefitScript+'\n'+openingStats.transitionScript);
 await writeFile(new URL('index.html', root), html);
 console.log('Built Sorami index.html — count-up opening, joined shelf and reverse cup animation, film, and 11 pitch chapters, offline.');

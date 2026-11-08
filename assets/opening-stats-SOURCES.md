@@ -28,3 +28,11 @@ The displayed **1,044mg per cup** is the unweighted mean of eight conventional U
 All seven numerical values count upward once when the opening first enters view; the units and percent signs remain orange. The market trend draws in parallel. The counter script is placed directly after the opening markup so it can start before the remainder of the embedded film and artwork has parsed. Reduced-motion mode uses final values immediately. Leaving the viewport or hiding the tab suspends animation frames. The sources dialog preserves focus on close, and the continuation link measures the current journey position rather than assuming it starts at scroll zero.
 
 The opening precedes the existing shelf; the shelf, cup handoff, reverse assembly, research tour and remaining chapters keep their relative scroll timings. The deck replay still returns to the shelf.
+
+## Opening-to-shelf handoff
+
+The glass fills are now roughly 33–44% opaque, with lighter background treatment and a 1.5px backdrop blur so the supplied shelves remain visible. Caption contrast is increased to remain readable over the brighter photograph.
+
+The opening content is sticky during its exit. A one-viewport runway overlaps the start of the existing journey through an equal negative margin, keeping the shelf’s absolute start and every later section in place. The statistic cards fold upward in a stagger while the photograph zooms slightly and the incoming shelf blends into the same viewport. Once the handoff completes, the shelf pin returns to an untransformed, fully opaque state before its original animation begins.
+
+For tall phone content, the sticky offset allows normal reading until the last row reaches the viewport. The handoff then occupies one viewport of scrolling. All poses derive from measured scroll geometry, so reverse scrolling and restored positions do not need a previous playthrough. Reduced motion switches between completed scenes without folds or zoom. The counter still runs independently on entry.

@@ -2,6 +2,7 @@ import {readFile} from 'node:fs/promises';
 import {runInNewContext} from 'node:vm';
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {sampleOpeningHandoff} from '../src/opening-handoff.mjs';
 const script=await readFile(new URL('../src/opening-stats.js',import.meta.url),'utf8');
 function setup({reduced=false,inView=true}={}){
  const frames=new Map(),events={},motionEvents=[];let next=0,now=0,observer,scrollTarget;
@@ -32,4 +33,29 @@ test('restored pages can enter later, and leaving the opening suspends animation
 test('hidden tabs pause work, motion changes complete it, and the link lands at the shifted journey',()=>{
  const a=setup();a.flush(0);a.hide(true);assert.equal(a.pending,0);a.hide(false);assert.equal(a.pending,1);a.reduce();assert.deepEqual(a.values.map(v=>v.textContent),final);assert.equal(a.pending,0);
  a.nodes['opening-explore'].fire('click',{preventDefault(){}});assert.equal(a.scrollTarget.top,900);assert.equal(a.scrollTarget.behavior,'instant');
+});
+test('desktop handoff folds the cards in order, overlaps both scenes and ends at the shelf start',()=>{
+ const first=sampleOpeningHandoff(0,900,900),middle=sampleOpeningHandoff(450,900,900),last=sampleOpeningHandoff(900,900,900);
+ assert.equal(first.progress,0);assert.equal(first.introOpacity,1);assert.equal(first.shelfOpacity,0);assert.ok(first.cards.every(v=>v===0));
+ assert.equal(middle.progress,.5);assert.ok(middle.introOpacity>0&&middle.shelfOpacity>0);assert.ok(middle.introOpacity+middle.shelfOpacity>1);assert.ok(middle.cards[0]>middle.cards[5]);
+ for(let i=0;i<=100;i++){const f=sampleOpeningHandoff(i*9,900,900);assert.ok(f.introOpacity+f.shelfOpacity>=1-1e-9,'the handoff never reveals an empty frame')}
+ assert.equal(last.progress,1);assert.equal(last.introOpacity,0);assert.equal(last.shelfOpacity,1);assert.equal(last.shelfScale,1);assert.ok(last.cards.every(v=>v===1));
+});
+test('a tall phone opening stays readable until its final row reaches the viewport',()=>{
+ const before=sampleOpeningHandoff(270,1120,844),middle=sampleOpeningHandoff(698,1120,844),last=sampleOpeningHandoff(1120,1120,844);
+ assert.equal(before.progress,0);assert.equal(before.introOpacity,1);assert.ok(before.cards.every(v=>v===0));
+ assert.equal(middle.progress,.5);assert.equal(last.progress,1);assert.equal(last.shelfOpacity,1);
+});
+test('reduced motion uses complete scenes with no perspective or zoom phase',()=>{
+ for(const progress of [0,.2,.49,.5,.8,1]){
+  const state=sampleOpeningHandoff(progress*900,900,900,true),next=progress>=.5;
+  assert.equal(state.introOpacity,next?0:1);assert.equal(state.shelfOpacity,next?1:0);assert.equal(state.imageScale,1);assert.equal(state.shelfScale,1);assert.ok(state.cards.every(v=>v===(next?1:0)));
+ }
+});
+test('camera blend and fold progress remain continuous across their timing boundaries',()=>{
+ for(const progress of [.02,.22,.27,.33,.46,.71,.90,.94]){
+  const a=sampleOpeningHandoff((progress-1e-7)*900,900,900),b=sampleOpeningHandoff((progress+1e-7)*900,900,900);
+  for(const key of ['introOpacity','shelfOpacity','imageScale','shelfScale'])assert.ok(Math.abs(a[key]-b[key])<1e-4);
+  a.cards.forEach((v,i)=>assert.ok(Math.abs(v-b.cards[i])<1e-4));
+ }
 });
