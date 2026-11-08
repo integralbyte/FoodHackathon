@@ -13,6 +13,7 @@
  const cash=n=>`${n<0?'−':''}$${Math.abs(n).toFixed(2)}`;
  const comma=n=>Math.round(n).toLocaleString('en-US');
  const costModel=/*__COST_MODEL__*/;
+ const formulation=/*__FORMULATION__*/;
  const research=scenes[0].researchScene,weights=scenes.map((_,i)=>i===0?research.timelineWeight:1),starts=[];
  let totalWeight=0;weights.forEach(w=>{starts.push(totalWeight);totalWeight+=w});
  function toTimeline(value){const i=Math.min(count-1,Math.floor(clamp(value,0,count)));return starts[i]+clamp(value-i)*weights[i]}
@@ -43,7 +44,7 @@
  const formulaGrains=[];
  for(let i=0;i<100;i++){
   const ring=i<60?0:1,index=ring?i-60:i,total=ring?40:60,a=index/total*Math.PI*2-Math.PI/2,r=ring?174:224;
-  const e=svg('use',{href:'#pitch-seed',x:-7,y:-10,width:14,height:20,class:`formula-grain${i>=85?' other':i%2?' millet':''}`},$('formula-grains'));
+  const e=svg('use',{href:'#pitch-seed',x:-7,y:-10,width:14,height:20,class:`formula-grain${i>=formulation.grainPercent?' other':i%2?' millet':''}`},$('formula-grains'));
   formulaGrains.push({e,a,r});
  }
  const channels=[
@@ -84,11 +85,11 @@
  }
  // Local interaction state remains independent of the scroll animation.
  const productCopy=[
-  ['THE FORMULATION TARGET','Sorghum + foxtail millet, at the center.','85 of these 100 grains represent the proposed sorghum–foxtail-millet share of the dry formulation. The remaining 15% is other ingredients.'],
+  ['THE FORMULATION TARGET','Sorghum + foxtail millet, at the center.','__GRAIN_SHARE__ of these 100 grains represent the proposed sorghum–foxtail-millet share of the dry formulation. The remaining __OTHER_SHARE__% is other ingredients.'],
   ['THE PROCESS CONCEPT','Steam, extrude, chill, dry.','Steam-assisted extrusion, a 24-hour cold hold and hybrid hot-air/microwave-vacuum/hot-air drying form the proposed non-fried route. Settings still need trials.'],
   ['THE STUDENT RITUAL','A kettle. A cup. That’s it.','Add the seasoning and toppings, approximately 300mL freshly boiled water, then cover for five minutes and stir. This is a preparation target, not a measured Sorami result.']
  ];
- $$('[data-product]').forEach(button=>button.addEventListener('click',()=>{productChoice=+button.dataset.product;productTime=performance.now();$$('[data-product]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));const copy=productCopy[productChoice];$('product-kicker').textContent=copy[0];$('product-headline').textContent=copy[1];$('product-description').textContent=copy[2];$$('.product-visual>svg')[0].setAttribute('aria-label',['One hundred grains arrange into the proposed 85 percent grain formulation','Grains form rows beneath drawn steam paths, illustrating the proposed non-fried process','Grains form a bowl beneath a water droplet, illustrating hot-water preparation'][productChoice]);request()}));
+ $$('[data-product]').forEach(button=>button.addEventListener('click',()=>{productChoice=+button.dataset.product;productTime=performance.now();$$('[data-product]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));const copy=productCopy[productChoice];$('product-kicker').textContent=copy[0];$('product-headline').textContent=copy[1];$('product-description').textContent=copy[2];$$('.product-visual>svg')[0].setAttribute('aria-label',['One hundred grains arrange into the proposed __GRAIN_SHARE__ percent grain formulation','Grains form rows beneath drawn steam paths, illustrating the proposed non-fried process','Grains form a bowl beneath a water droplet, illustrating hot-water preparation'][productChoice]);request()}));
  $('deadline-time').addEventListener('input',e=>{const minute=47+Number(e.target.value);$('deadline-label').textContent=`11:${minute} PM`;$('deadline-remaining').textContent=minute===59?'Deadline reached':`${59-minute} minute${59-minute===1?'':'s'} left`;request()});
  $('hydration-progress').addEventListener('input',e=>{waterTime=-1;waterValue=+e.target.value;$('hydration-label').textContent=`${waterValue}%`;request()});
  $('water-replay').addEventListener('click',()=>{waterTime=performance.now();request()});
@@ -109,7 +110,7 @@
  ['cup-price','cup-cost','pantry-toggle'].forEach(id=>$(id).addEventListener('input',economics));
  $('economics-reset').addEventListener('click',()=>{$('cup-price').value=String(costModel.price);$('cup-cost').value=String(costModel.scale.cost.toFixed(2));$('pantry-toggle').checked=false;economics()});
  $('pantry-deliver').addEventListener('click',()=>{deliveryTime=performance.now();deliveries++;$('pantry-result').textContent=`${deliveries}`;$('pantry-message').textContent=`illustrative pantry cup${deliveries===1?'':'s'} funded by ${deliveries*20} sales at the deck’s assumptions`;$('pantry-deliver').querySelector('span').textContent='Demonstrate another 20 + 1';request()});
- $('cups-sold').addEventListener('input',e=>{cupsValue=+e.target.value;$('cups-sold-label').textContent=`${comma(cupsValue)} cups`;$('grain-tonnes').textContent=(cupsValue*47/1e6).toFixed(1);request()});
+ $('cups-sold').addEventListener('input',e=>{cupsValue=+e.target.value;$('cups-sold-label').textContent=`${comma(cupsValue)} cups`;$('grain-tonnes').textContent=(cupsValue*formulation.grainGrams/1e6).toFixed(1);request()});
  const routeCopy=['Start where students already grab a late-night snack.','Extend the same just-water ritual to vending locations.','Explore campus dining as the next distribution channel.'];
  $$('[data-route]').forEach(b=>b.addEventListener('click',()=>{$$('[data-route]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));$('route-detail').textContent=routeCopy[+b.dataset.route]}));
  const growerCopy=['Turn an everyday convenience food into a new use for millet.','Build fair farmer relationships before making sourcing claims.','Explore how reliable grain demand could create value for growers.'];

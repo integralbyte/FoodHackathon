@@ -348,13 +348,70 @@
     ]
   ],
   "noodleRecipe": [
-    "Sorghum flour",
-    "Foxtail millet flour",
-    "Pregelatinised tapioca starch",
-    "Tapioca starch",
-    "Xanthan gum",
-    "Sunflower lecithin",
-    "Guar gum"
+    {
+      "name": "White, low-tannin sorghum flour",
+      "displayName": "White sorghum flour",
+      "percent": 49,
+      "suppliedGrams": 23.1,
+      "role": "Main gluten-free grain base; starch, protein and flavour.",
+      "researchContext": "Team cites Palavecino et al. (2017) for sorghum-pasta feasibility with starch and structural additives. The exact proposed level is unvalidated."
+    },
+    {
+      "name": "Foxtail millet flour",
+      "displayName": "Foxtail millet flour",
+      "percent": 21,
+      "suppliedGrams": 11.55,
+      "role": "Adds a second grain, nutrients and flavour.",
+      "researchContext": "Team describes moderate support from millet-noodle research; the optimal sorghum–foxtail ratio is unknown."
+    },
+    {
+      "name": "Pregelatinised tapioca starch",
+      "displayName": "Pregelatinised tapioca starch",
+      "percent": 18.7,
+      "suppliedGrams": 10.29,
+      "role": "Helps the dough hold together before cooking.",
+      "researchContext": "The team-cited sorghum-pasta study used pregelatinised corn starch, not tapioca. It supports the binder function, not this starch or exact level."
+    },
+    {
+      "name": "Native tapioca starch",
+      "displayName": "Native tapioca starch",
+      "percent": 8,
+      "suppliedGrams": 4.4,
+      "role": "Helps the cooked noodle become firm and springy.",
+      "researchContext": "Team formulation hypothesis; not a demonstrated result for this recipe."
+    },
+    {
+      "name": "Xanthan gum",
+      "displayName": "Xanthan gum",
+      "percent": 1.2,
+      "suppliedGrams": 0.66,
+      "role": "Binds water and helps the noodle keep its shape.",
+      "researchContext": "Team describes strong functional support in gluten-free cereal noodles; no new verification is claimed."
+    },
+    {
+      "name": "Guar gum",
+      "displayName": "Guar gum",
+      "percent": 0.8,
+      "suppliedGrams": 0.44,
+      "role": "Supports hydration and texture.",
+      "researchContext": "Team cites benefits at approximately 0.6–1.5% in millet- and rice-based noodles; this recipe still needs trials."
+    },
+    {
+      "name": "Sunflower lecithin",
+      "displayName": "Sunflower lecithin",
+      "percent": 1,
+      "suppliedGrams": 0.55,
+      "role": "Helps ingredients mix evenly and makes dough easier to handle.",
+      "researchContext": "Optional processing aid. The team supplied no study showing a benefit at 1% in this formulation."
+    },
+    {
+      "name": "Sea salt",
+      "displayName": "Sea salt",
+      "percent": 0.3,
+      "suppliedGrams": 0.17,
+      "role": "Adds a little flavour; most salt remains in the seasoning.",
+      "researchContext": "Practical team formulation choice. Sea salt follows the user's established ingredient preference; the latest table labels it salt."
+    }
   ],
   "packageMockup": {
     "file": "assets/sorami-spicy-garlic-kit.png",

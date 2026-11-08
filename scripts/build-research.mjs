@@ -7,6 +7,8 @@ export async function buildResearch(root){
  const read=p=>readFile(new URL(p,root),'utf8');
  const [template,script,raw,camera,kit,nutritionLabel]=await Promise.all([read('src/research.html'),read('src/research.js'),read('src/research.json'),read('src/research-camera.mjs'),readFile(new URL('assets/sorami-spicy-garlic-kit.png',root)),read('assets/sorami-nutrition-facts.svg')]);
  const data=JSON.parse(raw),p=data.process,pack=data.pack,total=pack.noodlesGrams+pack.seasoningGrams+pack.toppingsGrams;
+ const grainPercent=data.noodleRecipe.slice(0,2).reduce((sum,r)=>sum+r.percent,0);
+ const formulation={grainPercent,otherPercent:100-grainPercent,grainGrams:pack.noodlesGrams*grainPercent/100};
  const [launchTemplate,launchScript,launchRaw]=await Promise.all([read('src/launch.html'),read('src/launch.js'),read('src/launch.json')]);
  const model=calculateLaunchModel(JSON.parse(launchRaw)),cash=v=>`$${v.toFixed(2)}`;
  data.steps.push(...model.steps);
@@ -17,7 +19,7 @@ export async function buildResearch(root){
   return {name:costNames[i],value,share,mid,index:i};
  });
  const launchReplacements={
-  '__PILOT_COST__':cash(model.pilot.cost),'__PILOT_PROFIT__':cash(model.pilot.gross),'__SELLING_PRICE__':cash(model.price),'__LAUNCH_CASH__':`$${(model.launchCash/1000).toFixed(1)}`,
+  '__PILOT_COST__':cash(model.pilot.cost),'__SELLING_PRICE__':cash(model.price),'__LAUNCH_CASH__':`$${(model.launchCash/1000).toFixed(1)}`,
   '<!--__COST_SEGMENTS__-->':costParts.map(c=>`<i class="launch-cost-segment is-cost-${c.index}" data-cost-segment="${c.index}" style="flex-basis:${c.share*100}%"></i>`).join(''),
   '<!--__COST_CONNECTORS__-->':costParts.map(c=>`<path class="is-cost-${c.index}" data-cost-connector="${c.index}" pathLength="1" d="M${c.mid*1000} 0V18L${(c.index+.5)*200} 58V76"/>`).join(''),
   '<!--__COST_LABELS__-->':costParts.map(c=>`<li class="is-cost-${c.index}" data-cost-label="${c.index}"><span>${escape(c.name)}</span><strong>${cash(c.value)}</strong></li>`).join(''),
@@ -44,7 +46,8 @@ export async function buildResearch(root){
   <section data-research-details="sustainability" hidden><h3>Packaging design</h3><p class="research-explanation">The cost model proposes an insulated polypropylene (PP) cup, printed directly, with a high-barrier mono-PP peelable lid and no separate paper sleeve. This is a design target; the illustrated foil-lid package elsewhere in the pitch is concept artwork. The seasoning and toppings still use two high-barrier laminate sachets.</p><p class="research-footnote">Packaging!A5:I12. Pilot cup + lid: $0.295; scale: $0.108. A separate sleeve is set to zero units. The former sleeve line was $0.12 pilot / $0.03 scale; those figures are not additional savings deducted in this adaptation. Material compatibility and local collection must be checked before making recyclability claims. No packaging mass, lifecycle assessment or measured carbon reduction was supplied.</p><h3>Campus pantry proposal</h3><p class="research-explanation">One cup donated for every 20 sold. At the modelled cup cost, this allocates about ${(model.pilot.pantry*100).toFixed(1)}¢ per pilot sale or ${(model.scale.pantry*100).toFixed(1)}¢ per scale sale, before extra program delivery costs. The three-month plan would donate 342 cups. This is a proposed program, not an existing commitment.</p><p class="research-footnote">Pilot plan!B11 and C23:F23. The grains’ drought tolerance is discussed in the earlier grain scene; no lower water-use or carbon-footprint claim is inferred for the finished product. Non-fried processing is not evidence of lower manufacturing energy, especially with refrigerated holding and microwave-vacuum treatment.</p></section>`,
   '__PRODUCT_KIT_IMAGE__':`data:image/png;base64,${kit.toString('base64')}`,
   '__CLEAN_NUTRITION_LABEL__':nutritionLabel,
-  '<!--__NOODLE_RECIPE__-->':data.noodleRecipe.map((name,i)=>`<li data-recipe-line="${i}"><span>${escape(name)}</span></li>`).join(''),
+  '<!--__NOODLE_RECIPE__-->':data.noodleRecipe.map((r,i)=>`<li data-recipe-line="${i}" aria-label="${escape(r.name)}, ${r.percent}%"><span class="research-recipe-name">${escape(r.displayName)}</span><strong class="research-recipe-share">${r.percent}%</strong></li>`).join(''),
+  '<!--__RECIPE_DETAILS__-->':rows(data.noodleRecipe.map(r=>[`${r.name} · ${r.percent}%`,r.role])),
   '<!--__PACKAGE_NUTRITION__-->':rows([['Calories',`${data.packageMockup.calories} kcal`],['Protein',`${data.packageMockup.proteinGrams}g`],['Fibre',`${data.packageMockup.fibreGrams}g`],['Sodium',`${data.packageMockup.sodiumMg}mg`]]),
   '<!--__PROCESS_FLOWCHART__-->':chart(4)+chart(3)+legend,
   '<!--__CONTROL_NOTES__-->':rows(data.controls),
@@ -99,5 +102,5 @@ export async function buildResearch(root){
  };
  replacements['<!--__PORE_DRY_SETTINGS__-->']=replacements['<!--__DRY_SETTINGS__-->'];
  let html=template;for(const [key,value] of Object.entries(replacements))html=html.replaceAll(key,String(value));
- return {html,model,script:script.replace('/*__RESEARCH_DATA__*/',()=>JSON.stringify(data)).replace('/*__RESEARCH_CAMERA__*/',()=>camera.replace(/^export /gm,'')).replace('/*__LAUNCH_RUNTIME__*/',()=>launchScript+'\nconst launchScenes=createLaunchScenes(root);')};
+ return {html,model,formulation,script:script.replace('/*__RESEARCH_DATA__*/',()=>JSON.stringify(data)).replace('/*__RESEARCH_CAMERA__*/',()=>camera.replace(/^export /gm,'')).replace('/*__LAUNCH_RUNTIME__*/',()=>launchScript+'\nconst launchScenes=createLaunchScenes(root);')};
 }
