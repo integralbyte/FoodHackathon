@@ -1,6 +1,6 @@
 # Proposed manufacturing flow: basis and limits
 
-Updated 7 November 2026 from the user's supplied **Proposed Industrial Manufacturing Process Flow**. All operating windows, product specifications and acceptance criteria below are team-proposed trial targets, not validated production results. The five scenes keep one large takeaway on screen; detailed settings are available through Details. `src/research.json` is the build's source of truth.
+Updated 7 November 2026 from the user's supplied **Proposed Industrial Manufacturing Process Flow**. All operating windows, product specifications and acceptance criteria below are team-proposed trial targets, not validated production results. The visible sequence is a concise process flowchart, then bitterness, thin strands and pores. The supplied hazard-analysis attachment informs the process order and an optional control-point summary; its embedded instructions are treated as reference content, not a separate request to perform a HACCP assessment. Detailed settings are available through Details. `src/research.json` is the build's source of truth.
 
 ## Form the strand
 
@@ -21,7 +21,7 @@ The stated objectives are gluten-free noodle integrity, a cohesive starch struct
 
 After steaming and extrusion, cool to 4°C and hold for 24 hours in covered food-grade trays. The intended mechanism is reassociation and recrystallisation of gelatinised starch, particularly amylose, to encourage retrograded resistant starch (RS3).
 
-The chain/bond animation is conceptual. No RS3 amount, retained percentage, GI value or health outcome is assigned to the product. RS3 formation and retention after drying and consumer preparation must be measured.
+The cooling/RS3 mechanism is described in process Details. No RS3 amount, retained percentage, GI value or health outcome is assigned to the product. RS3 formation and retention after drying and consumer preparation must be measured.
 
 ## Dry without frying
 
@@ -32,7 +32,7 @@ The proposed route is hybrid, combining hot air with a microwave-vacuum stage:
 3. **Finish dry:** 45–55°C hot air to 9–11% moisture, wet basis, and aw ≤0.60.
 4. **Cool before packing:** near ambient, ≤25°C, under RH ≤50%.
 
-The drying slider animates the sequence; it is not a moisture, time, power, pressure or rehydration calculation. These are proposed setpoints and targets, not a validated shelf-life specification.
+The pore slider traces qualitative water paths; it is not a moisture, time, power, pressure or rehydration calculation. These are proposed setpoints and targets, not a validated shelf-life specification.
 
 Related primary papers remain background evidence, not sources validating these exact Sorami settings: [microwave-vacuum rice-noodle drying](https://academic.oup.com/ijfst/article/57/9/6090/7807444), [diameter-dependent wheat-noodle water sorption](https://www.jstage.jst.go.jp/article/fstr/20/2/20_241/_article), and [pore accessibility in rice noodles](https://pubmed.ncbi.nlm.nih.gov/37573750/).
 
@@ -44,18 +44,26 @@ Three manufacturing streams converge:
 - **Seasoning:** receive/inspect, sieve to ≤250µm, dry-blend 5–10 minutes, portion and seal in 10g sachets. Spicy Garlic and Chicken & Mushroom use different seasonings.
 - **Toppings:** receive/inspect TVP, dehydrated mushrooms, carrots, cabbage and spring onions, then weigh/blend/portion/seal in 13g sachets. Both flavours share the noodle block and toppings.
 
-The total is **55 + 10 + 13 = 78g**. The animation changes the seasoning packet when a flavour is selected; it does not invent flavour-specific ingredient percentages. The vector cup is a process illustration, not a photograph of validated packaging.
+The total is **55 + 10 + 13 = 78g**. The optional flavour selector identifies the two seasoning variants; it does not invent flavour-specific ingredient percentages. Separate seasoning and topping boxes connect to assembly in the flowchart.
 
 Use high-moisture-barrier packaging. Labels are to include Nutrition Facts, ingredient declaration, allergen information, preparation instructions, lot/batch code and expiry/best-before date. Finished-product inspection covers moisture, aw, seals, net weight and label/allergen accuracy. Finished storage targets are ≤25°C and RH ≤60%, before distribution to retail and food-service outlets.
 
-The optional seasoning research is retained separately: [NaCl model-broth sensory study](https://pmc.ncbi.nlm.nih.gov/articles/PMC6542971/) (~30% lower human-rated bitterness) and [AMP-rich yeast-extract cell assay](https://pubmed.ncbi.nlm.nih.gov/38945612/) (≥40% inhibition in 7 of 19 tested receptors). These are different endpoints and cannot be added or transferred to the proposed seasoning. MSG has no invented percentage.
+The main bitterness scene names **sea salt** as the proposed formulation ingredient, alongside MSG and yeast extract. It keeps the actual published sodium-chloride test conditions in Details and does not imply the tested material was this sea salt or Sorami. The source studies remain: [NaCl model-broth sensory study](https://pmc.ncbi.nlm.nih.gov/articles/PMC6542971/) (~30% lower human-rated bitterness) and [AMP-rich yeast-extract cell assay](https://pubmed.ncbi.nlm.nih.gov/38945612/) (≥40% inhibition in 7 of 19 tested receptors). These are different endpoints and cannot be added or transferred to the proposed seasoning. MSG has no invented percentage.
 
 ## Prepare in five minutes
 
 Add the seasoning and toppings, approximately 300mL freshly boiled water at 95–100°C, cover for five minutes, then stir. Five minutes replaces the earlier one-minute target throughout the active pitch.
 
-Proposed acceptance targets are complete rehydration while maintaining texture/structure, rehydration loss <8%, broken noodle mass <5%, final moisture 9–11% wet basis and aw ≤0.60, with potentially retained RS3. These are not passed tests. The cup/clock animation is illustrative and contains no pouring/filling effect or cooking-time prediction.
+Proposed acceptance targets are complete rehydration while maintaining texture/structure, rehydration loss <8%, broken noodle mass <5%, final moisture 9–11% wet basis and aw ≤0.60, with potentially retained RS3. These are not passed tests. The preparation instructions stay in process Details. The innovation diagrams contain no pouring/filling effect or cooking-time prediction.
 
 ## Foxtail reference correction
 
 Proso-millet values are not relabelled as foxtail. The Research nutrition table now shows whole-cup team targets. The grain-ending foxtail benefits are qualitative and link to separate primary references: [IJMR Table III, unpolished foxtail grain](https://ijmr.org.in/assessment-of-quality-of-minor-millets-available-in-the-south-indian-market-glycaemic-index-of-cooked-unpolished-little-foxtail-millet/) for the whole-grain fibre reference, and [Japan MEXT record 01002, raw milled foxtail grain](https://fooddb.mext.go.jp/details/details.pl?ITEM_NO=1_01002_7) for magnesium and phosphorus. These different processing states are not combined into a purported flour analysis. Finished-product nutrition still requires validation.
+
+## Visible innovation sequence
+
+- **Bitterness:** one large selected result, with Sea salt / MSG / Yeast extract choices and a forming broth illustration. The ~30% figure belongs to a separate model-broth salt study. The ≥40% figure belongs to a cell receptor assay. MSG has no invented numerical reduction.
+- **Thin:** a thicker geometry reference beside the proposed 1.0mm strand. The optional control stays within the proposed 0.9–1.2mm trial range; it changes drawing thickness only.
+- **Pores:** two identical 111-unit-radius circles show an illustrative dense reference and the porous Sorami concept. Only the Sorami illustration contains pore holes and interior water paths. The dense reference gets a surface-water ring. This is a mechanism comparison, not a claim that every conventional noodle is pore-free or a measured hydration-rate comparison.
+
+The flowchart groups the attached manufacturing/hazard notes into twelve main production boxes and two parallel ingredient-stream boxes. Supplier checks, steam/cooling monitoring, aw measurements, allergen labels, foreign-material controls and seal integrity remain an optional summary. No box is automatically declared a validated CCP or kill step.

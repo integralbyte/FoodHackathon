@@ -3,24 +3,20 @@
   "status": "Team-proposed process and trial targets; not validated manufacturing or product results.",
   "steps": [
     {
-      "id": "form",
-      "title": "Form the strand"
+      "id": "process",
+      "title": "The process"
     },
     {
-      "id": "chill",
-      "title": "Set the starch"
+      "id": "bitterness",
+      "title": "Balance the bitterness"
     },
     {
-      "id": "dry",
-      "title": "Dry without frying"
+      "id": "thin",
+      "title": "Thin strands"
     },
     {
-      "id": "assemble",
-      "title": "Assemble the cup"
-    },
-    {
-      "id": "prepare",
-      "title": "Prepare in five minutes"
+      "id": "pores",
+      "title": "Connected pores"
     }
   ],
   "ingredients": [
@@ -43,6 +39,10 @@
     {
       "name": "Mushroom-umami seasoning",
       "role": "Separate seasoning line"
+    },
+    {
+      "name": "Sea salt",
+      "role": "Proposed seasoning ingredient"
     },
     {
       "name": "Textured soy protein (TVP)",
@@ -166,9 +166,9 @@
       "number": "~30",
       "suffix": "%",
       "endpoint": "less bitterness",
-      "context": "Salt · model-broth taste study",
-      "detail": "Salt reduced bitterness in model chicken broths containing L-tryptophan.",
-      "basis": "Published broth result; not a Sorami taste test.",
+      "context": "Model-broth salt study",
+      "detail": "Our proposed broth uses sea salt. In a separate NaCl model-chicken-broth study containing L-tryptophan, salt reduced human-rated bitterness by about 30%.",
+      "basis": "The study did not test Sorami or our sea salt. The dose and sensory result still need formulation trials.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6542971/",
       "remaining": 0.7
     },
@@ -194,5 +194,85 @@
       "source": "https://pubmed.ncbi.nlm.nih.gov/38945612/",
       "remaining": 0.6
     }
+  ],
+  "flow": [
+    {
+      "id": "receive",
+      "label": "Receive & inspect"
+    },
+    {
+      "id": "blend",
+      "label": "Sieve & blend"
+    },
+    {
+      "id": "hydrate",
+      "label": "Hydrate & mix"
+    },
+    {
+      "id": "steam",
+      "label": "Steam"
+    },
+    {
+      "id": "extrude",
+      "label": "Extrude"
+    },
+    {
+      "id": "chill",
+      "label": "Chill"
+    },
+    {
+      "id": "predry",
+      "label": "Hot-air pre-dry"
+    },
+    {
+      "id": "vacuum",
+      "label": "Microwave-vacuum"
+    },
+    {
+      "id": "finish",
+      "label": "Finish dry"
+    },
+    {
+      "id": "cool",
+      "label": "Cool"
+    },
+    {
+      "id": "assemble",
+      "label": "Assemble & label"
+    },
+    {
+      "id": "store",
+      "label": "Store & distribute"
+    }
+  ],
+  "controls": [
+    [
+      "Supplier verification",
+      "Ingredient specifications, incoming checks and relevant supplier verification."
+    ],
+    [
+      "Steam",
+      "Record actual product temperature and exposure time; validate any intended microbial lethality."
+    ],
+    [
+      "Cold hold",
+      "Control and record cooling profile and refrigerated holding temperature."
+    ],
+    [
+      "Final drying",
+      "Measure final moisture and water activity using calibrated methods."
+    ],
+    [
+      "Allergens & labels",
+      "Verify the correct sachets, flavour labels and allergen declarations."
+    ],
+    [
+      "Foreign material",
+      "Inspect equipment and use validated detection/rejection where required."
+    ],
+    [
+      "Packaging",
+      "Check seals, moisture barrier and package integrity."
+    ]
   ]
 }

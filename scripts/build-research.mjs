@@ -6,7 +6,15 @@ export async function buildResearch(root){
  const read=p=>readFile(new URL(p,root),'utf8');
  const [template,script,raw]=await Promise.all([read('src/research.html'),read('src/research.js'),read('src/research.json')]);
  const data=JSON.parse(raw),p=data.process,pack=data.pack,total=pack.noodlesGrams+pack.seasoningGrams+pack.toppingsGrams;
+ const chart=columns=>{
+  const count=data.flow.length,rowCount=Math.ceil(count/columns),positions=data.flow.map((_,i)=>{const row=Math.floor(i/columns),slot=i%columns;return {row,col:row%2?columns-1-slot:slot}});
+  const joins=positions.slice(1).map((b,i)=>{const a=positions[i],x1=(a.col+.5)/columns*100,y1=(a.row+.5)/rowCount*100,x2=(b.col+.5)/columns*100,y2=(b.row+.5)/rowCount*100;return {path:`<path pathLength="1" d="M${x1} ${y1}L${x2} ${y2}"/>`,arrow:`<i class="research-flow-arrow" data-flow-arrow="${i}" aria-hidden="true" style="left:calc(${(x1+x2)/2}% + var(--flow-gap-x) * ${((x1+x2)/2)/100-.5});top:calc(${(y1+y2)/2}% + var(--flow-gap-y) * ${((y1+y2)/2)/100-.5});--flow-angle:${y2>y1?45:x2>x1?-45:135}deg"></i>`}});
+  const nodes=data.flow.map((step,i)=>`<li class="research-flow-node" style="grid-row:${positions[i].row+1};grid-column:${positions[i].col+1}" data-flow-node="${i}"><span>${escape(step.label).replace('Microwave-vacuum','Microwave-<wbr>vacuum')}</span></li>`).join('');
+  return `<div class="research-flow-layout research-flow-${columns}" data-flow-layout="${columns}"><div class="research-flow-main" style="--flow-columns:${columns};--flow-rows:${rowCount}"><svg class="research-flow-connectors" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${joins.map(j=>j.path).join('')}</svg>${joins.map(j=>j.arrow).join('')}<ol class="research-flow-grid">${nodes}</ol></div><div class="research-flow-branches"><svg viewBox="0 0 100 24" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M25 24V12H50V0M75 24V12H50"/></svg><i class="research-flow-arrow research-branch-arrow" aria-hidden="true"></i><div class="research-flow-node research-flow-branch" data-flow-branch="0">Seasoning</div><div class="research-flow-node research-flow-branch" data-flow-branch="1">Toppings</div></div></div>`;
+ };
  const replacements={
+  '<!--__PROCESS_FLOWCHART__-->':chart(4)+chart(3),
+  '<!--__CONTROL_NOTES__-->':rows(data.controls),
   '<!--__FORM_SETTINGS__-->':rows([
    ['Receive & inspect','Quality, safety and supplier specifications; route ingredients to their respective lines.'],
    ['Flour sieving',`≤${range(p.sieveCutMicron,' µm')}; target D50 ${range(p.medianParticleMicron,' µm')}`],
@@ -50,11 +58,12 @@ export async function buildResearch(root){
    ['Finished moisture',`${range(p.finalMoistureWetPercent,'%')} wet basis`],['Water activity',`aw ≤${p.finalWaterActivityMax.toFixed(2)} target`],
    ['Resistant starch','Potential retained RS3; its formation and retention must be measured.']
   ]),
-  '<!--__TASTE_RESEARCH__-->':data.taste.map(t=>`<section class="research-study"><h4>${escape(t.id==='salt'?'Salt · about 30% less rated bitterness':t.id==='yeast'?'Yeast extract · ≥40% lower receptor activity':'MSG · savoury depth')}</h4><p>${escape(t.detail)} ${escape(t.basis)}</p><a class="research-source" href="${escape(t.source)}" target="_blank" rel="noopener">Read the study ↗</a></section>`).join(''),
+  '<!--__TASTE_RESEARCH__-->':data.taste.map(t=>`<section class="research-study"><h4>${escape(t.id==='salt'?'Sea salt in the recipe · published salt research':t.id==='yeast'?'Yeast extract · ≥40% lower receptor activity':'MSG · savoury depth')}</h4><p>${escape(t.detail)} ${escape(t.basis)}</p><a class="research-source" href="${escape(t.source)}" target="_blank" rel="noopener">Read the study ↗</a></section>`).join(''),
   '__DIAMETER__':p.strandMm.toFixed(1),'__CHILL_HOURS__':p.chillHours,'__CHILL_C__':p.chillC,
   '__TOTAL_GRAMS__':total,'__NOODLE_GRAMS__':pack.noodlesGrams,'__SEASONING_GRAMS__':pack.seasoningGrams,'__TOPPING_GRAMS__':pack.toppingsGrams,
   '__PREP_MINUTES__':p.preparationMinutes,'__WATER_ML__':p.preparationWaterMl
  };
+ replacements['<!--__PORE_DRY_SETTINGS__-->']=replacements['<!--__DRY_SETTINGS__-->'];
  let html=template;for(const [key,value] of Object.entries(replacements))html=html.replaceAll(key,String(value));
  return {html,script:script.replace('/*__RESEARCH_DATA__*/',JSON.stringify(data))};
 }

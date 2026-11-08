@@ -1,4 +1,4 @@
-/* Proposed manufacturing flow. Geometry illustrates mechanisms, not validated process results. */
+/* Proposed process overview, followed by three mechanism illustrations. */
 (() => {
  'use strict';
  const root=document.querySelector('.research-scene');if(!root)return;
@@ -8,69 +8,66 @@
  const attr=(e,k,v)=>e.setAttribute(k,String(v));
  const svg=(tag,attrs,parent)=>{const e=document.createElementNS(NS,tag);Object.entries(attrs).forEach(([k,v])=>attr(e,k,v));parent.appendChild(e);return e};
  const panels=all('[data-research-panel]'),nav=all('[data-research-step]'),detailPanels=all('[data-research-details]'),dialog=$('research-details');
- let active=-1,entered=0,tableTime=-10000,tableMode='process',flavourTime=-10000;
+ let active=-1,entered=0,taste=0,tasteTime=-10000;
  const update=()=>root.dispatchEvent(new CustomEvent('sorami-research-update',{bubbles:true}));
  $('research-details-open').addEventListener('click',()=>{dialog.showModal();$('research-details-close').focus()});
  $('research-details-close').addEventListener('click',()=>dialog.close());
  dialog.addEventListener('close',()=>$('research-details-open').focus());
  dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close()}});
  nav.forEach(b=>b.addEventListener('click',()=>root.dispatchEvent(new CustomEvent('sorami-research-seek',{bubbles:true,detail:{step:+b.dataset.researchStep}}))));
- all('[data-research-table]').forEach(b=>b.addEventListener('click',()=>{
-  tableMode=b.dataset.researchTable;tableTime=performance.now();
-  all('[data-research-table]').forEach(e=>e.setAttribute('aria-pressed',String(e===b)));
-  ['process','ingredients','nutrition'].forEach(name=>$(`research-${name}`).hidden=name!==tableMode);update();
- }));
- $('research-drying').addEventListener('input',()=>{$('research-drying-label').textContent=`${$('research-drying').value}%`;update()});
  all('[data-research-flavour]').forEach(b=>b.addEventListener('click',()=>{
-  const index=+b.dataset.researchFlavour,name=data.flavours[index];flavourTime=performance.now();
-  all('[data-research-flavour]').forEach(e=>e.setAttribute('aria-pressed',String(e===b)));
-  $('research-flavour-detail').textContent=`${name} seasoning. Both variants share the same noodle block and toppings.`;
-  const label=$('research-packet-flavour');label.replaceChildren();
-  const lines=index===0?['Spicy','Garlic']:['Chicken &','Mushroom'];
-  lines.forEach((line,i)=>{const span=svg('tspan',{x:95,dy:i?13:0},label);span.textContent=line});
-  root.querySelector('.research-sachet').style.fill=index===0?'#a94c29':'#8a2636';update();
+  const name=data.flavours[+b.dataset.researchFlavour];all('[data-research-flavour]').forEach(e=>e.setAttribute('aria-pressed',String(e===b)));
+  $('research-flavour-detail').textContent=`${name} seasoning; both flavours share the 55g noodle block and 13g toppings. Seasoning sachet: 10g.`;
  }));
- const grains=[];
- for(let i=0;i<38;i++){
-  const a=i*2.399,e=svg('use',{href:'#pitch-seed',x:-6,y:-9,width:12,height:18,class:i%7===0?'research-starch':i%2?'research-sorghum':'research-millet'},$('research-form-grains'));
-  grains.push({e,i,sx:250+Math.cos(a)*145,sy:25+Math.sin(a)*24,x:174+i*37%173,y:119+i*23%55});
+ function setTaste(index){
+  taste=index;tasteTime=performance.now();const d=data.taste[index];
+  all('[data-research-taste]').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===index)));
+  $('research-taste-result').replaceChildren(document.createTextNode(d.number));
+  if(d.suffix){const small=document.createElement('small');small.textContent=d.suffix;$('research-taste-result').appendChild(small)}
+  $('research-taste-result').classList.toggle('is-word',d.remaining===null);
+  $('research-taste-context').textContent=d.context;$('research-taste-endpoint').textContent=d.endpoint;
+  $('research-taste-detail').textContent=d.detail;$('research-taste-basis').textContent=d.basis;$('research-taste-source').href=d.source;
+  $('research-broth-art').dataset.ingredient=d.id;update();
  }
- for(let i=0;i<10;i++)svg('path',{d:`M${145+i*28} 255q-13 16 0 35m0-35q13 16 0 35`,class:'research-screw',pathLength:1},$('research-extruder-screw'));
- const extrusion=[];
- for(let i=0;i<4;i++)extrusion.push(svg('path',{d:`M489 ${250+i*12}C${527+i*5} ${234+i*12} ${503-i*7} ${318+i*8} ${545+i*11} ${310+i*17}S${576+i*3} ${354+i*4} ${588-i*8} ${365+i*4}`,class:'research-extrusion',pathLength:1},$('research-extruded-strands')));
- const formSteam=[];
- for(let i=0;i<3;i++)formSteam.push(svg('path',{d:`M${166+i*37} 214q-18-23 0-45t0-43`,class:'research-vapour',pathLength:1},$('research-form-steam')));
- const chains=[],bonds=[];
- for(let i=0;i<7;i++)chains.push({e:svg('path',{class:i%2?'research-starch-chain light':'research-starch-chain',pathLength:1},$('research-starch-chains')),i});
- for(let i=0;i<6;i++)for(let j=0;j<3;j++)bonds.push(svg('path',{d:`M${176+j*93} ${143+i*19}v19`,class:'research-starch-bond',pathLength:1},$('research-starch-bonds')));
- const preAir=[],finishAir=[],microwaves=[],vapour=[],pores=[],connections=[];
- for(const [parent,items,base] of [[ $('research-pre-air'),preAir,53 ],[ $('research-finish-air'),finishAir,476 ]]){
-  for(let i=0;i<3;i++)items.push(svg('path',{d:`M${base} ${206+i*20}q23-12 46 0t45 0`,class:'research-hot-air',pathLength:1},parent));
+ all('[data-research-taste]').forEach(b=>b.addEventListener('click',()=>setTaste(+b.dataset.researchTaste)));
+ $('research-thickness').addEventListener('input',()=>{$('research-thickness-label').textContent=`${(+$('research-thickness').value).toFixed(1)} mm`;update()});
+ $('research-pore-progress').addEventListener('input',()=>{$('research-pore-label').textContent=`${$('research-pore-progress').value}%`;update()});
+ const particles=[],brothNoodles=[],steam=[],umami=[];
+ for(let i=0;i<21;i++){
+  const e=svg('path',{d:'M-5-3 1-6 6-1 4 5-3 4Z',class:'research-salt-crystal'},$('research-taste-particles'));
+  particles.push({e,i,x:137+i*37%337,y:73+i*19%58});
  }
- for(let i=0;i<3;i++)microwaves.push(svg('path',{d:`M246 ${153+i*20}q24-12 48 0t48 0t49 0`,class:'research-microwave',pathLength:1},$('research-microwaves')));
- for(let i=0;i<18;i++)pores.push({e:svg('ellipse',{cx:247+i*31%145,cy:248+i*13%31,rx:0,ry:0,class:'research-dry-pore'},$('research-dry-pores')),r:2+i%4*1.5,i});
- for(const d of ['M236 260c31-17 40 23 74 7s55-10 96-6','M275 239q-11 24 12 48','M352 239q17 23 0 48'])connections.push(svg('path',{d,class:'research-dry-channel',pathLength:1},$('research-dry-pores')));
- for(let i=0;i<5;i++)vapour.push(svg('path',{d:`M${253+i*31} 240q-13-24 0-44t0-49`,class:'research-vapour',pathLength:1},$('research-vapour')));
- const dryerStages=all('[data-dryer-stage]');
- for(let i=0;i<10;i++){
-  let d='';for(let x=58;x<=153;x+=3)d+=`${x===58?'M':'L'}${x} ${60+i*4+Math.sin(x*.2+i)*2.2}`;
-  svg('path',{d,class:'research-block-noodle',pathLength:1},$('research-assembly-noodles'));
+ for(let i=0;i<8;i++){
+  let d='';for(let x=127;x<=494;x+=5)d+=`${x===127?'M':'L'}${x} ${227+i*14+Math.sin(x*.057+i)*5}`;
+  brothNoodles.push(svg('path',{d,class:'research-broth-noodle',pathLength:1},$('research-broth-noodles')));
  }
- const toppingColours=['#ab7b39','#b86731','#859049','#e5c56f'];
- for(let i=0;i<18;i++)svg('circle',{cx:61+i*17%73,cy:307+i*13%40,r:2+i%3,fill:toppingColours[i%4]},$('research-topping-pieces'));
- const assemblyPaths=[],tokens=[],sourceY=[86,203,326];
- for(let i=0;i<3;i++){
-  assemblyPaths.push(svg('path',{d:`M175 ${sourceY[i]}Q285 ${sourceY[i]} 453 177`,class:'research-assembly-route',pathLength:1},$('research-assembly-paths')));
-  tokens.push(svg('circle',{r:7,fill:['#d3a24c','#8a2636','#859049'][i]},$('research-assembly-tokens')));
+ for(let i=0;i<3;i++)steam.push(svg('path',{d:`M${236+i*73} 173q-21-29 0-54t0-43`,class:'research-vapour',pathLength:1},$('research-broth-steam')));
+ for(let i=0;i<15;i++){
+  const a=i/15*Math.PI*2;
+  umami.push({e:svg('ellipse',{rx:5,ry:3,fill:'#8a2636'},$('research-umami-ring')),a});
  }
- const prepSteam=[];
- for(let i=0;i<3;i++)prepSteam.push(svg('path',{d:`M${158+i*38} 134q-20-27 0-50t0-45`,class:'research-vapour',pathLength:1},$('research-prepare-steam')));
- for(let i=0;i<12;i++){
-  const a=i/12*Math.PI*2,r=i%3===0?75:79;
-  svg('path',{d:`M${447+Math.sin(a)*r} ${166-Math.cos(a)*r}L${447+Math.sin(a)*84} ${166-Math.cos(a)*84}`,class:'research-clock-tick'},$('research-clock-ticks'));
+ const d='M0 27C-58 60 58 86 0 117S-58 175 0 203S58 254 0 282';
+ const thick=svg('path',{d,class:'research-thick-reference',pathLength:1},$('research-thick-strand'));
+ const thinShadow=svg('path',{d,class:'research-thin-shadow',pathLength:1},$('research-thin-strand'));
+ const thinLight=svg('path',{d,class:'research-thin-highlight',pathLength:1},$('research-thin-strand'));
+ attr($('research-thick-strand'),'transform','translate(148 0)');attr($('research-thin-strand'),'transform','translate(448 0)');
+ const holes=[],texture=[],water=[];
+ for(let i=0;i<20;i++){
+  const a=i*2.399,r=Math.sqrt((i+.5)/20)*94,x=480+Math.cos(a)*r,y=192+Math.sin(a)*r;
+  const e=svg('ellipse',{cx:x,cy:y,rx:0,ry:0,class:'research-pore-hole',transform:`rotate(${i*31} ${x} ${y})`},$('research-pore-holes'));
+  holes.push({e,i,r:4+i%4*1.6});
  }
- function scaleAt(e,x,y,scale){attr(e,'transform',`translate(${x} ${y}) scale(${scale}) translate(${-x} ${-y})`)}
- function drawPaths(panel,t){panel.querySelectorAll('.research-machine,.research-fine-line,.research-draw,.research-screw').forEach((e,i)=>e.style.strokeDashoffset=1-phase(t,.01+i*.006,.75+i*.005))}
+ for(let i=0;i<28;i++){
+  const a=i*2.399,r=Math.sqrt((i+.5)/28)*107;
+  texture.push(svg('circle',{cx:480+Math.cos(a)*r,cy:192+Math.sin(a)*r,r:.9,fill:'#a06c31',opacity:.3},$('research-pore-texture')));
+ }
+ for(const d of [
+  'M369 188C401 176 409 216 432 208S449 176 480 192',
+  'M494 81C511 123 451 132 463 160S494 169 480 192',
+  'M591 197C551 214 551 165 519 177S510 205 480 192',
+  'M479 303C457 270 513 255 493 226S470 215 480 192'
+ ])water.push(svg('path',{d,class:'research-pore-water',pathLength:1},$('research-water-paths')));
+ function scaleAt(e,x,y,s){attr(e,'transform',`translate(${x} ${y}) scale(${s}) translate(${-x} ${-y})`)}
  function paint(q,now,reduced){
   const index=Math.min(panels.length-1,Math.floor(clamp(q)*panels.length)),local=clamp(q*panels.length-index);
   if(index!==active){
@@ -78,42 +75,40 @@
    panels.forEach((e,i)=>{e.hidden=i!==index;e.inert=i!==index});detailPanels.forEach((e,i)=>e.hidden=i!==index);
    nav.forEach((e,i)=>e.setAttribute('aria-pressed',String(i===index)));$('research-details-title').textContent=data.steps[index].title;
   }
-  const t=reduced?1:Math.min(phase(local,.015,.75),phase((now-entered)/1000,0,.8));
-  const panel=panels[index],copy=panel.querySelector('.research-data');drawPaths(panel,t);
-  copy.style.clipPath=`inset(0 ${(1-phase(t,.08,.72))*100}% 0 0)`;copy.style.transform=`translateX(${(1-phase(t,.08,.72))*16}px)`;copy.inert=t<.24;
+  const t=reduced?1:Math.min(phase(local,.015,.75),phase((now-entered)/1000,0,.8)),panel=panels[index],copy=panel.querySelector('.research-data');
+  copy.style.clipPath=`inset(0 ${(1-phase(t,.03,.6))*100}% 0 0)`;copy.style.transform=`translateX(${(1-phase(t,.03,.6))*16}px)`;copy.inert=t<.24;
   if(index===0){
-   grains.forEach(({e,i,sx,sy,x,y})=>{const p=phase(t,i*.003,.6+i*.003);attr(e,'transform',`translate(${sx+(x-sx)*p} ${sy+(y-sy)*p}) rotate(${i*37+(1-p)*150}) scale(${p})`)});
-   extrusion.forEach((e,i)=>e.style.strokeDashoffset=1-phase(t,.25+i*.03,.88));formSteam.forEach((e,i)=>e.style.strokeDashoffset=1-phase(t,.15+i*.04,.7));
-   $( `research-${tableMode}` ).style.clipPath=`inset(0 ${(1-(reduced?1:phase((now-tableTime)/1000,0,.55)))*100}% 0 0)`;
+   all('[data-flow-node]').forEach(e=>{const n=+e.dataset.flowNode,p=phase(t,n*.035,.34+n*.035);e.style.clipPath=`inset(0 ${(1-p)*100}% 0 0)`;e.style.transform=`translateY(${(1-p)*13}px)`});
+   all('.research-flow-connectors>path').forEach((e,i)=>e.style.strokeDashoffset=1-phase(t,.04+i*.035,.4+i*.035));
+   all('[data-flow-arrow]').forEach(e=>{const i=+e.dataset.flowArrow;e.style.transform=`translate(-50%,-50%) rotate(var(--flow-angle)) scale(${phase(t,.04+i*.035,.4+i*.035)})`});
+   all('[data-flow-branch]').forEach(e=>{const p=phase(t,.48+(+e.dataset.flowBranch)*.04,.85);e.style.clipPath=`inset(0 ${(1-p)*100}% 0 0)`});
+   all('.research-flow-branches>svg>path').forEach(e=>e.style.strokeDashoffset=1-phase(t,.53,.85));
+   all('.research-branch-arrow').forEach(e=>e.style.transform=`translate(-50%,-50%) rotate(-135deg) scale(${phase(t,.53,.85)})`);
   }else if(index===1){
-   chains.forEach(({e,i})=>{
-    const p=phase(t,.03+i*.025,.75);let d='';
-    for(let j=0;j<=24;j++){const x=138+j*11,y=143+i*19+(1-p)*Math.sin(j*.65+i)*22;d+=`${j===0?'M':'L'}${x} ${y}`}
-    attr(e,'d',d);e.style.strokeDashoffset=1-p;
-   });bonds.forEach((e,i)=>e.style.strokeDashoffset=1-phase(t,.35+i*.004,.95));
-   panel.querySelector('.research-clock-progress').style.strokeDashoffset=1-phase(t,.2,.95);
-  }else if(index===2){
-   const dry=+$('research-drying').value/100*t;
-   dryerStages.forEach((e,i)=>scaleAt(e,[108,321,530][i],[241,194,241][i],phase(t,.03+i*.09,.53+i*.1)));
-   preAir.forEach((e,i)=>e.style.strokeDashoffset=1-phase(dry,.01+i*.025,.4));
-   microwaves.forEach((e,i)=>e.style.strokeDashoffset=1-phase(dry,.18+i*.025,.7));
-   finishAir.forEach((e,i)=>e.style.strokeDashoffset=1-phase(dry,.45+i*.025,.98));
-   pores.forEach(({e,r,i})=>{const p=phase(dry,.2+i*.003,.9);attr(e,'rx',r*p*1.4);attr(e,'ry',r*p)});
-   connections.forEach((e,i)=>e.style.strokeDashoffset=1-phase(dry,.3+i*.025,.95));vapour.forEach((e,i)=>e.style.strokeDashoffset=1-phase(dry,.2+i*.025,.85));
-   attr($('research-pressure-needle'),'transform',`rotate(${-75*dry} 264 105)`);
-  }else if(index===3){
-   ['noodles','seasoning','toppings'].forEach((name,i)=>{
-    const p=phase(t,.01+i*.07,.55+i*.06),flip=name==='seasoning'?(reduced?1:phase((now-flavourTime)/1000,0,.6)):1;
-    const e=$(`research-source-${name}`);attr(e,'transform',`translate(98 ${sourceY[i]}) scale(${p*flip} ${p}) translate(-98 ${-sourceY[i]})`);
+   const it=reduced?1:phase((now-tasteTime)/1000,0,.65),build=t*it;
+   scaleAt($('research-broth-bowl'),310,354,phase(t,.02,.65));
+   panel.querySelector('.research-bowl').style.strokeDashoffset=1-phase(t,.04,.6);scaleAt(panel.querySelector('.research-broth-surface'),310,212,phase(t,.13,.65));
+   particles.forEach(({e,i,x,y})=>{
+    const p=phase(build,i*.004,.72+i*.008),isYeast=taste===2;
+    attr(e,'transform',`translate(${x} ${y+p*67}) rotate(${i*31+p*80}) scale(${p*(taste===1?.55:isYeast?.7:1)})`);
+    e.style.fill=taste===0?'#fff2d2':isYeast?'#9d7436':'#dcbb65';
    });
-   assemblyPaths.forEach((e,i)=>e.style.strokeDashoffset=1-phase(t,.12+i*.06,.78+i*.03));
-   tokens.forEach((e,i)=>{const p=phase(t,.2+i*.08,.8+i*.05),x=(1-p)**2*175+2*(1-p)*p*285+p*p*453,y=(1-p)**2*sourceY[i]+2*(1-p)*p*sourceY[i]+p*p*177;attr(e,'cx',x);attr(e,'cy',y);attr(e,'r',7*Math.sin(p*Math.PI))});
-   scaleAt($('research-assembly-cup'),457,290,phase(t,.15,.72));
-   const lid=phase(t,.63,.98);attr($('research-assembly-lid'),'transform',`translate(0 ${-95*(1-lid)}) rotate(${-14*(1-lid)} 457 181)`);
+   brothNoodles.forEach((e,i)=>e.style.strokeDashoffset=1-phase(t,.12+i*.025,.78));steam.forEach((e,i)=>e.style.strokeDashoffset=1-phase(t,.25+i*.04,.85));
+   umami.forEach(({e,a},i)=>{const p=taste===1?phase(build,i*.008,.7):0;attr(e,'cx',310+Math.cos(a)*215);attr(e,'cy',214+Math.sin(a)*67);attr(e,'transform',`translate(310 214) scale(${p}) translate(-310 -214)`)});
+   $('research-taste-result').style.transform=`perspective(500px) rotateX(${(1-build)*-65}deg)`;
+  }else if(index===2){
+   const width=+$('research-thickness').value;
+   thick.style.strokeDashoffset=thinShadow.style.strokeDashoffset=thinLight.style.strokeDashoffset=1-phase(t,.04,.85);
+   thinShadow.style.strokeWidth=String(24*width);thinLight.style.strokeWidth=String(15*width);
+   panel.querySelector('.research-measure-line').style.strokeDashoffset=1-phase(t,.35,.9);
   }else{
-   scaleAt($('research-prepared-cup'),198,283,phase(t,.02,.63));scaleAt($('research-prepare-clock'),447,166,phase(t,.1,.6));
-   const p=phase(t,.22,.98);$('research-prep-arc').style.strokeDashoffset=1-p;attr($('research-prep-hand'),'transform',`rotate(${p*360} 447 166)`);prepSteam.forEach((e,i)=>e.style.strokeDashoffset=1-phase(t,.25+i*.06,.9));
+   const wet=+$('research-pore-progress').value/100*phase(t,.2,.95);
+   scaleAt($('research-normal-section'),159,192,phase(t,.03,.55));scaleAt($('research-porous-section'),480,192,phase(t,.08,.6));
+   holes.forEach(({e,i,r})=>{const p=phase(t,.13+i*.006,.75);attr(e,'rx',r*p*1.4);attr(e,'ry',r*p)});
+   water.forEach((e,i)=>e.style.strokeDashoffset=1-clamp(wet*(1.15-i*.04)));
+   attr($('research-normal-water').firstElementChild,'stroke-width',wet*12);
+   panel.querySelector('.research-water-arrow').style.strokeDashoffset=1-phase(t,.2,.7);
   }
  }
- root.researchScene={steps:panels.length,timelineWeight:panels.length*.8,paint,needsFrame(now){return now-entered<900||now-tableTime<650||now-flavourTime<700}};
+ root.researchScene={steps:panels.length,timelineWeight:panels.length*.8,paint,needsFrame(now){return now-entered<900||now-tasteTime<750}};
 })();
