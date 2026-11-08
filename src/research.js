@@ -68,11 +68,12 @@
   copy.style.clipPath=`inset(0 ${(1-phase(t,.03,.6))*100}% 0 0)`;copy.style.transform=`translateX(${(1-phase(t,.03,.6))*16}px)`;copy.inert=t<.24;
   if(index===0){
    all('[data-flow-node]').forEach(e=>{const n=+e.dataset.flowNode,p=phase(t,n*.035,.34+n*.035);e.style.clipPath=`inset(0 ${(1-p)*100}% 0 0)`;e.style.transform=`translateY(${(1-p)*13}px)`});
-   all('.research-flow-connectors>path').forEach((e,i)=>e.style.strokeDashoffset=1-phase(t,.04+i*.035,.4+i*.035));
-   all('[data-flow-arrow]').forEach(e=>{const i=+e.dataset.flowArrow;e.style.transform=`translate(-50%,-50%) rotate(var(--flow-angle)) scale(${phase(t,.04+i*.035,.4+i*.035)})`});
+   all('[data-flow-link]').forEach(e=>{
+    const i=+e.dataset.flowLink,p=phase(t,.04+i*.035,.4+i*.035),remaining=(1-p)*100;
+    e.style.clipPath=e.dataset.flowDirection==='left'?`inset(0 0 0 ${remaining}%)`:e.dataset.flowDirection==='down'?`inset(0 0 ${remaining}% 0)`:`inset(0 ${remaining}% 0 0)`;
+   });
    all('[data-flow-branch]').forEach(e=>{const p=phase(t,.48+(+e.dataset.flowBranch)*.04,.85);e.style.clipPath=`inset(0 ${(1-p)*100}% 0 0)`});
-   all('.research-flow-branches>svg>path').forEach(e=>e.style.strokeDashoffset=1-phase(t,.53,.85));
-   all('.research-branch-arrow').forEach(e=>e.style.transform=`translate(-50%,-50%) rotate(-135deg) scale(${phase(t,.53,.85)})`);
+   all('.research-branch-links').forEach(e=>e.style.clipPath=`inset(${(1-phase(t,.53,.85))*100}% 0 0 0)`);
   }else if(index===1){
    const build=t;
    all('[data-bitterness-result]').forEach((e,i)=>{const p=phase(t,.03+i*.09,.65+i*.08);e.style.clipPath=`inset(0 ${(1-p)*100}% 0 0)`;e.style.transform=reduced?'none':`perspective(600px) rotateX(${(1-p)*-65}deg) scale(${1+Math.sin(p*Math.PI)*.055})`});
