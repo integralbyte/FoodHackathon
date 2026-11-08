@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="727.083333" viewBox="0 0 400 727.083333" role="img" aria-labelledby="nutrition-label-title nutrition-label-description">
+ <title id="nutrition-label-title">Sorami Spicy Garlic Nutrition Facts</title>
+ <desc id="nutrition-label-description">Clean vector recreation of the supplied package illustration. One 78g cup: 260 calories, 11g protein, 5.8g dietary fiber and 340mg sodium. These are the supplied mockup values.</desc>
+ <rect width="400" height="727.083333" fill="#fff3df"/>
+ <rect x="1.5" y="1.5" width="397" height="724.083333" fill="none" stroke="#171510" stroke-width="2"/>
+ <g font-family="Arial,Helvetica,sans-serif" fill="#171510">
+  <text x="12" y="54" font-size="47" font-weight="900" textLength="376" lengthAdjust="spacingAndGlyphs">Nutrition Facts</text>
+  <path d="M12 65H388" stroke="#171510" stroke-width="1.5"/>
+  <text x="12" y="89" font-size="18">1 serving per container</text>
+  <g font-size="20" font-weight="700"><text x="12" y="116">Serving size</text><text x="388" y="116" text-anchor="end">1 cup (78 g)</text></g>
+  <path d="M12 130H388" stroke="#171510" stroke-width="9"/>
+  <text x="12" y="155" font-size="14" font-weight="700">Amount per serving</text>
+  <text x="12" y="197" font-size="39" font-weight="800">Calories</text>
+  <text x="388" y="197" font-size="55" font-weight="800" text-anchor="end">260</text>
+  <path d="M12 211H388" stroke="#171510" stroke-width="5"/>
+  <text x="388" y="237" font-size="16" font-weight="700" text-anchor="end">% Daily Value*</text>
+  <g fill="none" stroke="#171510" stroke-width=".8">
+   <path d="M12 244H388M12 275H388M28 301H388M28 327H388M12 353H388M12 379H388M12 405H388M28 431H388M28 457H388M40 483H388"/>
+   <path d="M12 550H388M12 578H388M12 606H388"/>
+  </g>
+  <g font-size="18">
+   <text x="12" y="267"><tspan font-weight="700">Total Fat</tspan> 3.0 g</text>
+   <text x="28" y="293">Saturated Fat 0.5 g</text>
+   <text x="28" y="319"><tspan font-style="italic">Trans</tspan> Fat 0 g</text>
+   <text x="12" y="345"><tspan font-weight="700">Cholesterol</tspan> 0 mg</text>
+   <text x="12" y="371"><tspan font-weight="700">Sodium</tspan> 340 mg</text>
+   <text x="12" y="397"><tspan font-weight="700">Total Carbohydrate</tspan> 53 g</text>
+   <text x="28" y="423">Dietary Fiber 5.8 g</text>
+   <text x="28" y="449">Total Sugars 3.6 g</text>
+   <text x="40" y="475" font-size="16">Includes 0 g Added Sugars</text>
+   <text x="12" y="501"><tspan font-weight="700">Protein</tspan> 11 g</text>
+   <text x="12" y="542">Vitamin D 0 mcg</text>
+   <text x="12" y="570">Calcium 40 mg</text>
+   <text x="12" y="598">Iron 2.0 mg</text>
+   <text x="12" y="626">Potassium 280 mg</text>
+  </g>
+  <g font-size="18" font-weight="700" text-anchor="end">
+   <text x="388" y="267">4%</text><text x="388" y="293">3%</text>
+   <text x="388" y="345">0%</text><text x="388" y="371">15%</text>
+   <text x="388" y="397">19%</text><text x="388" y="423">21%</text><text x="388" y="475">0%</text>
+  </g>
+  <g font-size="18" text-anchor="end"><text x="388" y="542">0%</text><text x="388" y="570">4%</text><text x="388" y="598">10%</text><text x="388" y="626">6%</text></g>
+  <path d="M12 515H388" stroke="#171510" stroke-width="9"/>
+  <path d="M12 638H388" stroke="#171510" stroke-width="4"/>
+  <text x="12" y="659" font-size="12.5"><tspan x="12">* The % Daily Value (DV) tells you how much a nutrient</tspan><tspan x="12" dy="16">in a serving of food contributes to a daily diet.</tspan><tspan x="12" dy="16">2,000 calories a day is used for general nutrition advice.</tspan></text>
+ </g>
+</svg>

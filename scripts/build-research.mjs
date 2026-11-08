@@ -4,7 +4,7 @@ const range=(values,unit='')=>`${values.join('–')}${unit}`;
 const rows=items=>items.map(([label,value])=>`<tr><th scope="row">${escape(label)}</th><td>${escape(value)}</td></tr>`).join('');
 export async function buildResearch(root){
  const read=p=>readFile(new URL(p,root),'utf8');
- const [template,script,raw,camera,kit]=await Promise.all([read('src/research.html'),read('src/research.js'),read('src/research.json'),read('src/research-camera.mjs'),readFile(new URL('assets/sorami-spicy-garlic-kit.png',root))]);
+ const [template,script,raw,camera,kit,nutritionLabel]=await Promise.all([read('src/research.html'),read('src/research.js'),read('src/research.json'),read('src/research-camera.mjs'),readFile(new URL('assets/sorami-spicy-garlic-kit.png',root)),read('assets/sorami-nutrition-facts.svg')]);
  const data=JSON.parse(raw),p=data.process,pack=data.pack,total=pack.noodlesGrams+pack.seasoningGrams+pack.toppingsGrams;
  const chart=columns=>{
   const count=data.flow.length,rowCount=Math.ceil(count/columns),positions=data.flow.map((_,i)=>{const row=Math.floor(i/columns),slot=i%columns;return {row,col:row%2?columns-1-slot:slot}});
@@ -18,6 +18,7 @@ export async function buildResearch(root){
  };
  const replacements={
   '__PRODUCT_KIT_IMAGE__':`data:image/png;base64,${kit.toString('base64')}`,
+  '__CLEAN_NUTRITION_LABEL__':nutritionLabel,
   '<!--__NOODLE_RECIPE__-->':data.noodleRecipe.map((name,i)=>`<li data-recipe-line="${i}"><span>${escape(name)}</span></li>`).join(''),
   '<!--__PACKAGE_NUTRITION__-->':rows([['Calories',`${data.packageMockup.calories} kcal`],['Protein',`${data.packageMockup.proteinGrams}g`],['Fibre',`${data.packageMockup.fibreGrams}g`],['Sodium',`${data.packageMockup.sodiumMg}mg`]]),
   '<!--__PROCESS_FLOWCHART__-->':chart(4)+chart(3),

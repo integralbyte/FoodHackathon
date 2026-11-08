@@ -3,9 +3,12 @@
 .research-scene{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:25px;min-height:0;padding:12px 0 9px}
 .research-workbench{position:relative;width:100%;min-height:0;flex:1;display:flex;align-items:center;isolation:isolate;overflow:clip}
 .research-panel{position:relative;z-index:1;width:100%;display:grid;grid-template-columns:.92fr 1.08fr;align-items:center;gap:clamp(24px,4vw,70px)}.research-panel[hidden],.research-details [hidden]{display:none!important}
-.research-kit-viewport{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;will-change:clip-path}
-.research-kit-viewport[hidden]{display:none}
+.research-kit-viewport{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;will-change:clip-path}
+.research-kit-viewport[hidden],.pitch-story:not(.is-research) .research-kit-viewport{display:none}
 .research-kit-viewport img{position:absolute;left:0;top:0;display:block;width:1536px;height:1024px;max-width:none;transform-origin:0 0;will-change:transform;user-select:none}
+.research-kit-viewport .research-clean-label{position:absolute;left:0;top:0;width:192px;height:349px;transform-origin:0 0;will-change:transform,opacity}
+.research-clean-label>svg{display:block;width:100%;height:100%}
+.research-kit-viewport .research-clean-label[hidden]{display:none}
 .research-kit-panel{height:100%;pointer-events:none}
 .research-nutrition-panel{grid-template-columns:1fr 1fr;gap:0}
 .research-recipe-copy{grid-column:2;padding-left:clamp(15px,3vw,50px)}

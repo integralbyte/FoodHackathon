@@ -35,3 +35,27 @@ for(const [width,height,phone] of [[1324,624,false],[342,608,true],[598,500,fals
   }
  });
 }
+test('overview uses the full screen while label and ingredient close-ups stay beside their text',()=>{
+ const frame={x:58,y:113,width:1324,height:612},w=1440,h=900;
+ for(const [u,name] of [[1.8,'label'],[3.8,'seasoning'],[5.4,'noodles']]){
+  const old=researchCameraPose(name,frame.width,frame.height,false),f=sampleResearchCamera(u/7,w,h,false,false,frame);
+  close(f.scale,old.scale);close(f.x,old.x+frame.x);close(f.y,old.y+frame.y);
+ }
+ for(const u of [2.7,4.7]){
+  const f=sampleResearchCamera(u/7,w,h,false,false,frame),old=researchCameraPose('kit',frame.width,frame.height,false);
+  close(f.scale,Math.min(w/1536,h/1024));assert.ok(f.scale>old.scale*1.4,'desktop overview must be substantially larger');
+  close(f.clip.bottom-f.clip.top,h);assert.ok(f.clip.left>=0&&f.clip.right<=w);
+ }
+ for(const boundary of [1.9,2.4,2.9,3.35,3.9,4.4,4.9,5.35]){
+  const a=sampleResearchCamera((boundary-1e-7)/7,w,h,false,false,frame),b=sampleResearchCamera((boundary+1e-7)/7,w,h,false,false,frame);
+  for(const key of ['scale','x','y'])assert.ok(Math.abs(a[key]-b[key])<.01);
+  for(const edge of ['left','top','right','bottom'])assert.ok(Math.abs(a.clip[edge]-b.clip[edge])<.01);
+ }
+});
+test('clean label stays opaque when reading and blends into the printed label during zoom-out',()=>{
+ assert.equal(sampleResearchCamera(1.8/7,1440,900).labelBlend,1);
+ const middle=sampleResearchCamera(2.1/7,1440,900);assert.ok(middle.labelBlend>0&&middle.labelBlend<1);
+ for(const u of [2.7,3.8,4.7,5.8,6.8])assert.equal(sampleResearchCamera(u/7,1440,900).labelBlend,0);
+ assert.equal(sampleResearchCamera(1.8/7,390,844,true).labelBlend,1);
+ assert.equal(sampleResearchCamera(2.7/7,390,844,true).labelBlend,0);
+});

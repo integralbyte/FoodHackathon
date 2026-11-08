@@ -10,6 +10,10 @@
  const svg=(tag,attrs,parent)=>{const e=document.createElementNS(NS,tag);Object.entries(attrs).forEach(([k,v])=>attr(e,k,v));parent.appendChild(e);return e};
  const panels=all('[data-research-panel]'),nav=all('[data-research-step]'),detailPanels=all('[data-research-details]'),dialog=$('research-details');
  let active=-1;
+ // Keep the photographic camera outside the text scroller so overview frames
+ // can use the whole screen without enlarging or moving the close-up copy.
+ const pin=root.closest('.pitch-pin'),cameraLayer=$('research-kit-viewport');
+ pin.appendChild(cameraLayer);
  const update=()=>root.dispatchEvent(new CustomEvent('sorami-research-update',{bubbles:true}));
  $('research-details-open').addEventListener('click',()=>{dialog.showModal();$('research-details-close').focus()});
  $('research-details-close').addEventListener('click',()=>dialog.close());
@@ -52,11 +56,15 @@
    detailPanels.forEach(e=>e.hidden=e.dataset.researchDetails!==data.steps[index].details);
    nav.forEach(e=>e.setAttribute('aria-pressed',String(+e.dataset.researchStep===index)));$('research-details-title').textContent=data.steps[index].title;
   }
-  const bounds=root.querySelector('.research-workbench').getBoundingClientRect(),width=bounds.width,height=bounds.height;
-  const camera=sampleResearchCamera(q,width,height,reduced,window.innerWidth<=620),viewport=$('research-kit-viewport');
+  const bounds=root.querySelector('.research-workbench').getBoundingClientRect(),stage=pin.getBoundingClientRect(),width=stage.width,height=stage.height;
+  const contentFrame={x:bounds.left-stage.left,y:bounds.top-stage.top,width:bounds.width,height:bounds.height};
+  const camera=sampleResearchCamera(q,width,height,reduced,window.innerWidth<=620,contentFrame),viewport=cameraLayer;
   viewport.hidden=!camera.visible;
   viewport.style.clipPath=`inset(${camera.clip.top}px ${Math.max(0,width-camera.clip.right)}px ${Math.max(0,height-camera.clip.bottom)}px ${camera.clip.left}px)`;
   $('research-kit-image').style.transform=`translate3d(${camera.x}px,${camera.y}px,0) scale(${camera.scale})`;
+  const label=$('research-clean-label'),region=researchKitRegions.label;
+  label.hidden=camera.labelBlend<=0;label.style.opacity=camera.labelBlend;
+  label.style.transform=`translate3d(${camera.x+region.x*camera.scale}px,${camera.y+region.y*camera.scale}px,0) scale(${camera.scale})`;
   root.dataset.researchCamera=camera.from===camera.to?camera.to:`${camera.from}-to-${camera.to}`;
   const delay=index===0||index===6?.015:index===5?.52:.35;
   const t=reduced?1:phase(local,delay,index===5?.86:.75),panel=panels[index],copy=panel.querySelector('.research-data');

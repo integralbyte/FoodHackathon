@@ -26,10 +26,17 @@ export function researchCameraPose(name,width,height,phone=width<=620){
  return {scale,x:left-region.x*scale,y:top-region.y*scale,clip:{left,top,right:left+region.width*scale,bottom:top+region.height*scale}};
 }
 
-export function sampleResearchCamera(progress,width,height,reduced=false,phone=width<=620){
+export function sampleResearchCamera(progress,width,height,reduced=false,phone=width<=620,contentFrame={x:0,y:0,width,height}){
  width=Math.max(1,width);height=Math.max(1,height);
  const u=Math.max(0,Math.min(7,progress*7)),step=Math.min(6,Math.floor(u));
- const poses={label:researchCameraPose('label',width,height,phone),kit:researchCameraPose('kit',width,height,phone),seasoning:researchCameraPose('seasoning',width,height,phone),noodles:researchCameraPose('noodles',width,height,phone)};
+ const focusedPose=name=>{
+  const p=researchCameraPose(name,contentFrame.width,contentFrame.height,phone);
+  p.x+=contentFrame.x;p.y+=contentFrame.y;
+  for(const edge of ['left','right'])p.clip[edge]+=contentFrame.x;
+  for(const edge of ['top','bottom'])p.clip[edge]+=contentFrame.y;
+  return p;
+ };
+ const poses={label:focusedPose('label'),kit:researchCameraPose('kit',width,height,phone),seasoning:focusedPose('seasoning'),noodles:focusedPose('noodles')};
  let from='label',to='label',amount=0;
  if(u>=1.9&&u<2.4){to='kit';amount=cameraEase((u-1.9)/.5)}
  else if(u>=2.4&&u<2.9)from=to='kit';
@@ -47,6 +54,7 @@ export function sampleResearchCamera(progress,width,height,reduced=false,phone=w
  clip.left=cameraMix(clip.left,clip.right,handoff);
  return {
   step,from,to,amount,emerge,handoff,
+  labelBlend:reduced?(step===1?1:0):1-cameraEase((u-1.98)/.24),
   visible:handoff<1&&(reduced?step>0:u>.9),
   scale:Math.exp(cameraMix(Math.log(a.scale),Math.log(b.scale),amount)),
   x:cameraMix(a.x,b.x,amount),y:cameraMix(a.y,b.y,amount),clip
