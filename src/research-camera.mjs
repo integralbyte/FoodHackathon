@@ -4,7 +4,7 @@ export const researchKitRegions={
  seasoning:{x:529,y:681,width:283,height:291},
  noodles:{x:1161,y:681,width:316,height:279}
 };
-export const researchTourStops=[.8,1.8,2.7,3.8,4.7,5.8,6.8];
+export const researchTourStops=[.8,1.8,2.4,3.8,4.7,5.8,6.8];
 const cameraClamp=v=>Math.max(0,Math.min(1,v));
 const cameraEase=v=>{v=cameraClamp(v);return v*v*v*(v*(v*6-15)+10)};
 const cameraMix=(a,b,t)=>a+(b-a)*t;

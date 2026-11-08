@@ -19,6 +19,7 @@
 .pitch-header{height:88px;gap:24px;border-bottom:1px solid #ffffff06}
 .pitch-wordmark{width:104px;height:60px;padding:0;background:none;box-shadow:none;transform:rotate(-5deg);flex-shrink:0;transition:transform .25s}
 .pitch-wordmark:hover{transform:rotate(0deg)}
+.pitch-wordmark[hidden],.pitch-story:not(.is-impact) .pitch-wordmark{display:none!important}
 .pitch-wordmark svg{display:block;width:100%;height:100%;overflow:visible}
 .pitch-header-caption{font-size:8px;letter-spacing:2.6px;color:var(--tone-detail);margin-right:auto}
 .pitch-header button{gap:18px;padding:10px 15px;border:1px solid var(--tone-line);border-radius:30px;background:var(--tone-panel);color:var(--tone-ink);font-size:10px}

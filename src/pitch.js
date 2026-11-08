@@ -30,6 +30,7 @@
   by('pitch-folio').textContent=String(step+1).padStart(2,'0');
   buttons.forEach((button,i)=>{if(i===step)button.setAttribute('aria-current','step');else button.removeAttribute('aria-current')});
   const impact=step===research.steps-1;root.classList.toggle('is-impact',impact);
+  const logo=root.querySelector('.pitch-wordmark');logo.hidden=!impact;logo.inert=!impact;
   by('sorami-film')?.filmScene?.setActive(impact);
  }
  function request(){if(!frame&&visible&&!document.hidden)frame=requestAnimationFrame(paint)}

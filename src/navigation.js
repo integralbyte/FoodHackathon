@@ -7,7 +7,7 @@
  const shelf=by('noodle-shelf')?.shelfScene,assembly=by('cup-story')?.assemblyScene,pitch=by('pitch-story')?.pitchScene;
  if(!flow||!shelf||!assembly||!pitch)return;
  const motion=matchMedia('(prefers-reduced-motion: reduce)'),stops=[];
- const quick=900,queuePause=90;
+ const quick=900;
  const journeyTop=p=>window.scrollY+journey.getBoundingClientRect().top+p*(journey.offsetHeight-window.innerHeight);
  const add=(id,top,duration,kind='timeline',pause=true)=>stops.push({id,top,duration,kind,pause});
  add('opening',()=>0,0,'page');
@@ -18,21 +18,18 @@
   add(i===3?'grains':`cup-reverse-${i}`,()=>journeyTop(phase),i===3?6800:quick,'timeline',false);
  });
  add('grain-facts',()=>journeyTop(flow.phases.factsEnd),quick);
- for(let i=0;i<pitch.research.steps;i++)add(`research-${i}`,()=>pitch.targetTop(pitch.research.stopAt(i)),i===2?5100:quick,i===0?'page':'timeline');
+ add('research-entry',()=>pitch.targetTop(0),quick,'page',false);
+ for(let i=0;i<pitch.research.steps;i++)add(`research-${i}`,()=>pitch.targetTop(pitch.research.stopAt(i)),i===0?2000:i===2?3400:quick);
  for(let i=1;i<pitch.count;i++)add(`chapter-${i}`,()=>pitch.targetTop(i+.79),quick);
 
- let frame=0,job=null,queued=null,expectedY=window.scrollY;
+ let frame=0,job=null,expectedY=window.scrollY;
  const closeMenu=()=>{const menu=by('pitch-chapters');if(menu)menu.hidden=true;by('pitch-chapters-toggle')?.setAttribute('aria-expanded','false')};
- function cancel(){if(frame)cancelAnimationFrame(frame);frame=0;job=null;queued=null}
+ function cancel(){if(frame)cancelAnimationFrame(frame);frame=0;job=null}
  function write(top){expectedY=top;window.scrollTo({top,behavior:'instant'})}
  function nextIndex(direction){
   if(direction>0)return stops.findIndex(s=>s.pause&&s.top()>window.scrollY+3);
   for(let i=stops.length-1;i>=0;i--)if(stops[i].pause&&stops[i].top()<window.scrollY-3)return i;
   return 0;
- }
- function adjacentIndex(index,direction){
-  for(let i=index+direction;i>=0&&i<stops.length;i+=direction)if(stops[i].pause)return i;
-  return index;
  }
  function begin(index){
   if(index<0)return;
@@ -59,20 +56,15 @@
  }
  function tick(now){
   frame=0;if(!job)return;
-  if(job.hold){if(now-job.start<queuePause){frame=requestAnimationFrame(tick);return}const index=job.index;job=null;begin(index);return}
   const current=job,elapsed=Math.max(0,now-current.start),leg=current.legs.find(s=>elapsed<s.offset+s.duration)||current.legs.at(-1);
   const t=Math.min(1,(elapsed-leg.offset)/leg.duration),p=leg.page?t*t*(3-2*t):t;
   write(leg.from+(leg.to-leg.from)*p);
   if(job!==current)return; // A clamped or externally redirected scroll cancels playback.
   if(elapsed<current.duration){frame=requestAnimationFrame(tick);return}
-  const direction=job.direction;job=null;
-  if(queued!==null){job={hold:true,index:queued,direction,start:now};queued=null;frame=requestAnimationFrame(tick)}
+  job=null;
  }
  function advance(direction){
-  if(job){
-   if(direction===job.direction){if(!job.hold)queued=adjacentIndex(job.index,direction);return}
-   const index=job.hold?nextIndex(direction):adjacentIndex(job.index,direction);cancel();begin(index);return;
-  }
+  if(job)return; // Arrows are accepted only while idle; nothing is queued.
   begin(nextIndex(direction));
  }
  window.soramiNavigation={
@@ -94,5 +86,5 @@
  window.addEventListener('resize',cancel);
  document.addEventListener('sorami-navigation-cancel',cancel);
  document.addEventListener('visibilitychange',()=>{if(document.hidden)cancel()});
- motion.addEventListener('change',()=>{const target=job&&!job.hold?job.to:null;cancel();if(motion.matches&&target!==null)write(target)});
+ motion.addEventListener('change',()=>{const target=job?job.to:null;cancel();if(motion.matches&&target!==null)write(target)});
 })();

@@ -91,6 +91,7 @@ button:focus-visible{outline:3px solid #ad450c;outline-offset:4px}
 .pitch-header{height:88px;gap:24px;border-bottom:1px solid #ffffff06}
 .pitch-wordmark{width:104px;height:60px;padding:0;background:none;box-shadow:none;transform:rotate(-5deg);flex-shrink:0;transition:transform .25s}
 .pitch-wordmark:hover{transform:rotate(0deg)}
+.pitch-wordmark[hidden],.pitch-story:not(.is-impact) .pitch-wordmark{display:none!important}
 .pitch-wordmark svg{display:block;width:100%;height:100%;overflow:visible}
 .pitch-header-caption{font-size:8px;letter-spacing:2.6px;color:var(--tone-detail);margin-right:auto}
 .pitch-header button{gap:18px;padding:10px 15px;border:1px solid var(--tone-line);border-radius:30px;background:var(--tone-panel);color:var(--tone-ink);font-size:10px}
@@ -815,7 +816,7 @@ button:focus-visible{outline:3px solid #ad450c;outline-offset:4px}
    <symbol id="pitch-cup" viewBox="0 0 300 360"><ellipse cx="150" cy="347" rx="100" ry="9" fill="#714b23" opacity=".1"/><use href="#sorami-finished-cup" x="0" y="0" width="300" height="348"/></symbol>
    <symbol id="pitch-seed" viewBox="-10 -15 20 30"><path d="M0-14C13-5 10 8 0 14C-10 8-13-5 0-14Z" fill="currentColor"/><path d="M0-9Q4 0 0 10" fill="none" stroke="#fff4ce" stroke-width="1.2" opacity=".55"/></symbol>
   </defs></svg>
-  <header class="pitch-header"><a href="#product-journey" class="pitch-wordmark" aria-label="Sorami, back to the noodle shelf"><svg viewBox="0 0 210 120" aria-hidden="true"><use href="#sorami-logo" width="210" height="120"/></svg></a><button id="pitch-chapters-toggle" aria-expanded="false" aria-controls="pitch-chapters">The story <span id="pitch-count">01 / 10</span><span aria-hidden="true">☰</span></button></header>
+  <header class="pitch-header"><a href="#product-journey" class="pitch-wordmark" hidden inert aria-label="Sorami, back to the noodle shelf"><svg viewBox="0 0 210 120" aria-hidden="true"><use href="#sorami-logo" width="210" height="120"/></svg></a><button id="pitch-chapters-toggle" aria-expanded="false" aria-controls="pitch-chapters">The story <span id="pitch-count">01 / 10</span><span aria-hidden="true">☰</span></button></header>
   <nav id="pitch-chapters" class="pitch-chapters" aria-label="Pitch scenes" hidden><button id="pitch-evidence" aria-haspopup="dialog">Sources &amp; assumptions</button></nav>
   <main class="pitch-scenes">
       <article class="pitch-scene research-scene" data-tone="wheat" data-chapter="Research" aria-labelledby="pitch-title-0">
@@ -1207,7 +1208,7 @@ const researchKitRegions={
  seasoning:{x:529,y:681,width:283,height:291},
  noodles:{x:1161,y:681,width:316,height:279}
 };
-const researchTourStops=[.8,1.8,2.7,3.8,4.7,5.8,6.8];
+const researchTourStops=[.8,1.8,2.4,3.8,4.7,5.8,6.8];
 const cameraClamp=v=>Math.max(0,Math.min(1,v));
 const cameraEase=v=>{v=cameraClamp(v);return v*v*v*(v*(v*6-15)+10)};
 const cameraMix=(a,b,t)=>a+(b-a)*t;
@@ -1361,14 +1362,15 @@ const launchScenes=createLaunchScenes(root);
   if(index>=7)launchScenes.paint(index,reveal,reduced);
   if(index===0){panel.style.clipPath=`inset(0 0 ${(1-depart)*100}% 0)`}
   if(index===0){
-   all('[data-flow-node]').forEach(e=>{const n=+e.dataset.flowNode,p=phase(t,n*.035,.34+n*.035);e.style.clipPath=`inset(0 ${(1-p)*100}% 0 0)`;e.style.transform=`translateY(${(1-p)*13}px)`});
+   const flowProgress=reduced?1:clamp((local-.04)/.66);
+   all('[data-flow-node]').forEach(e=>{const n=+e.dataset.flowNode,p=phase(flowProgress,n*.035,.34+n*.035);e.style.clipPath=`inset(0 ${(1-p)*100}% 0 0)`;e.style.transform=`translateY(${(1-p)*13}px)`});
    all('[data-flow-link]').forEach(e=>{
-    const i=+e.dataset.flowLink,p=phase(t,.04+i*.035,.4+i*.035),remaining=(1-p)*100;
+    const i=+e.dataset.flowLink,p=phase(flowProgress,.04+i*.035,.4+i*.035),remaining=(1-p)*100;
     e.style.clipPath=e.dataset.flowDirection==='left'?`inset(0 0 0 ${remaining}%)`:e.dataset.flowDirection==='down'?`inset(0 0 ${remaining}% 0)`:`inset(0 ${remaining}% 0 0)`;
    });
-   all('[data-flow-branch]').forEach(e=>{const p=phase(t,.48+(+e.dataset.flowBranch)*.04,.85);e.style.clipPath=`inset(0 ${(1-p)*100}% 0 0)`});
-   all('.research-branch-links').forEach(e=>e.style.clipPath=`inset(${(1-phase(t,.53,.85))*100}% 0 0 0)`);
-   all('.research-flow-key').forEach(e=>e.style.clipPath=`inset(0 ${(1-phase(t,.56,.92))*100}% 0 0)`);
+   all('[data-flow-branch]').forEach(e=>{const p=phase(flowProgress,.48+(+e.dataset.flowBranch)*.04,.85);e.style.clipPath=`inset(0 ${(1-p)*100}% 0 0)`});
+   all('.research-branch-links').forEach(e=>e.style.clipPath=`inset(${(1-phase(flowProgress,.53,.85))*100}% 0 0 0)`);
+   all('.research-flow-key').forEach(e=>e.style.clipPath=`inset(0 ${(1-phase(flowProgress,.56,.92))*100}% 0 0)`);
   }else if(index===1){
    all('[data-recipe-line]').forEach((e,i)=>{const p=reduced?1:phase(local,.34+i*.025,.63+i*.025);e.style.clipPath=`inset(0 ${(1-p)*100}% 0 0)`;e.style.transform=`translateX(${(1-p)*18}px)`});
   }else if(index===3){
@@ -1424,6 +1426,7 @@ const launchScenes=createLaunchScenes(root);
   by('pitch-folio').textContent=String(step+1).padStart(2,'0');
   buttons.forEach((button,i)=>{if(i===step)button.setAttribute('aria-current','step');else button.removeAttribute('aria-current')});
   const impact=step===research.steps-1;root.classList.toggle('is-impact',impact);
+  const logo=root.querySelector('.pitch-wordmark');logo.hidden=!impact;logo.inert=!impact;
   by('sorami-film')?.filmScene?.setActive(impact);
  }
  function request(){if(!frame&&visible&&!document.hidden)frame=requestAnimationFrame(paint)}
@@ -1615,7 +1618,7 @@ function sampleOpeningHandoff(scrolled,contentHeight,viewportHeight,reduced=fals
  const shelf=by('noodle-shelf')?.shelfScene,assembly=by('cup-story')?.assemblyScene,pitch=by('pitch-story')?.pitchScene;
  if(!flow||!shelf||!assembly||!pitch)return;
  const motion=matchMedia('(prefers-reduced-motion: reduce)'),stops=[];
- const quick=900,queuePause=90;
+ const quick=900;
  const journeyTop=p=>window.scrollY+journey.getBoundingClientRect().top+p*(journey.offsetHeight-window.innerHeight);
  const add=(id,top,duration,kind='timeline',pause=true)=>stops.push({id,top,duration,kind,pause});
  add('opening',()=>0,0,'page');
@@ -1626,21 +1629,18 @@ function sampleOpeningHandoff(scrolled,contentHeight,viewportHeight,reduced=fals
   add(i===3?'grains':`cup-reverse-${i}`,()=>journeyTop(phase),i===3?6800:quick,'timeline',false);
  });
  add('grain-facts',()=>journeyTop(flow.phases.factsEnd),quick);
- for(let i=0;i<pitch.research.steps;i++)add(`research-${i}`,()=>pitch.targetTop(pitch.research.stopAt(i)),i===2?5100:quick,i===0?'page':'timeline');
+ add('research-entry',()=>pitch.targetTop(0),quick,'page',false);
+ for(let i=0;i<pitch.research.steps;i++)add(`research-${i}`,()=>pitch.targetTop(pitch.research.stopAt(i)),i===0?2000:i===2?3400:quick);
  for(let i=1;i<pitch.count;i++)add(`chapter-${i}`,()=>pitch.targetTop(i+.79),quick);
 
- let frame=0,job=null,queued=null,expectedY=window.scrollY;
+ let frame=0,job=null,expectedY=window.scrollY;
  const closeMenu=()=>{const menu=by('pitch-chapters');if(menu)menu.hidden=true;by('pitch-chapters-toggle')?.setAttribute('aria-expanded','false')};
- function cancel(){if(frame)cancelAnimationFrame(frame);frame=0;job=null;queued=null}
+ function cancel(){if(frame)cancelAnimationFrame(frame);frame=0;job=null}
  function write(top){expectedY=top;window.scrollTo({top,behavior:'instant'})}
  function nextIndex(direction){
   if(direction>0)return stops.findIndex(s=>s.pause&&s.top()>window.scrollY+3);
   for(let i=stops.length-1;i>=0;i--)if(stops[i].pause&&stops[i].top()<window.scrollY-3)return i;
   return 0;
- }
- function adjacentIndex(index,direction){
-  for(let i=index+direction;i>=0&&i<stops.length;i+=direction)if(stops[i].pause)return i;
-  return index;
  }
  function begin(index){
   if(index<0)return;
@@ -1667,20 +1667,15 @@ function sampleOpeningHandoff(scrolled,contentHeight,viewportHeight,reduced=fals
  }
  function tick(now){
   frame=0;if(!job)return;
-  if(job.hold){if(now-job.start<queuePause){frame=requestAnimationFrame(tick);return}const index=job.index;job=null;begin(index);return}
   const current=job,elapsed=Math.max(0,now-current.start),leg=current.legs.find(s=>elapsed<s.offset+s.duration)||current.legs.at(-1);
   const t=Math.min(1,(elapsed-leg.offset)/leg.duration),p=leg.page?t*t*(3-2*t):t;
   write(leg.from+(leg.to-leg.from)*p);
   if(job!==current)return; // A clamped or externally redirected scroll cancels playback.
   if(elapsed<current.duration){frame=requestAnimationFrame(tick);return}
-  const direction=job.direction;job=null;
-  if(queued!==null){job={hold:true,index:queued,direction,start:now};queued=null;frame=requestAnimationFrame(tick)}
+  job=null;
  }
  function advance(direction){
-  if(job){
-   if(direction===job.direction){if(!job.hold)queued=adjacentIndex(job.index,direction);return}
-   const index=job.hold?nextIndex(direction):adjacentIndex(job.index,direction);cancel();begin(index);return;
-  }
+  if(job)return; // Arrows are accepted only while idle; nothing is queued.
   begin(nextIndex(direction));
  }
  window.soramiNavigation={
@@ -1702,7 +1697,7 @@ function sampleOpeningHandoff(scrolled,contentHeight,viewportHeight,reduced=fals
  window.addEventListener('resize',cancel);
  document.addEventListener('sorami-navigation-cancel',cancel);
  document.addEventListener('visibilitychange',()=>{if(document.hidden)cancel()});
- motion.addEventListener('change',()=>{const target=job&&!job.hold?job.to:null;cancel();if(motion.matches&&target!==null)write(target)});
+ motion.addEventListener('change',()=>{const target=job?job.to:null;cancel();if(motion.matches&&target!==null)write(target)});
 })();
 </script>
 </body>
