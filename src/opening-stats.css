@@ -4,14 +4,16 @@
 .sorami-intro:before{content:'';position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 50% 45%,#fff5df00,#cda97130);pointer-events:none}
 .sorami-intro:after{content:'';position:absolute;inset:0;z-index:-1;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath d='M0 0h180v180H0z' filter='url(%23g)' opacity='.12'/%3E%3C/svg%3E");opacity:.65;pointer-events:none}
 .sorami-intro[hidden]{display:none}
+.sorami-intro-content{position:relative}
+.sorami-intro-navigation{position:absolute;top:calc(100% + 28px);left:50%;transform:translateX(-50%);width:max-content;max-width:84vw;margin:0;color:#805039;font-size:clamp(14px,1.2vw,17px);line-height:1.5;text-align:center}
 .sorami-intro-logo{position:relative;display:block;width:min(55vw,500px);border:0;padding:0;background:none;cursor:pointer;transition:transform .3s,opacity .3s;transform-origin:center}
 .sorami-intro-logo>svg{display:block;width:100%;height:auto;overflow:visible}
 .sorami-intro-hint{position:absolute;right:3%;top:65%;width:140px;height:100px;color:#805039;pointer-events:none}
 .sorami-intro-hint svg{display:block;width:100%;height:100%;overflow:visible}
 .sorami-intro-hint path{stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .sorami-intro-hint>span{position:absolute;right:0;bottom:0;font:italic 27px/1 Georgia,serif;letter-spacing:-.03em;transform:rotate(-7deg)}
-.sorami-intro-logo:hover{transform:scale(1.035)}
-.sorami-intro-logo:focus-visible{outline:2px solid #a42e3e;outline-offset:18px;border-radius:5px}
+.sorami-intro-logo:hover,.sorami-intro-logo:focus-visible{transform:scale(1.035)}
+.sorami-intro-logo:focus,.sorami-intro-logo:focus-visible{outline:none;box-shadow:none}
 .sorami-intro.is-revealing{clip-path:inset(0 0 100% 0);pointer-events:none}
 .sorami-intro.is-revealing .sorami-intro-logo{transform:translateY(-18px) scale(.96);opacity:0}
 @media(max-width:620px){.sorami-intro-logo{width:min(76vw,400px)}.sorami-intro-hint{right:1%;width:110px;height:79px}.sorami-intro-hint>span{font-size:24px}}

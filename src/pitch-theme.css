@@ -140,7 +140,6 @@
 
 /* Keyboard navigation leaves the entire stage available to the story. */
 .pitch-controls[hidden]{display:none!important}
-.pitch-chapters #pitch-evidence{margin:8px 0 0;padding:12px;border-top:1px solid var(--tone-line);color:var(--tone-muted);font-size:11px;text-decoration:none}
 @media screen{.pitch-story .pitch-scenes{bottom:30px}}
 @media screen and (max-width:620px){.pitch-story .pitch-scenes{bottom:24px}}
 
