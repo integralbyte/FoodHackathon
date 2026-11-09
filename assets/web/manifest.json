@@ -1,0 +1,122 @@
+{
+  "assets/competitors/buldak-cheese-cup.png": {
+    "src": "assets/web/buldak-cheese-cup.4441874a9d57.webp",
+    "width": 768,
+    "height": 768
+  },
+  "assets/competitors/buldak-cream-carbonara.png": {
+    "src": "assets/web/buldak-cream-carbonara.464fdfd666bb.webp",
+    "width": 768,
+    "height": 718
+  },
+  "assets/competitors/buldak-cup.png": {
+    "src": "assets/web/buldak-cup.542649f2bd39.webp",
+    "width": 768,
+    "height": 768
+  },
+  "assets/competitors/buldak-habanero-lime-big-bowl.png": {
+    "src": "assets/web/buldak-habanero-lime-big-bowl.2f716aec787d.webp",
+    "width": 768,
+    "height": 718
+  },
+  "assets/competitors/buldak-original-cup.png": {
+    "src": "assets/web/buldak-original-cup.43782eb129ff.webp",
+    "width": 768,
+    "height": 768
+  },
+  "assets/competitors/buldak-quattro-cheese-big-bowl.png": {
+    "src": "assets/web/buldak-quattro-cheese-big-bowl.7e60a612f4e0.webp",
+    "width": 768,
+    "height": 718
+  },
+  "assets/competitors/immi-chicken.png": {
+    "src": "assets/web/immi-chicken.c379329363d7.webp",
+    "width": 768,
+    "height": 768
+  },
+  "assets/competitors/immi-pork.png": {
+    "src": "assets/web/immi-pork.3b3160e41ac7.webp",
+    "width": 768,
+    "height": 768
+  },
+  "assets/competitors/miyoka-chicken.png": {
+    "src": "assets/web/miyoka-chicken.dd32e574065a.webp",
+    "width": 768,
+    "height": 768
+  },
+  "assets/competitors/nissin-cup.png": {
+    "src": "assets/web/nissin-cup.28264b1e9e62.webp",
+    "width": 768,
+    "height": 768
+  },
+  "assets/competitors/nissin-protein-chicken.png": {
+    "src": "assets/web/nissin-protein-chicken.53488aa4b887.webp",
+    "width": 768,
+    "height": 768
+  },
+  "assets/competitors/nissin-shrimp.png": {
+    "src": "assets/web/nissin-shrimp.900fdd6135c5.webp",
+    "width": 768,
+    "height": 768
+  },
+  "assets/competitors/nissin-spicy-jalapeno-chicken.png": {
+    "src": "assets/web/nissin-spicy-jalapeno-chicken.65a4b8b54a57.webp",
+    "width": 768,
+    "height": 768
+  },
+  "assets/competitors/nongshim-46.png": {
+    "src": "assets/web/nongshim-46.9e5121882c27.webp",
+    "width": 768,
+    "height": 768
+  },
+  "assets/competitors/nongshim-cup.png": {
+    "src": "assets/web/nongshim-cup.00f8bd020246.webp",
+    "width": 734,
+    "height": 768
+  },
+  "assets/competitors/soba-chilli.png": {
+    "src": "assets/web/soba-chilli.4103fb60fcb5.webp",
+    "width": 595,
+    "height": 768
+  },
+  "assets/competitors/soba-classic.png": {
+    "src": "assets/web/soba-classic.b316184dda07.webp",
+    "width": 594,
+    "height": 768
+  },
+  "assets/cornell-university-seal.png": {
+    "src": "assets/web/cornell-university-seal.d7373790f261.webp",
+    "width": 222,
+    "height": 222
+  },
+  "assets/sorami-logo-transparent.png": {
+    "src": "assets/web/sorami-logo-transparent.956891ef39c3.webp",
+    "width": 1254,
+    "height": 1254
+  },
+  "assets/sorami-opening-shelf.png": {
+    "src": "assets/web/sorami-opening-shelf.29152d8648df.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "assets/sorami-package-reference.png": {
+    "src": "assets/web/sorami-package-reference.de394e65513a.webp",
+    "width": 1536,
+    "height": 1024
+  },
+  "assets/sorami-spicy-garlic-cutout.png": {
+    "src": "assets/web/sorami-spicy-garlic-cutout.3c16619a0b56.webp",
+    "width": 768,
+    "height": 512
+  },
+  "assets/sorami-spicy-garlic-kit.png": {
+    "src": "assets/web/sorami-spicy-garlic-kit.b974b2fb2015.webp",
+    "width": 1536,
+    "height": 1024
+  },
+  "assets/sorami-umami-chicken-cutout.png": {
+    "src": "assets/web/sorami-umami-chicken-cutout.43d8c8f1712d.webp",
+    "width": 768,
+    "height": 512
+  }
+}

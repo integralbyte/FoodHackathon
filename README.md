@@ -10,6 +10,6 @@ Built with HTML, CSS, JavaScript and SVG, the demo includes:
 - A procedural cup-to-grain animation and product close-ups.
 - Nutrition, ingredient and cost diagrams.
 - Desktop and mobile layouts with reduced-motion support.
-- Embedded images and video for offline viewing.
+- Optimized images and video loaded as each part of the story approaches.
 
 Product figures and manufacturing settings are proposed targets. Research sources and assumptions are documented within the demo.

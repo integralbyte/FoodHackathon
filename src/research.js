@@ -52,6 +52,7 @@
  function paint(q,now,reduced){
   const u=clamp(q)*panels.length,index=Math.min(panels.length-1,Math.floor(u)),local=clamp(u-index);
   if(index!==active){
+   window.soramiMedia?.prepare(index);
    active=index;root.dataset.researchStep=String(index);root.closest('.pitch-scenes').scrollTop=0;
    panels.forEach((e,i)=>{e.hidden=i!==index;e.inert=i!==index});
    detailPanels.forEach(e=>e.hidden=e.dataset.researchDetails!==data.steps[index].details);

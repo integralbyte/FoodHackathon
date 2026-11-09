@@ -13,6 +13,7 @@
  function canPlay(){return active&&inView&&!document.hidden&&!manuallyPaused&&!failed&&(!motion.matches||explicitPlay)}
  function reconcile(){
   if(!canPlay()){playGeneration++;playPending=false;video.pause();updateControl();return}
+  window.soramiMedia?.load('film');
   if(!video.paused||playPending)return;
   playPending=true;const generation=++playGeneration;
   const attempt=video.play();
